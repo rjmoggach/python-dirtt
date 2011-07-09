@@ -1,0 +1,3 @@
+[submodule "dtds"]
+	path = dtds
+	url = git@github.com:dshng/dtds.git
