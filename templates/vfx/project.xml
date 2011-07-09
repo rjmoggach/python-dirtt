@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1//EN"
+      "http://dashing.tv/dtds/dirtt-0_1_1.xml">
+<dirtt name="Project Tree" version="0.1.1" dirname="${projects_root}" basename="${project_path}">
+
+<!-- A S S E T S   F O L D E R -->
+	<dir name="Project Assets Folder" basename="assets">
+		<dir basename="data">
+			<dir basename="chan"/>
+			<dir basename="db"/>
+			<dir basename="lut"/>
+			<dir basename="mocap"/>
+			<dir basename="moco"/>
+		</dir><!-- data -->
+		<dir basename="img">
+			<dir basename="calibration"/>
+			<dir basename="elements"/>
+			<dir basename="grain"/>
+			<dir basename="hdri"/>
+			<dir basename="lens"/>
+			<dir basename="paint"/>
+			<dir basename="textures"/>
+			<dir basename="stock"/>
+		</dir><!-- img -->
+		<dir basename="models"/>
+		<dir basename="shaders">
+			<dir basename="vray"/>
+			<dir basename="rman"/>
+			<dir basename="mray"/>
+		</dir><!-- shaders -->
+		<dir basename="tools"/>
+	</dir><!-- assets -->
+
+<!-- C O N F I G   F O L D E R -->
+	<dir name="Project Config Folder" basename="etc">
+		<dir basename="houdini">
+			<dir name ="dso"/>
+            <dir name ="otls"/>
+            <dir name ="scripts"/>
+        </dir><!-- houdini -->
+		<dir basename="maya">
+            <dir name="modules"/>
+            <dir name="plugins"/>
+            <dir name="scripts">
+                <dir name="mel"/>
+                <dir name="py"/>
+            </dir>
+			<dir basename="shelves"/>
+		</dir><!-- maya -->
+		<dir basename="nuke">
+			<dir basename="gizmos"/>
+			<dir basename="menu"/>
+			<dir basename="scripts"/>
+		</dir><!-- nuke -->
+		<dir basename="user"/>
+		<dir basename="vray"/>
+	</dir><!-- etc -->
+
+<!-- F L A M E   F O L D E R -->
+	<dir name="Project Flame Projects Folder" basename="flame">
+	</dir><!-- flame -->
+
+<!-- L I B R A R Y   F O L D E R -->
+	<dir name= "Project Library Folder" basename="library">
+		<dir basename="audio"/>
+		<dir basename="data">
+			<dir basename="chan"/>
+			<dir basename="db"/>
+			<dir basename="lut"/>
+			<dir basename="mocap"/>
+			<dir basename="moco"/>
+		</dir><!-- data -->
+		<dir basename="edits">
+			<dir basename="_YYYY_MM_DD_name">
+				<dir basename="edl"/>
+				<dir basename="media"/>
+			</dir>
+		</dir><!-- edits -->
+		<dir basename="fonts"/>
+		<dir basename="graphics"/>
+		<dir basename="reference" >
+			<dir basename="misc"/>
+			<dir basename="on_set">
+				<dir basename="_YYYY_MM_DD_name">
+					<dir basename="edl"/>
+					<dir basename="media"/>
+				</dir>
+			</dir><!-- on_set -->
+		</dir><!-- reference -->
+	</dir><!-- library -->
+
+<!-- P R O D U C T I O N   F O L D E R -->
+	<dir basename="production">
+		<dir basename="financial">
+			<dir basename="bid"/>
+			<dir basename="invoices"/>
+			<dir basename="purchases"/>
+		</dir><!-- financial -->
+		<dir basename="creative">
+			<dir basename="breakdown"/>
+			<dir basename="script"/>
+			<dir basename="storyboard"/>
+			<dir basename="treatment"/>
+			<dir basename="reference"/>
+		</dir><!-- creative -->
+		<dir basename="notes"/>
+		<dir basename="postings">
+			<dir basename="data"/>
+			<dir basename="stills"/>
+			<dir basename="movies"/>
+		</dir><!-- postings -->
+		<dir basename="schedule"/>
+		<dir basename="shotsheets"/>
+	</dir><!-- production -->
+
+<!-- S E Q U E N C E S   F O L D E R -->
+	<dir basename="sequences">
+	</dir><!-- sequences -->
+
+<!-- S H O T S   F O L D E R -->
+	<dir basename="shots">
+	</dir><!-- shots -->
+		
+</dirtt>

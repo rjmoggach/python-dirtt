@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1//EN"
+      "http://dashing.tv/dtds/dirtt-0_1_1.xml">
+<dirtt name="Shot Tree" version="0.1.1" dirname="${projects_root}/${project_path}/shots" basename="${shot_name}">
+
+<!-- V A R / D A T A   F O L D E R -->
+	<dir name="Shot Data Folder" basename="var">
+		<dir basename="cache">
+			<dir basename="maya"/>
+			<dir basename="houdini"/>
+			<dir basename="rman"/>
+			<dir basename="nuke"/>
+		</dir>
+		<dir basename="chan"/>
+		<dir basename="geo"/>
+		<dir basename="db"/>
+		<dir basename="lut"/>
+		<dir basename="mocap"/>
+		<dir basename="moco"/>
+		<dir basename="timewarp"/>
+	</dir><!-- var -->
+
+<!-- E T C / C O N F I G   F O L D E R -->
+	<dir name="Shot Config Folder" basename="etc">
+		<dir basename="houdini">
+			<dir name ="dso"/>
+            <dir name ="otls"/>
+            <dir name ="scripts"/>
+        </dir><!-- houdini -->
+		<dir basename="maya">
+            <dir name="modules"/>
+            <dir name="plugins"/>
+            <dir name="scripts">
+                <dir name="mel"/>
+                <dir name="py"/>
+            </dir>
+			<dir basename="shelves"/>
+		</dir><!-- maya -->
+		<dir basename="nuke">
+			<dir basename="gizmos"/>
+			<dir basename="menu"/>
+			<dir basename="scripts"/>
+		</dir><!-- nuke -->
+		<dir basename="user"/>
+		<dir basename="vray"/>
+	</dir><!-- etc -->
+
+<!-- I M G / I M A G E S   F O L D E R -->
+	<dir name="Shot Image Folder" basename="img">
+		<dir basename="2d">
+			<dir basename="comp"/>
+			<dir basename="paint"/>
+			<dir basename="roto"/>
+		</dir><!-- 2d -->
+		<dir basename="cg"/>
+		<dir basename="design"/>
+		<dir basename="footage">
+			<dir basename="elements"/>
+			<dir basename="plates"/>
+		</dir><!-- footage -->
+	</dir><!-- img -->
+
+<!-- L I B / L I B R A R Y   F O L D E R -->
+	<dir name="Shot Library Folder" basename="lib">
+		<dir basename="audio"/>
+		<dir basename="camera">
+			<dir basename="trk"/>
+			<dir basename="lens"/>
+		</dir><!-- camera -->
+		<dir basename="design"/>
+		<dir basename="hdri"/>
+		<dir basename="paint"/>
+		<dir basename="reference"/>
+		<dir basename="tools"/>
+	</dir><!-- lib -->
+	
+<!-- U S R / W O R K   F O L D E R -->
+	<dir name="Shot Work Folder" basename="usr">
+		<dir basename="2d">
+		</dir><!-- 2d -->
+		<dir basename="cg">
+		</dir><!-- cg -->
+	</dir><!-- usr -->
+	
+</dirtt>
