@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.1//EN"
       "http://opensource.dashing.tv/dtds/dirtt-0_1_1.xml">
-<dirtt name="Project Tree" version="0.1.1" dirname="${projects_root}" basename="${project_path}">
+<dirtt name="Project Tree" version="0.1.1" dirname="{{projects_root}}" basename="{{project_path}}">
 
 <!-- A S S E T S   F O L D E R -->
 	<dir name="Project Assets Folder" basename="assets">

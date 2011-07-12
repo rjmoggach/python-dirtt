@@ -1,0 +1,88 @@
+dirtt
+==========
+
+* `Discussion list <http://groups.google.com/group/python-virtualenv/>`_
+* `Bugs <https://github.com/dshng/dirtt/issues/>`_
+
+.. contents::
+
+.. toctree::
+   :maxdepth: 1
+
+   news
+
+.. comment: split here
+
+
+Status and License
+------------------
+
+It was written by Robert Moggach, for Dashing Collective Inc. 
+<http://dashing.tv>`_ and is  maintained by a `group of developers 
+<https://github.com/dshng/dirtt/raw/master/AUTHORS.txt>`_.
+It is licensed under an
+`MIT-style permissive license <https://github.com/dshng/dirtt/raw/master/LICENSE.txt>`_.
+
+You can install it with ``easy_install dirtt``.
+
+
+What It Does
+------------
+
+``dirtt`` is a standalone tool and library used to generate 
+directory and file structures from xml templates that define 
+a repeatedly used layout.
+
+The general problem being tackled is one of inconsistent directory structures 
+for visual effects projects, from a lack of industry standards, resulting in 
+lost assets, security risks, and most importantly wasted resources from inefficient production.
+
+``dirtt`` doesn't solve that problem directly. It provides a command-line
+tool and python library that allow for quick creation of complex structures
+from XML templates that define directory, file and link structures as well as
+filesystem attributes and reference Cheetah templates for static file 
+customizations.
+
+The basic usage is::
+
+    $ dirtt TEMPLATE.xml 
+
+The templates that come with ``dirtt`` will not work out of the box as they
+are templates themselves. They are intended to be parsed by some other method 
+to replace the inherent template variables that create a custom structure.
+Alternatively these can be easily edited to create working templates.
+
+
+Contributing
+------------
+
+All kinds of contributions are welcome - code, tests, documentation, bug reports, ideas, etc.
+
+Forking through Github
+~~~~~~~~~~~~~~~~~~~~~~
+
+First of all, you need to fork the the official repository, which is 
+https://github.com/dshng/dirtt`_.
+
+Log in to Github, go to the dirtt repository page, follow the fork link, 
+wait for Github to copy the repository and then clone your fork, like:
+
+$ git clone https://github.com/YOUR_USER_NAME/dirtt
+Now you can change whatever you want, commit, push to your fork and when 
+your contribution is done, follow the pull request link and send us a 
+request explaining what you did and why.
+
+Running the tests
+~~~~~~~~~~~~~~~~~
+
+dirtt's test suite is small and not yet at all comprehensive, but we aim
+to grow it.
+
+The easy way to run tests (handles test dependencies automatically)::
+
+    $ python setup.py test
+
+
+Other Documentation and Links
+-----------------------------
+

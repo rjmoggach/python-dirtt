@@ -1,0 +1,18 @@
+Changes & News
+--------------
+
+Next release (0.2) schedule
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Beta release mid-July 2011, final release early August.
+
+HEAD
+~~~~
+
+* still working on getting it working
+
+
+0.1.1
+~~~~~
+
+Initial commit.  Everything is new and broken!
