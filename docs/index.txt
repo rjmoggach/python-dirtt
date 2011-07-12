@@ -1,7 +1,6 @@
-dirtt
+python-dirtt - Directory Tree Templater
 ==========
 
-* `Discussion list <http://groups.google.com/group/python-virtualenv/>`_
 * `Bugs <https://github.com/dshng/dirtt/issues/>`_
 
 .. contents::
@@ -45,7 +44,7 @@ customizations.
 
 The basic usage is::
 
-    $ dirtt TEMPLATE.xml 
+    $ dirtt -t TEMPLATE.xml 
 
 The templates that come with ``dirtt`` will not work out of the box as they
 are templates themselves. They are intended to be parsed by some other method 
@@ -62,12 +61,12 @@ Forking through Github
 ~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you need to fork the the official repository, which is 
-https://github.com/dshng/dirtt`_.
+https://github.com/dshng/python-dirtt`_.
 
 Log in to Github, go to the dirtt repository page, follow the fork link, 
 wait for Github to copy the repository and then clone your fork, like:
 
-$ git clone https://github.com/YOUR_USER_NAME/dirtt
+$ git clone https://github.com/YOUR_USER_NAME/python-dirtt
 Now you can change whatever you want, commit, push to your fork and when 
 your contribution is done, follow the pull request link and send us a 
 request explaining what you did and why.

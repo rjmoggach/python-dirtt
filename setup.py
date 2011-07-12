@@ -26,7 +26,7 @@ f.close()
 version = __import__('dirtt').get_version()
 
 
-setup(name='dirtt',
+setup(name='python-dirtt',
       version=version,
       description="Directory Tree Templater",
       long_description=long_description,
