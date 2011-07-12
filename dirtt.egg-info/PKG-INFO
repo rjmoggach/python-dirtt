@@ -1,0 +1,50 @@
+Metadata-Version: 1.0
+Name: an-example-pypi-project
+Version: 0.0.5
+Summary: An demonstration of how to create, document, and publish to the cheese shop a5 pypi.org.
+Home-page: http://packages.python.org/an_example_pypi_project
+Author: Andrew Carter
+Author-email: andrewjcarter@gmail.com
+License: BSD
+Description: .. include globals.rst
+        
+        .. an_example_pypi_project documentation master file, created by
+        sphinx-quickstart on Thu Nov 05 22:55:49 2009.
+        You can adapt this file completely to your liking, but it should at least
+        contain the root `toctree` directive.
+        
+        Welcome to an_example_pypi_project's documentation!
+        ***************************************************
+        
+        Introduction: This Package is a Tutorial
+        ========================================
+        
+        This is just a demonstration vehicle used to take you through the process
+        -- start to finish -- of creating a Python project that can be:
+        
+        1. Uploaded to
+        2. Distributed from
+        
+        and
+        
+        3. Documented on
+        
+        the Python Package Index (aka pypi or the cheeseshop) at http://pypi.python.org/pypi.
+        This project uses setuptools, sphinx, and the Sphinx-PyPI-upload
+        (http://pypi.python.org/pypi/Sphinx-PyPI-upload/0.2.1).
+        
+        This demonstration is not meant to be complete nor authoritative. It's just a
+        recording of the steps I took to get some projects onto pypi and
+        hopefully it might save someone some time from googling around.  To be sure,
+        this is simply just *one* way to make a project, document it, and get it
+        on pypi.
+        
+        NOTE: This was originally given as a talk to the Minnesota Python Users Group
+        http://groups.google.com/group/pymntos/ and was developed for a
+        spoken presentation format.
+        
+Keywords: example documentation tutorial
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Topic :: Utilities
+Classifier: License :: OSI Approved :: BSD License

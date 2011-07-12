@@ -1,5 +1,7 @@
+.. include globals.rst
+
 python-dirtt - Directory Tree Templater
-==========
+=======================================
 
 * `Bugs <https://github.com/dshng/dirtt/issues/>`_
 
@@ -16,7 +18,7 @@ python-dirtt - Directory Tree Templater
 Status and License
 ------------------
 
-It was written by Robert Moggach, for Dashing Collective Inc. 
+python-dirtt was written by Robert Moggach, for Dashing Collective Inc. 
 <http://dashing.tv>`_ and is  maintained by a `group of developers 
 <https://github.com/dshng/dirtt/raw/master/AUTHORS.txt>`_.
 It is licensed under an
@@ -24,13 +26,37 @@ It is licensed under an
 
 You can install it with ``easy_install dirtt``.
 
+(c) 2011 Dashing Collective Inc. and contributors
+Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+
+Changes & News
+--------------
+
+Next release (0.2) schedule
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Beta release mid-July 2011, final release early August.
+
+HEAD
+~~~~
+
+* still working on getting it working
+
+
+0.1.1
+~~~~~
+
+Initial commit.  Everything is new and broken!
+
 
 What It Does
 ------------
 
 ``dirtt`` is a standalone tool and library used to generate 
-directory and file structures from xml templates that define 
-a repeatedly used layout.
+directory and file structures from xml templates that describe 
+repeatedly used filesystem layouts such as project structures
+or elements therein.
 
 The general problem being tackled is one of inconsistent directory structures 
 for visual effects projects, from a lack of industry standards, resulting in 
@@ -84,4 +110,5 @@ The easy way to run tests (handles test dependencies automatically)::
 
 Other Documentation and Links
 -----------------------------
+
 
