@@ -1,3 +1,14 @@
+"""
+dirtt - Directory Tree Templater
+(c) 2011 Dashing Collective Inc. and contributors
+Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+	create.py
+	
+	This provides the main handler class for parsing the XML template
+	rendering file or url templates and writing to the file system
+
+"""
 import os
 
 from xml.etree import ElementTree
@@ -5,7 +16,7 @@ from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 
 from dirtt.util import get_uid_for_name, get_gid_for_name
-from dirtt.io import create_dir, create_file, create_symlink, set_perms_uid_gid, read_file, read_url
+from dirtt.util.io import create_dir, create_file, create_symlink, set_perms_uid_gid, read_file, read_url
 from dirtt.util.template import Template
 
 DEFAULT_PERMS = "02775"
@@ -15,7 +26,7 @@ DEFAULT_GROUP = "root"
 
 class CreateDirectoryTreeHandler(ContentHandler):
 
-	def __init__(self, verbose, tree_template, **kwargs):
+	def __init__(self, verbose, tree_template, kwargs):
 		self.verbose = verbose
 		self.tree_template = tree_template
 		self.start_dir = self.dirname = os.path.abspath(".")
@@ -27,8 +38,9 @@ class CreateDirectoryTreeHandler(ContentHandler):
 		parser = make_parser()
 		parser.setContentHandler(self)
 		tree_template_str = self._read_template(self.tree_template)
+
 		tree_template_str = self._parse_template(tree_template_str,self.tree_template)
-		parser.parse(tree_template_str)
+		parser.parse(self.tree_template)
 		os.chdir(self.start_dir)
 	
 	def startElement(self, name, attrs):

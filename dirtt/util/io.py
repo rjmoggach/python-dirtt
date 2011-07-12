@@ -1,3 +1,16 @@
+"""
+dirtt - Directory Tree Templater
+(c) 2011 Dashing Collective Inc. and contributors
+Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+	io.py
+	
+	These are helper functions for dealing with filesystem IO.
+	Creating directories, files, symlinks, and reading files, urls
+	are handled here.
+	
+"""
+
 import os
 import sys
 import urllib
@@ -22,13 +35,11 @@ def create_dir(basename, perms=None, uid=None, gid=None, warn=False):
 	"""
 	if os.path.isdir(basename):
 		if warn:
-			print >> sys.stderr,
-				"A directory exists with that name ('%s'). \
+			print >> sys.stderr, "A directory exists with that name ('%s'). \
 				\nAborting directory creation." % basename
 			sys.exit(-1)
 	elif os.path.isfile(basename):
-		print >> sys.stderr,
-			"A file exists with the name of the desired dir ('%s'). \
+		print >> sys.stderr, "A file exists with the name of the desired dir ('%s'). \
 			\nAborting directory creation." % basename
 		sys.exit(-2)
 	else:
@@ -52,8 +63,7 @@ def create_file(basename, content=None, perms=None, uid=None, gid=None):
 	content should be ready to go (no parsing done here)
 	"""
 	if os.path.exists(basename):
-		print >> sys.stderr,
-			"A file or directory exists with the same name ('%s'). \
+		print >> sys.stderr, "A file or directory exists with the same name ('%s'). \
 			\nAborting file creation." % basename
 		sys.exit(-2)
 	if content is None:
@@ -71,8 +81,7 @@ def create_symlink(ref, target):
 	if not os.path.exists(target):
 		os.symlink(ref,target)
 	else:
-		print >> sys.stderr,
-			"A file or directory exists with the same name ('%s'). \
+		print >> sys.stderr, "A file or directory exists with the same name ('%s'). \
 			\nAborting link creation." % target
 		sys.exit(-2)
 		
@@ -90,7 +99,7 @@ def read_file(path):
 		file.close()
 		return content
 	else:
-		raise OSError: "File does not exist or is not a file", path
+		raise OSError, "File does not exist or is not a file", path
 
 
 def read_url(href):
