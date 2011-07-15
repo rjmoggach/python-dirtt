@@ -37,7 +37,7 @@ import re
 import sys
 import cgi
 import urllib
-from dirtt.util.looper import looper
+import looper
 
 __all__ = ['TemplateError', 'Template', 'sub', 'HTMLTemplate',
 		   'sub_html', 'html', 'bunch']

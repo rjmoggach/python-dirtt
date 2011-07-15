@@ -1,5 +1,0 @@
-recursive-include docs *.txt
-recursive-include scripts *
-recursive-include dirtt
-include AUTHORS.txt
-include LICENSE.txt

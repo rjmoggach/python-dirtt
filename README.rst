@@ -124,6 +124,11 @@ checks and balances first. Eventually I'm sure we'll add exceptions and handling
 but for now it does what we need it to do and we're aware of the limitations in it's
 exception handling.
 
+Installation
+~~~~~~~~~~~~
+
+It should be as easy as easy_install python-dirtt or pip install python-dirtt.
+
 XML Schema & Templates
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -209,7 +214,7 @@ reason it can't be used as it is. It doesn't have alot of the error checking it 
 
 The basic usage is::
 
-    $ dirtt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive
+    $ mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive
 
 This command will parse the template file which needs to be defined using a urllib style string. It can
 be a file accessible locally or a url. So the template itself could be something that is static data

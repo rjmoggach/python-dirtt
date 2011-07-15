@@ -1,9 +1,11 @@
+#!/usr/bin/python
+
 """
 python-dirtt - Directory Tree Templater
 (c) 2011 Dashing Collective Inc. and contributors
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-	command.py
+	dirtt
 	
 	This is a generic command line tool that prompts for template
 	variables in a given template and renders the tree.
@@ -14,7 +16,8 @@ import os
 import sys
 from optparse import OptionParser
 
-from dirtt.create import CreateDirectoryTreeHandler
+#import dirtt.CreateDirectoryTreeHandler
+from dirtt import CreateDirectoryTreeHandler
 from dirtt.util.template import return_placeholders
 
 
@@ -61,4 +64,7 @@ def main():
 	c.run()
 	print "Created Tree."
 	sys.exit(0)
+
+if __name__ == "__main__":
+	main()
 
