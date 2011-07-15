@@ -42,6 +42,11 @@ HEAD
 
 * still working on getting it working
 
+0.1.2a1
+~~~~~~~
+
+The python setup.py script should be working as expected. Do install_data as well
+to get the examples.
 
 0.1.1
 ~~~~~
@@ -127,7 +132,15 @@ exception handling.
 Installation
 ~~~~~~~~~~~~
 
-It should be as easy as easy_install python-dirtt or pip install python-dirtt.
+Once downloaded it should be as easy as typing:
+
+	$ python setup.py install
+
+and then to get the example templates and needed dtd locally:
+
+	$ python setup.py install_data
+
+Try it out in a python-virtualenv environment to play around and it should make sense quickly.
 
 XML Schema & Templates
 ~~~~~~~~~~~~~~~~~~~~~~
