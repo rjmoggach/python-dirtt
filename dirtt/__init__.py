@@ -10,7 +10,7 @@ or elements therein.
 """
 
 #v0.1.1a2
-VERSION = (0, 1, 1, 'alpha', 1)
+VERSION = (0, 1, 1, 'alpha', 2)
 
 STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidiate': 'rc' }
 
