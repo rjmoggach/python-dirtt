@@ -9,8 +9,8 @@ repeatedly used filesystem layouts such as project structures
 or elements therein.
 """
 
-#v0.1.1a2
-VERSION = (0, 1, 1, 'alpha', 2)
+#v0.1.1a4
+VERSION = (0, 1, 1, 'alpha', 4)
 
 STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidiate': 'rc' }
 

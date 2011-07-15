@@ -13,6 +13,7 @@ def here():
 def return_version():
 	return __import__('dirtt').get_version()
 
+kw = {}
 
 setup(
 	name='python-dirtt',
@@ -37,7 +38,7 @@ setup(
 	maintainer_email='opensource@dashing.tv',
 	url='http://opensource.dashing.tv/python-dirtt',
 	license='MIT',
-	py_modules=['dirtt'],
+	packages=['dirtt','dirtt.util'],
 	**kw
 	)
 
