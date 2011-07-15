@@ -18,15 +18,14 @@ python-dirtt - Directory Tree Templater
 Status and License
 ------------------
 
-python-dirtt was written by Rob Moggach, for Dashing Collective Inc. 
-<http://dashing.tv>`_ and is  maintained by a `group of developers 
-<https://github.com/dshng/python-dirtt/raw/master/AUTHORS.txt>`_.
-It is licensed under an
-`MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.txt>`_.
+python-dirtt was written by Rob Moggach, for `Dashing Collective Inc. <http://dashing.tv>`_
+and is  maintained by a `group of developers <https://github.com/dshng/python-dirtt/raw/master/AUTHORS.txt>`_.
+It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.txt>`_.
 
 You can install it with ``easy_install dirtt``.
 
-(c) 2011 Dashing Collective Inc. and contributors
+(c) 2011 Dashing Collective Inc. and contributors.
+
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
 
@@ -94,12 +93,13 @@ Forking through Github
 ~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you need to fork the the official repository, which is 
-https://github.com/dshng/python-dirtt`_.
+`https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
 
 Log in to Github, go to the dirtt repository page, follow the fork link, 
 wait for Github to copy the repository and then clone your fork, like:
 
-$ git clone https://github.com/YOUR_USER_NAME/python-dirtt
+	$ git clone https://github.com/YOUR_USER_NAME/python-dirtt
+
 Now you can change whatever you want, commit, push to your fork and when 
 your contribution is done, follow the pull request link and send us a 
 request explaining what you did and why.
@@ -181,7 +181,7 @@ Look at the examples and even try them out locally in your own test environment.
 
 The template placeholders are defined using enclosing double curly braces. 
 
-	Eg. {{placeholder}}
+	$ Eg. {{placeholder}}
 	
 The base class does take template variables as a python dictionary but this is something you'll
 need to explicitly define in your python code. The sample command line tool shows a slightly
@@ -223,6 +223,6 @@ Links
 
 Here's the links. Some are just placeholders for now:
 
-https://github.com/dshng/python-dirtt`_
+`Github. <https://github.com/dshng/python-dirtt>`_
 
-http://opensource.dashing.tv/python-dirtt`_
+`Dashing Opensource <http://opensource.dashing.tv/python-dirtt>`_
