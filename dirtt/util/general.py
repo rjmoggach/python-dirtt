@@ -8,7 +8,7 @@ def get_gid_for_name(group, default=0):
 	returns gid for a given name string
 	"""
 	if not group is None:
-		try: gid = grp.getgrname(group).gr_gid
+		try: gid = grp.getgrnam(group).gr_gid
 		except KeyError: gid = default
 	return gid
 

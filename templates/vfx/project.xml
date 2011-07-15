@@ -34,16 +34,16 @@
 <!-- C O N F I G   F O L D E R -->
 	<dir name="Project Config Folder" basename="etc">
 		<dir basename="houdini">
-			<dir name ="dso"/>
-            <dir name ="otls"/>
-            <dir name ="scripts"/>
+			<dir basename="dso"/>
+            <dir basename="otls"/>
+            <dir basename="scripts"/>
         </dir><!-- houdini -->
 		<dir basename="maya">
-            <dir name="modules"/>
-            <dir name="plugins"/>
-            <dir name="scripts">
-                <dir name="mel"/>
-                <dir name="py"/>
+            <dir basename="modules"/>
+            <dir basename="plugins"/>
+            <dir basename="scripts">
+                <dir basename="mel"/>
+                <dir basename="py"/>
             </dir>
 			<dir basename="shelves"/>
 		</dir><!-- maya -->
