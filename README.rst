@@ -69,7 +69,7 @@ that it can be used for any similar task.
 
 The basic usage is::
 
-    $ dirtt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive
+    $ mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive
 
 The templates that come with ``dirtt`` provide one generic example of how to use
 the tools. They use a simple template language that is part of the package to
