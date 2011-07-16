@@ -1,0 +1,61 @@
+<!--
+
+  XML Document Type Definition for python-dirtt - Directory Tree Templater.
+
+  Copyright (C) 2011 Dashing Collective Inc.
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+  This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+-->
+
+<!--
+  dirtt is an XML language - Typical usage:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.3//EN"
+      "http://opensource.dashing.tv/dtds/dirtt-0_1_3.dtd">
+<dirtt>
+</dirtt>
+-->
+
+<!-- 'root' of directory tree template, our starting point -->
+<!ELEMENT   dirtt       (dir | file | link )*>
+<!ATTLIST   dirtt
+            basename    CDATA        #REQUIRED
+            name        CDATA        #REQUIRED
+            version     CDATA        #REQUIRED
+            dirname     CDATA        #REQUIRED>
+
+<!-- Folder/Directory -->
+<!ELEMENT   dir         (dir | file | link )*>
+<!ATTLIST   dir
+            basename    CDATA        #REQUIRED
+            id          ID           #IMPLIED
+            name        CDATA        #IMPLIED
+            username    CDATA        #IMPLIED
+            group       CDATA        #IMPLIED
+            perms       CDATA        #IMPLIED>
+
+<!-- File -->
+<!ELEMENT   file        EMPTY>
+<!ATTLIST   file
+            basename    CDATA        #REQUIRED
+            id          ID           #IMPLIED
+            name        CDATA        #IMPLIED
+            username    CDATA        #IMPLIED
+            group       CDATA        #IMPLIED
+            perms       CDATA        #IMPLIED
+            href        CDATA        #IMPLIED>
+
+<!-- Symbolic Link -->
+<!ELEMENT  link         EMPTY>
+<!ATTLIST  link
+           basename     CDATA        #REQUIRED
+           id           ID           #IMPLIED
+           name         CDATA        #IMPLIED
+           idref        IDREF        #IMPLIED
+           ref          CDATA        #IMPLIED>
+
