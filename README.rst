@@ -3,14 +3,10 @@
 python-dirtt - Directory Tree Templater
 =======================================
 
-* `Bugs <https://github.com/dshng/python-dirtt/issues/>`_
-
 .. contents::
 
 .. toctree::
    :maxdepth: 1
-
-   news
 
 .. comment: split here
 
@@ -27,26 +23,6 @@ You can install it with ``easy_install dirtt``.
 (c) 2011 Dashing Collective Inc. and contributors.
 
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
-
-
-Changes & News
---------------
-
-Next release (0.2) schedule
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Beta release mid-July 2011, final release early August.
-
-HEAD
-~~~~
-
-* mostly working... directories can be interactive
-
-
-0.1.1
-~~~~~
-
-Initial commit.  Everything is new!
 
 
 What It Does
@@ -67,11 +43,11 @@ filesystem attributes and reference Cheetah templates for static file
 customizations. The specifics of how it gets used as a tool are generic enough
 that it can be used for any similar task.
 
-The basic usage is::
+The basic usage is:
 
-    mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive::
+	``mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive``
 
-The templates that come with ``dirtt`` provide one generic example of how to use
+The templates that come with ``python-dirtt`` provide one generic example of how to use
 the tools. They use a simple template language that is part of the package to
 create a solution that is quick to customize and rapid to deploy.
 These can easily be edited to create working templates tailored to your needs.
@@ -93,13 +69,13 @@ Currently we need to implement the following:
 Forking through Github
 ~~~~~~~~~~~~~~~~~~~~~~
 
-First of all, you need to fork the the official repository, which is 
+First of all, you need to fork from the official repository, which is 
 `https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
 
 Log in to Github, go to the dirtt repository page, follow the fork link, 
 wait for Github to copy the repository and then clone your fork, like:
 
-	git clone https://github.com/YOUR_USER_NAME/python-dirtt::
+	``git clone https://github.com/YOUR_USER_NAME/python-dirtt``
 
 Now you can change whatever you want, commit, push to your fork and when 
 your contribution is done, follow the pull request link and send us a 
@@ -130,11 +106,11 @@ Installation
 
 Once downloaded it should be as easy as typing:
 
-	python setup.py install::
+	``python setup.py install``
 
 and then to get the example templates and needed dtd locally:
 
-	python setup.py install_data::
+	``python setup.py install_data``
 
 Try it out in a python-virtualenv environment to play around and it should make sense quickly.
 
@@ -149,11 +125,11 @@ happens) A shared mount makes sense.
 Next as you customize the templates you'll need to change the reference to this file using urllib
 style references. Eg.
 
-	file:///shared/drive/dtds/dirtt.dtd::
+	``file:///shared/drive/dtds/dirtt.dtd``
 	
-or
+	or
 	
-	http:///intranet/dtds/dirtt.dtd::
+	``http:///intranet/dtds/dirtt.dtd``
 	
 Now write your template using one of the samples. The variables you can define are below:
 
@@ -195,7 +171,7 @@ Look at the examples and even try them out locally in your own test environment.
 
 The template placeholders are defined using enclosing double curly braces. 
 
-	Eg. {{placeholder}}::
+	``Eg. {{placeholder}}``
 	
 The base class does take template variables as a python dictionary but this is something you'll
 need to explicitly define in your python code. The sample command line tool shows a slightly
@@ -221,9 +197,9 @@ Command Line Tool
 The command line tool was written more to test the library itself but there's no
 reason it can't be used as it is. It doesn't have alot of the error checking it probably should have.
 
-The basic usage is::
+The basic usage is:
 
-    mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive::
+	``mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive``
 
 This command will parse the template file which needs to be defined using a urllib style string. It can
 be a file accessible locally or a url. So the template itself could be something that is static data
@@ -235,8 +211,8 @@ will ask you for values to replace the placeholders.
 Links
 -----
 
-Here's the links. Some are just placeholders for now:
+Here's the links:
 
-`Github. <https://github.com/dshng/python-dirtt>`_
+`Github <https://github.com/dshng/python-dirtt>`_
 
 `Dashing Opensource <http://opensource.dashing.tv/python-dirtt>`_
