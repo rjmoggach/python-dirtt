@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.1//EN"
       "http://opensource.dashing.tv/dtds/dirtt-0_1_1.dtd">
-<dirtt name="Shot Tree" version="0.1.1" dirname="{{projects_root}}/{{project_path}}/shots" basename="{{shot_name}}">
+<dirtt name="Shot Tree" version="0.1.1" dirname="{{projects_root}}/{{project_path}}/shots" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
 
 <!-- L I N K   I N   S E Q U E N C E S   F O L D E R -->
 	<link basename="{{shot_name}}" dirname="{{projects_root}}/{{project_path}}/sequences/{{sequence_name}}"/>
 
 <!-- V A R / D A T A   F O L D E R -->
-	<dir name="Shot Data Folder" basename="var">
-		<dir basename="cache">
-			<dir basename="maya"/>
-			<dir basename="houdini"/>
-			<dir basename="rman"/>
-			<dir basename="nuke"/>
+	<dir name="Shot Data Folder" basename="var" username="pipeline" group="artist" perms="02755">
+		<dir basename="cache" username="pipeline" group="artist" perms="02755">
+			<dir basename="maya" username="pipeline" group="artist" perms="02775"/>
+			<dir basename="houdini" username="pipeline" group="artist" perms="02775"/>
+			<dir basename="rman" username="pipeline" group="artist" perms="02775"/>
+			<dir basename="nuke" username="pipeline" group="artist" perms="02775"/>
 		</dir>
-		<dir basename="chan"/>
-		<dir basename="geo"/>
-		<dir basename="db"/>
-		<dir basename="lut"/>
-		<dir basename="mocap"/>
-		<dir basename="moco"/>
-		<dir basename="timewarp"/>
+		<dir basename="chan" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="geo" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="db" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="lut" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="mocap" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="moco" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="timewarp" username="pipeline" group="artist" perms="02775"/>
 	</dir><!-- var -->
 
 <!-- E T C / C O N F I G   F O L D E R -->
-	<dir name="Shot Config Folder" basename="etc">
-		<dir basename="houdini">
-			<dir name ="dso"/>
-            <dir name ="otls"/>
-            <dir name ="scripts"/>
+	<dir name="Shot Config Folder" basename="etc" username="pipeline" group="supervisor" perms="02755">
+		<dir basename="houdini" username="pipeline" group="supervisor" perms="02755">
+			<dir name ="dso" username="pipeline" group="supervisor" perms="02775"/>
+            <dir name ="otls" username="pipeline" group="supervisor" perms="02775"/>
+            <dir name ="scripts" username="pipeline" group="supervisor" perms="02775"/>
         </dir><!-- houdini -->
-		<dir basename="maya">
-            <dir name="modules"/>
-            <dir name="plugins"/>
-            <dir name="scripts">
-                <dir name="mel"/>
-                <dir name="py"/>
+		<dir basename="maya" username="pipeline" group="supervisor" perms="02755">
+            <dir name="modules" username="pipeline" group="supervisor" perms="02775"/>
+            <dir name="plugins" username="pipeline" group="supervisor" perms="02775"/>
+            <dir name="scripts" username="pipeline" group="supervisor" perms="02755">
+                <dir name="mel" username="pipeline" group="supervisor" perms="02775"/>
+                <dir name="py" username="pipeline" group="supervisor" perms="02775"/>
             </dir>
-			<dir basename="shelves"/>
+			<dir basename="shelves" username="pipeline" group="supervisor" perms="02775"/>
 		</dir><!-- maya -->
-		<dir basename="nuke">
-			<dir basename="gizmos"/>
-			<dir basename="menu"/>
-			<dir basename="scripts"/>
+		<dir basename="nuke" username="pipeline" group="supervisor" perms="02755">
+			<dir basename="gizmos" username="pipeline" group="supervisor" perms="02775"/>
+			<dir basename="menu" username="pipeline" group="supervisor" perms="02775"/>
+			<dir basename="scripts" username="pipeline" group="supervisor" perms="02775"/>
 		</dir><!-- nuke -->
-		<dir basename="user"/>
-		<dir basename="vray"/>
+		<dir basename="user" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="vray" username="pipeline" group="artist" perms="02775"/>
 	</dir><!-- etc -->
 
 <!-- I M G / I M A G E S   F O L D E R -->
-	<dir name="Shot Image Folder" basename="img">
-		<dir basename="2d">
-			<dir basename="comp"/>
-			<dir basename="paint"/>
-			<dir basename="roto"/>
+	<dir name="Shot Image Folder" basename="img" username="pipeline" group="artist" perms="02755">
+		<dir basename="2d" username="pipeline" group="artist" perms="02755">
+			<dir basename="comp" username="pipeline" group="artist" perms="02775"/>
+			<dir basename="paint" username="pipeline" group="artist" perms="02775"/>
+			<dir basename="roto" username="pipeline" group="artist" perms="02775"/>
 		</dir><!-- 2d -->
-		<dir basename="cg"/>
-		<dir basename="design"/>
-		<dir basename="footage">
-			<dir basename="elements"/>
-			<dir basename="plates"/>
+		<dir basename="cg" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="design" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="footage" username="pipeline" group="artist" perms="02755">
+			<dir basename="elements" username="pipeline" group="artist" perms="02775"/>
+			<dir basename="plates" username="pipeline" group="artist" perms="02775"/>
 		</dir><!-- footage -->
 	</dir><!-- img -->
 
 <!-- L I B / L I B R A R Y   F O L D E R -->
-	<dir name="Shot Library Folder" basename="lib">
-		<dir basename="audio"/>
-		<dir basename="camera">
-			<dir basename="trk"/>
-			<dir basename="lens"/>
+	<dir name="Shot Library Folder" basename="lib" username="pipeline" group="supervisor" perms="02755">
+		<dir basename="audio" username="pipeline" group="artist" perms="02755"/>
+		<dir basename="camera" username="pipeline" group="artist" perms="02755">
+			<dir basename="trk" username="pipeline" group="artist" perms="02775"/>
+			<dir basename="lens" username="pipeline" group="artist" perms="02775"/>
 		</dir><!-- camera -->
-		<dir basename="design"/>
-		<dir basename="hdri"/>
-		<dir basename="paint"/>
-		<dir basename="reference"/>
-		<dir basename="tools"/>
+		<dir basename="design" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="hdri" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="paint" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="reference" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="tools" username="pipeline" group="artist" perms="02775"/>
 	</dir><!-- lib -->
 	
 <!-- U S R / W O R K   F O L D E R -->
-	<dir name="Shot Work Folder" basename="usr">
-		<dir basename="2d">
+	<dir name="Shot Work Folder" basename="usr" username="pipeline" group="artist" perms="02755">
+		<dir basename="2d" username="pipeline" group="artist" perms="02775">
 		</dir><!-- 2d -->
-		<dir basename="cg">
+		<dir basename="cg" username="pipeline" group="artist" perms="02775">
 		</dir><!-- cg -->
 	</dir><!-- usr -->
 	

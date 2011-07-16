@@ -8,8 +8,10 @@ def get_gid_for_name(group, default=0):
 	returns gid for a given name string
 	"""
 	if not group is None:
-		try: gid = grp.getgrnam(group).gr_gid
-		except KeyError: gid = default
+		try:
+			gid = grp.getgrnam(group).gr_gid
+		except KeyError:
+			gid = default
 	return gid
 
 
@@ -65,7 +67,7 @@ def clean_string(bad_text):
 	soap = re.sub('([\ ])','_',wash)
 	# strip out strange characters
 	rinse = re.sub('[^A-za-z0-9-_\.<>%]','',soap)
-	# squeeze reapeting "_"'s
+	# squeeze repeating underscores
 	spin = re.sub('[_]+','_',rinse)
 	return spin
 

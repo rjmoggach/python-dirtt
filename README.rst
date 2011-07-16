@@ -42,6 +42,11 @@ HEAD
 
 * still working on getting it working
 
+0.2.0b1
+~~~~~~~
+
+Published to PyPi for general consumption. Probably lots of bugs to report.
+
 0.1.2a1
 ~~~~~~~
 
@@ -57,7 +62,7 @@ Initial commit.  Everything is new!
 What It Does
 ------------
 
-``dirtt`` is a standalone tool and library used to generate 
+``python-dirtt`` is a standalone tool and library used to generate 
 directory and file structures from xml templates that describe 
 repeatedly used filesystem layouts such as complex project structures.
 
@@ -65,7 +70,7 @@ The general problem being tackled is one of inconsistent directory structures
 for visual effects projects, from a lack of industry standards, resulting in 
 lost assets, security risks, and most importantly wasted resources from inefficient production.
 
-``dirtt`` doesn't solve that problem as a whole. It provides a command-line
+``python-dirtt`` doesn't solve that problem as a whole. It provides a command-line
 tool and python library that allow for quick creation of complex structures
 from XML templates that define directory, file and link structures as well as
 filesystem attributes and reference Cheetah templates for static file 
@@ -74,7 +79,7 @@ that it can be used for any similar task.
 
 The basic usage is::
 
-    $ mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive
+    mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive::
 
 The templates that come with ``dirtt`` provide one generic example of how to use
 the tools. They use a simple template language that is part of the package to
@@ -86,13 +91,14 @@ Contributing
 ------------
 
 All kinds of contributions are welcome - code, tests, documentation, bug reports, ideas, etc.
+
 Currently we need to implement the following:
 
- -better testing
- -better error checking of values and process
- -introspection of existing trees
- -modular exceptions
- -better documentation
+-better testing
+-better error checking of values and process
+-introspection of existing trees
+-modular exceptions
+-better documentation
 
 Forking through Github
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -103,7 +109,7 @@ First of all, you need to fork the the official repository, which is
 Log in to Github, go to the dirtt repository page, follow the fork link, 
 wait for Github to copy the repository and then clone your fork, like:
 
-	$ git clone https://github.com/YOUR_USER_NAME/python-dirtt
+	git clone https://github.com/YOUR_USER_NAME/python-dirtt::
 
 Now you can change whatever you want, commit, push to your fork and when 
 your contribution is done, follow the pull request link and send us a 
@@ -112,7 +118,7 @@ request explaining what you did and why.
 Running the tests
 ~~~~~~~~~~~~~~~~~
 
-dirtt's test suite is small and not yet at all comprehensive, but we aim
+python-dirtt's test suite is small and not yet at all comprehensive, but we aim
 to grow it. That's not true... It plain doesn't exist yet. Anyone care to contribute?
 
 
@@ -134,11 +140,11 @@ Installation
 
 Once downloaded it should be as easy as typing:
 
-	$ python setup.py install
+	python setup.py install::
 
 and then to get the example templates and needed dtd locally:
 
-	$ python setup.py install_data
+	python setup.py install_data::
 
 Try it out in a python-virtualenv environment to play around and it should make sense quickly.
 
@@ -153,11 +159,11 @@ happens) A shared mount makes sense.
 Next as you customize the templates you'll need to change the reference to this file using urllib
 style references. Eg.
 
-	$ file:///shared/drive/dtds/dirtt.dtd
+	file:///shared/drive/dtds/dirtt.dtd::
 	
-	or
+or
 	
-	$ http:///intranet/dtds/dirtt.dtd
+	http:///intranet/dtds/dirtt.dtd::
 	
 Now write your template using one of the samples. The variables you can define are below:
 
@@ -199,7 +205,7 @@ Look at the examples and even try them out locally in your own test environment.
 
 The template placeholders are defined using enclosing double curly braces. 
 
-	$ Eg. {{placeholder}}
+	Eg. {{placeholder}}::
 	
 The base class does take template variables as a python dictionary but this is something you'll
 need to explicitly define in your python code. The sample command line tool shows a slightly
@@ -227,7 +233,7 @@ reason it can't be used as it is. It doesn't have alot of the error checking it 
 
 The basic usage is::
 
-    $ mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive
+    mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive::
 
 This command will parse the template file which needs to be defined using a urllib style string. It can
 be a file accessible locally or a url. So the template itself could be something that is static data
