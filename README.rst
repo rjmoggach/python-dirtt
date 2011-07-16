@@ -42,10 +42,10 @@ HEAD
 
 * still working on getting it working
 
-0.2.0b1
+0.1.3a1
 ~~~~~~~
 
-Published to PyPi for general consumption. Probably lots of bugs to report.
+need to get entity skipping working... how do I do this?
 
 0.1.2a1
 ~~~~~~~
