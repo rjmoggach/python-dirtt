@@ -14,7 +14,7 @@ user defined XML directory tree templates.
 """
 
 #v0.1.3a1
-VERSION = (0, 1, 3, 'alpha', 1)
+VERSION = (0, 1, 3, 'alpha', 2)
 
 STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidiate': 'rc' }
 
@@ -74,6 +74,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
 			kwargs = {}
 		self.interactive = interactive
 		self.kwargs = kwargs
+		self.skip_entity = 0
 		
 	def run(self):
 		"""
@@ -88,50 +89,53 @@ class CreateDirectoryTreeHandler(ContentHandler):
 		tree_template_str = self._read_template(self.tree_template)
 		tree_template_str = self._parse_template(tree_template_str,self.tree_template)
 		parseString(tree_template_str,self)
-		if self.verbose:
-			print "Returning to start dir: %s" % self.start_dir
+		if self.verbose: print "Returning to start dir: %s" % self.start_dir
 		os.chdir(self.start_dir)
+		self.current_dir = os.path.abspath(".")
 	
 	def startElement(self, name, attrs):
 		"""
 		When an XML element is first read, this function is run
 		to process it's attributes and content before moving on
+		to it's contents and then endElement
 		"""
 		warn = False
 		self.current_dir = os.path.abspath(".")
 		basename = attrs.get("basename", None)
 		perms,uid,gid = self._return_perms_uid_gid(attrs)
-		# base directory
 		if name == 'dirtt':
-			if self.verbose:
-				print "Starting Directory Tree Template Build..."
+			if self.verbose: print "Starting Directory Tree Template Build..."
 			self.dirname = attrs.get("dirname")
-			if self.verbose:
-				print "Changing current directory to: %s" % self.dirname
+			if self.verbose: print "\tChanging current directory to: %s" % self.dirname
 			os.chdir(self.dirname)
+			self.current_dir = os.path.abspath(".")
 		if basename:
+			if self.skip_entity: self.skip_entity += 1
 			if name in ('dirtt','dir'):
-				self.current_dir = os.path.abspath(".")
-				if self.verbose:
-					print "creating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
-				# THIS DOESN'T WORK YET - HOW DO WE SKIP ENTITIES...
-				#if self.interactive:
-				#	if not raw_input("Create Directory %s (yes/no)?" % os.path.join(self.current_dir,basename)) in ("yes","Yes","YES","Y","y"):
-				#		if self.verbose:
-				#			print "skipping dir: %s" % os.path.join(self.current_dir,basename)
-				create_dir(basename, perms, uid, gid, warn)
-				os.chdir(basename)
+				if self.interactive:
+					if not self.skip_entity:
+						if not raw_input("Create Directory %s (yes/no)?" % os.path.join(self.current_dir,basename)) in ("yes","Yes","YES","Y","y"):
+							self.skip_entity += 1
+							if self.verbose: print "\tSkipping dir: %s" % os.path.join(self.current_dir,basename)
+						else:
+							if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
+							create_dir(basename, perms, uid, gid, warn)
+							os.chdir(basename)
+							self.current_dir = os.path.abspath(".")
+				else:
+					if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
+					create_dir(basename, perms, uid, gid, warn)
+					os.chdir(basename)
+					self.current_dir = os.path.abspath(".")
 			if name == 'file':
-				if self.verbose:
-					print "creating file: %s/%s (%s/%i:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
+				if self.verbose: print "\tCreating file: %s/%s (%s/%i:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
 				href = attrs.get("href",None)
 				if not href is None:
 					template_str = self._read_template(href)
 					content = self._parse_template(template_str, href)
 				create_file(basename, content, perms, uid, gid)
 			if name == 'link':
-				if self.verbose:
-					print "creating symlink: %s/%s" % (self.current_dir, basename)
+				if self.verbose: print "\tCreating symlink: %s/%s" % (self.current_dir, basename)
 				create_symlink(ref, basename)
 		return
 			
@@ -192,8 +196,11 @@ class CreateDirectoryTreeHandler(ContentHandler):
 		we're done processing it's contents, otherwise
 		pass silently
 		"""
-		if name =='dir':
-			os.chdir("..")
+		if not self.skip_entity:
+			if name in ('dir','dirtt'):
+					os.chdir("..")
+					self.current_dir = os.path.abspath(".")
+		if self.skip_entity: self.skip_entity -= 1
 		pass
 
 

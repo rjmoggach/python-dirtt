@@ -40,18 +40,8 @@ Beta release mid-July 2011, final release early August.
 HEAD
 ~~~~
 
-* still working on getting it working
+* mostly working... directories can be interactive
 
-0.1.3a1
-~~~~~~~
-
-need to get entity skipping working... how do I do this?
-
-0.1.2a1
-~~~~~~~
-
-The python setup.py script should be working as expected. Do install_data as well
-to get the examples.
 
 0.1.1
 ~~~~~
