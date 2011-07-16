@@ -23,6 +23,7 @@
 
 __all__ = ['looper']
 
+
 class looper(object):
 	"""
 	Helper for looping (particularly in templates)
@@ -44,6 +45,7 @@ class looper(object):
 		return '<%s for %r>' % (
 			self.__class__.__name__, self.seq)
 
+
 class looper_iter(object):
 
 	def __init__(self, seq):
@@ -59,6 +61,7 @@ class looper_iter(object):
 		result = loop_pos(self.seq, self.pos), self.seq[self.pos]
 		self.pos += 1
 		return result
+
 
 class loop_pos(object):
 

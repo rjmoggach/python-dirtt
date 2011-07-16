@@ -3,10 +3,14 @@
 python-dirtt - Directory Tree Templater
 =======================================
 
+* `Bugs <https://github.com/dshng/python-dirtt/issues/>`_
+
 .. contents::
 
 .. toctree::
    :maxdepth: 1
+
+   news
 
 .. comment: split here
 

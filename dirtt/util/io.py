@@ -17,11 +17,16 @@ import urllib
 
 
 def set_perms_uid_gid(target, perms, uid, gid):
+	"""
+	given a provided permission, uid & gid
+	set the the owner, group and permissions
+	for a given path (directory, file, etc.)
+	"""
 	os.chmod(target,perms)
 	if uid and gid:
-		os.chown(path,uid,gid)
+		os.chown(target,uid,gid)
 	elif uid:
-		os.chown(path,uid)
+		os.chown(target,uid,0)
 	else:
 		return
 

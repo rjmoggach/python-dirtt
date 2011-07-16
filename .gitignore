@@ -7,6 +7,8 @@
 .installed.cfg
 __minitage__*
 bin
+python_dirtt.egg-info
+build
 develop-eggs
 downloads
 eggs

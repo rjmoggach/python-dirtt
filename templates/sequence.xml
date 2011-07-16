@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.1//EN"
+      "http://opensource.dashing.tv/dtds/dirtt-0_1_1.dtd">
+<dirtt name="Sequence Tree" version="0.1.1" dirname="{{projects_root}}/{{project_path}}/sequences" basename="{{sequence_name}}" username="pipeline" group="artist" perms="02755">
+
+<!-- C O N F I G   F O L D E R -->
+	<dir name="Sequence Config Folder" basename="etc" username="pipeline" group="supervisor" perms="02755">
+		<dir basename="houdini" username="pipeline" group="supervisor" perms="02755">
+			<dir name ="dso" username="pipeline" group="supervisor" perms="02775"/>
+            <dir name ="otls" username="pipeline" group="supervisor" perms="02775"/>
+            <dir name ="scripts" username="pipeline" group="supervisor" perms="02775"/>
+        </dir><!-- houdini -->
+		<dir basename="maya" username="pipeline" group="supervisor" perms="02755">
+            <dir name="modules" username="pipeline" group="supervisor" perms="02775"/>
+            <dir name="plugins" username="pipeline" group="supervisor" perms="02775"/>
+            <dir name="scripts" username="pipeline" group="supervisor" perms="02755">
+                <dir name="mel" username="pipeline" group="artist" perms="02775"/>
+                <dir name="py" username="pipeline" group="artist" perms="02775"/>
+            </dir>
+			<dir basename="shelves" username="pipeline" group="supervisor" perms="02775"/>
+		</dir><!-- maya -->
+		<dir basename="nuke" username="pipeline" group="supervisor" perms="02755">
+			<dir basename="gizmos" username="pipeline" group="supervisor" perms="02775"/>
+			<dir basename="menu" username="pipeline" group="supervisor" perms="02775"/>
+			<dir basename="scripts" username="pipeline" group="supervisor" perms="02775"/>
+		</dir><!-- nuke -->
+		<dir basename="user" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="vray" username="pipeline" group="artist" perms="02775"/>
+	</dir><!-- etc -->
+
+</dirtt>

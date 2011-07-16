@@ -37,7 +37,7 @@ import re
 import sys
 import cgi
 import urllib
-from dirtt.util.looper import looper
+import looper
 
 __all__ = ['TemplateError', 'Template', 'sub', 'HTMLTemplate',
 		   'sub_html', 'html', 'bunch']
@@ -45,6 +45,7 @@ __all__ = ['TemplateError', 'Template', 'sub', 'HTMLTemplate',
 token_re = re.compile(r'\{\{|\}\}')
 in_re = re.compile(r'\s+in\s+')
 var_re = re.compile(r'^[a-z_][a-z0-9_]*$', re.I)
+
 
 class TemplateError(Exception):
 	"""Exception raised while parsing a template
@@ -62,11 +63,14 @@ class TemplateError(Exception):
 			msg += ' in %s' % self.name
 		return msg
 
+
 class _TemplateContinue(Exception):
 	pass
 
+
 class _TemplateBreak(Exception):
 	pass
+
 
 class Template(object):
 
@@ -262,15 +266,18 @@ class Template(object):
 			msg += " in file %s" % self.name
 		return msg
 
+
 def sub(content, **kw):
 	name = kw.get('__name')
 	tmpl = Template(content, name=name)
 	return tmpl.substitute(kw)
 	return result
 
+
 def paste_script_template_renderer(content, vars, filename=None):
 	tmpl = Template(content, name=filename)
 	return tmpl.substitute(vars)
+
 
 class bunch(dict):
 
