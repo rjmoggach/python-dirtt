@@ -44,9 +44,10 @@ def create_dir(basename, perms=None, uid=None, gid=None, warn=False):
 				\nAborting directory creation." % basename
 			sys.exit(-1)
 	elif os.path.isfile(basename):
-		print >> sys.stderr, "A file exists with the name of the desired dir ('%s'). \
-			\nAborting directory creation." % basename
-		sys.exit(-2)
+		if warn:
+			print >> sys.stderr, "A file exists with the name of the desired dir ('%s'). \
+				\nAborting directory creation." % basename
+			sys.exit(-2)
 	else:
 		head, tail = os.path.split(basename)
 		if head and not os.path.isdir(head):

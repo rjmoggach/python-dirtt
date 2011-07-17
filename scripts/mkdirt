@@ -28,6 +28,7 @@ def main():
 	parser.add_option("-t", "--template", dest="template_loc", help="Full path to template file.", metavar="XML_FILE")
 	parser.add_option("-v", "--verbose", dest="verbose", action="store_true", default=False)
 	parser.add_option("-i", "--interactive", dest="interactive", action="store_true", default=False)
+	parser.add_option("-w", "--stop-on-warning",dest="warn",action="store_true",default=False)
 	(options, args) = parser.parse_args()
 	if os.geteuid() != 0:
 		print "You must be root to run this script."
@@ -42,6 +43,8 @@ def main():
 	else: verbose = False
 	if options.interactive: interactive = True
 	else: interactive = False
+	if options.warn:  warn = True
+	else: warn = False	
 	template_file = open(template_loc,'r')
 	template_str = template_file.read()
 	template_file.close()
@@ -59,7 +62,7 @@ def main():
 			template_variables[key]=eval(key)
 	else: template_variables = {}
 
-	c = CreateDirectoryTreeHandler(verbose,template_loc,template_variables,interactive)
+	c = CreateDirectoryTreeHandler(verbose,template_loc,template_variables,interactive,warn)
 	c.run()
 	print "Created Tree."
 	sys.exit(0)

@@ -59,7 +59,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
 	and executing the xml elements and their attributes.
 	"""
 
-	def __init__(self, verbose, tree_template, kwargs, interactive=False):
+	def __init__(self, verbose, tree_template, kwargs, interactive=False,warn=False):
 		"""
 		define from the class initialization the verbosity level,
 		the template to use, the user's starting directory, and any
@@ -75,6 +75,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
 		self.interactive = interactive
 		self.kwargs = kwargs
 		self.skip_entity = 0
+		self.warn = warn 
 		
 	def run(self):
 		"""
@@ -99,7 +100,6 @@ class CreateDirectoryTreeHandler(ContentHandler):
 		to process it's attributes and content before moving on
 		to it's contents and then endElement
 		"""
-		warn = False
 		self.current_dir = os.path.abspath(".")
 		basename = attrs.get("basename", None)
 		perms,uid,gid = self._return_perms_uid_gid(attrs)
@@ -119,12 +119,12 @@ class CreateDirectoryTreeHandler(ContentHandler):
 							if self.verbose: print "\tSkipping dir: %s" % os.path.join(self.current_dir,basename)
 						else:
 							if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
-							create_dir(basename, perms, uid, gid, warn)
+							create_dir(basename, perms, uid, gid, self.warn)
 							os.chdir(basename)
 							self.current_dir = os.path.abspath(".")
 				else:
 					if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
-					create_dir(basename, perms, uid, gid, warn)
+					create_dir(basename, perms, uid, gid, self.warn)
 					os.chdir(basename)
 					self.current_dir = os.path.abspath(".")
 			if name == 'file':
