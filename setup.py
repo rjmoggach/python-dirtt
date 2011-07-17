@@ -2,23 +2,11 @@ import os
 from setuptools import setup
 
 
-here = os.path.dirname(os.path.abspath(__file__))
-
 def return_version():
 	return __import__('dirtt').get_version()
 
-
 def dirtt(s):
 	return "dirtt"+s
-
-## Get long_description from index.txt:
-f = open(os.path.join(here, 'docs', 'index.rst'))
-long_description = f.read().strip()
-long_description = long_description.split('split here', 1)[1]
-f.close()
-f = open(os.path.join(here, 'docs', 'news.rst'))
-long_description += "\n\n" + f.read()
-f.close()
 
 setup(
 	name='python-dirtt',
@@ -34,7 +22,24 @@ setup(
 		],
 	version=return_version(),
 	description="Directory Tree Templater",
-	long_description=long_description,
+	long_description="""
+		python-dirtt - Directory Tree Templater
+		(c) 2011 Dashing Collective Inc. and contributors
+		Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+		
+		dirtt is a standalone tool and library used to generate 
+		directory and file structures from xml templates that describe 
+		repeatedly used filesystem layouts such as project structures
+		or elements therein.
+		
+		It provides a subclassed implementation of xml.sax.handler ContentHandler
+		with internal methods that read,parse,render,and execute builds of
+		user defined XML directory tree templates.
+		
+		https://github.com/dshng/python-dirtt/
+	
+		http://opensource.dashing.tv/python-dirtt/
+		""",
 	classifiers=[
 		'Development Status :: 3 - Alpha',
 		'Intended Audience :: Developers',
@@ -52,7 +57,7 @@ setup(
 	author_email='rob@dashing.tv',
 	maintainer='Dashing Collective Inc.',
 	maintainer_email='rob@dashing.tv',
-	url='http://opensource.dashing.tv/python-dirtt',
+	url='https://github.com/dshng/python-dirtt/',
 	license='MIT',
 	zip_safe=True
 	)
