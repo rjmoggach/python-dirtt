@@ -2,9 +2,7 @@ import os
 from setuptools import setup
 
 
-def here():
-	return os.path.dirname(os.path.abspath(__file__))
-
+here = os.path.dirname(os.path.abspath(__file__))
 
 def return_version():
 	return __import__('dirtt').get_version()
