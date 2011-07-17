@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def return_version():
@@ -10,16 +10,12 @@ def dirtt(s):
 
 setup(
 	name='python-dirtt',
-	packages=[
-		dirtt(''),
-		dirtt('.util'),
-		],
+	#packages=[ dirtt(''), dirtt('.util')],
+	packages=find_packages(),
 	package_dir={dirtt(''):'dirtt'},
+	package_data={dirtt('') : ['data/templates/*.xml','data/dtds/*.dtd']},
 	scripts=['scripts/mkdirt',],
-	data_files=[
-		('var/dirtt/templates',['templates/project.xml','templates/sequence.xml','templates/shot.xml']),
-		('var/dirtt/dtds',['dtds/dirtt.dtd','dtds/dirtt-0_1_1.dtd']),
-		],
+	#data_files=[],
 	version=return_version(),
 	description="Directory Tree Templater",
 	long_description="""
@@ -59,6 +55,6 @@ setup(
 	maintainer_email='rob@dashing.tv',
 	url='https://github.com/dshng/python-dirtt/',
 	license='MIT',
-	zip_safe=True
+	zip_safe=False
 	)
 
