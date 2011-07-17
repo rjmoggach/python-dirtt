@@ -11,3 +11,4 @@ Dashing Collective Inc.
 Contributors
 ~~~~~~~~~~~~
 
+Michael F. Wilson

@@ -1,39 +1,41 @@
 import os
-from setuptools import setup
-
-
-def read(fname):
-	return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
-
-def here():
-	return os.path.dirname(os.path.abspath(__file__))
+from setuptools import setup, find_packages
 
 
 def return_version():
 	return __import__('dirtt').get_version()
 
-kw = {}
-
 def dirtt(s):
 	return "dirtt"+s
 
-
 setup(
 	name='python-dirtt',
-	packages=[
-		dirtt(''),
-		dirtt('.util'),
-		],
+	#packages=[ dirtt(''), dirtt('.util')],
+	packages=find_packages(),
 	package_dir={dirtt(''):'dirtt'},
+	package_data={dirtt('') : ['data/templates/*.xml','data/dtds/*.dtd']},
 	scripts=['scripts/mkdirt',],
-	data_files=[
-		('var/dirtt/templates',['templates/project.xml','templates/sequence.xml','templates/shot.xml']),
-		('var/dirtt/dtds',['dtds/dirtt.dtd','dtds/dirtt-0_1_1.dtd']),
-		],
+	#data_files=[],
 	version=return_version(),
 	description="Directory Tree Templater",
-	long_description=read('README.rst'),
+	long_description="""
+		python-dirtt - Directory Tree Templater
+		(c) 2011 Dashing Collective Inc. and contributors
+		Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+		
+		dirtt is a standalone tool and library used to generate 
+		directory and file structures from xml templates that describe 
+		repeatedly used filesystem layouts such as project structures
+		or elements therein.
+		
+		It provides a subclassed implementation of xml.sax.handler ContentHandler
+		with internal methods that read,parse,render,and execute builds of
+		user defined XML directory tree templates.
+		
+		https://github.com/dshng/python-dirtt/
+	
+		http://opensource.dashing.tv/python-dirtt/
+		""",
 	classifiers=[
 		'Development Status :: 3 - Alpha',
 		'Intended Audience :: Developers',
@@ -51,8 +53,8 @@ setup(
 	author_email='rob@dashing.tv',
 	maintainer='Dashing Collective Inc.',
 	maintainer_email='rob@dashing.tv',
-	url='http://opensource.dashing.tv/python-dirtt',
+	url='https://github.com/dshng/python-dirtt/',
 	license='MIT',
-	zip_safe=True
+	zip_safe=False
 	)
 
