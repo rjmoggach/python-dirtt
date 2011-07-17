@@ -2,10 +2,6 @@ import os
 from setuptools import setup
 
 
-def read(fname):
-	return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
-
 def here():
 	return os.path.dirname(os.path.abspath(__file__))
 
@@ -17,6 +13,14 @@ def return_version():
 def dirtt(s):
 	return "dirtt"+s
 
+## Get long_description from index.txt:
+f = open(os.path.join(here, 'docs', 'index.rst'))
+long_description = f.read().strip()
+long_description = long_description.split('split here', 1)[1]
+f.close()
+f = open(os.path.join(here, 'docs', 'news.rst'))
+long_description += "\n\n" + f.read()
+f.close()
 
 setup(
 	name='python-dirtt',
@@ -32,7 +36,7 @@ setup(
 		],
 	version=return_version(),
 	description="Directory Tree Templater",
-	long_description=read('README.rst'),
+	long_description=long_description,
 	classifiers=[
 		'Development Status :: 3 - Alpha',
 		'Intended Audience :: Developers',
