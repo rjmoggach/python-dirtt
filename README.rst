@@ -42,6 +42,8 @@ What It Does
 directory and file structures from xml templates that describe 
 repeatedly used filesystem layouts such as complex project structures.
 
+Take a look at the `screencast <http://opensource.dashing.tv/python-dirtt/dirtt-screencast.mov>`_.
+
 The general problem being tackled is one of inconsistent directory structures 
 for visual effects projects, from a lack of industry standards, resulting in 
 lost assets, security risks, and most importantly wasted resources from inefficient production.
