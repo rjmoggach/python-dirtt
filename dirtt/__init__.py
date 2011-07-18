@@ -135,8 +135,16 @@ class CreateDirectoryTreeHandler(ContentHandler):
 					content = self._parse_template(template_str, href)
 				create_file(basename, content, perms, uid, gid)
 			if name == 'link':
-				if self.verbose: print "\tCreating symlink: %s/%s" % (self.current_dir, basename)
-				create_symlink(ref, basename)
+				try:
+					ref = attrs.get("ref")
+					if self.verbose: print "\tCreating symlink: %s/%s" % (self.current_dir, basename)
+					create_symlink(ref, basename)
+				except:
+					pass
+		else:
+			if name in ('dirtt', 'dir'):
+				if not self.skip_entity:
+					self.skip_entity += 1
 		return
 			
 	def _return_perms_uid_gid(self,attrs):
