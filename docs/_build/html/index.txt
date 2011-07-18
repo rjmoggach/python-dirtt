@@ -3,21 +3,16 @@
 python-dirtt - Directory Tree Templater
 =======================================
 
+* `Bugs <https://github.com/dshng/python-dirtt/issues/>`_
+
 .. contents::
 
 .. toctree::
    :maxdepth: 1
 
+   news
+
 .. comment: split here
-.. |copy|   unicode:: U+000A9 .. COPYRIGHT SIGN
-
-Status and License
-------------------
-
-dshng-loginhooks was written by Rob Moggach, for `Dashing Collective Inc. <http://dashing.tv>`_
-It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.txt>`_.
-
-|copy| 2011 Dashing Collective Inc. and contributors.
 
 
 Status and License
@@ -25,12 +20,11 @@ Status and License
 
 python-dirtt was written by Rob Moggach, for `Dashing Collective Inc. <http://dashing.tv>`_
 and is  maintained by a `group of developers <https://github.com/dshng/python-dirtt/raw/master/AUTHORS.txt>`_.
+It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.txt>`_.
 
 You can install it with ``easy_install dirtt``.
 
-It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.txt>`_.
-
-|copy| 2011 Dashing Collective Inc. and contributors.
+(c) 2011 Dashing Collective Inc. and contributors.
 
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
