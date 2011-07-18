@@ -13,8 +13,8 @@ with internal methods that read,parse,render,and execute builds of
 user defined XML directory tree templates.
 """
 
-#v0.1.4b4
-VERSION = (0, 1, 4, 'beta', 4)
+#v0.1.4b9
+VERSION = (0, 1, 4, 'beta', 9)
 
 STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidiate': 'rc' }
 
@@ -135,8 +135,21 @@ class CreateDirectoryTreeHandler(ContentHandler):
 					content = self._parse_template(template_str, href)
 				create_file(basename, content, perms, uid, gid)
 			if name == 'link':
-				if self.verbose: print "\tCreating symlink: %s/%s" % (self.current_dir, basename)
-				create_symlink(ref, basename)
+				try:
+					ref = attrs.get("ref")
+					try:
+						dirname = attrs.get("dirname")
+					except:
+						dirname = self.current_dir
+					link = os.path.join(dirname,basename)
+					if self.verbose: print "\tCreating symlink: %s => %s" % (link, ref)
+					create_symlink(ref, link)
+				except:
+					pass
+		else:
+			if name in ('dirtt', 'dir'):
+				if not self.skip_entity:
+					self.skip_entity += 1
 		return
 			
 	def _return_perms_uid_gid(self,attrs):
