@@ -4,7 +4,8 @@
 <dirtt name="Shot Tree" version="0.1.1" dirname="{{projects_root}}/{{project_path}}/shots" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
 
 <!-- L I N K   I N   S E Q U E N C E S   F O L D E R -->
-	<link basename="{{shot_name}}" dirname="{{projects_root}}/{{project_path}}/sequences/{{sequence_name}}"/>
+	<link basename="{{shot_name}}" dirname="{{projects_root}}/{{project_path}}/sequences/{{sequence_name}}"
+		ref="{{projects_root}}/{{project_path}}/shots/{{shot_name}}"/>
 
 <!-- V A R / D A T A   F O L D E R -->
 	<dir name="Shot Data Folder" basename="var" username="pipeline" group="artist" perms="02755">
