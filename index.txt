@@ -51,7 +51,7 @@ The basic usage is:
 
 	``mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive``
 
-The templates that come with ``dirtt`` provide one generic example of how to use
+The templates that come with ``python-dirtt`` provide one generic example of how to use
 the tools. They use a simple template language that is part of the package to
 create a solution that is quick to customize and rapid to deploy.
 These can easily be edited to create working templates tailored to your needs.
@@ -73,7 +73,7 @@ Currently we need to implement the following:
 Forking through Github
 ~~~~~~~~~~~~~~~~~~~~~~
 
-First of all, you need to fork the the official repository, which is 
+First of all, you need to fork from the official repository, which is 
 `https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
 
 Log in to Github, go to the dirtt repository page, follow the fork link, 
@@ -131,7 +131,7 @@ style references. Eg.
 
 	``file:///shared/drive/dtds/dirtt.dtd``
 	
-		or
+	or
 	
 	``http:///intranet/dtds/dirtt.dtd``
 	
@@ -215,8 +215,8 @@ will ask you for values to replace the placeholders.
 Links
 -----
 
-Here's the links. Some are just placeholders for now:
+Here's the links:
 
-`Github. <https://github.com/dshng/python-dirtt>`_
+`Github <https://github.com/dshng/python-dirtt>`_
 
 `Dashing Opensource <http://opensource.dashing.tv/python-dirtt>`_
