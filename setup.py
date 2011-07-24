@@ -37,11 +37,57 @@ def find_data_files(base):
 	return data_files	
 	
 
+def is_package(path):
+	"""
+	is_package and find_package code borrowed from:
+	http://wiki.python.org/moin/Distutils/Cookbook/AutoPackageDiscovery
+	"""
+	return (
+		os.path.isdir(path) and
+		os.path.isfile(os.path.join(path, '__init__.py'))
+		)
+
+
+def find_packages(path, base="" ):
+	"""
+	Find all packages in path
+	"""
+	packages = {}
+	for item in os.listdir(path):
+		dir = os.path.join(path, item)
+		if is_package(dir):
+			if base:
+				module_name = "%(base)s.%(item)s" % vars()
+			else:
+				module_name = item
+				packages[module_name] = dir
+			packages.update(find_packages(dir, module_name))
+	return packages
+
+
+def find_data_files(base):
+	"""
+	Builds a list of data files to be installed aside from 
+	in-package data.
+	"""
+	data_files = []
+	for item in os.listdir(base):
+		_files = []
+		if os.path.isdir(os.path.join(base,item)):
+			for root, dirs, files in os.walk(os.path.join(base,item)):
+				_files.extend([os.path.join(base,item,f) for f in files])	
+		if len(_files) > 0:
+			data_files.append((item,_files))
+	return data_files	
+	
+
 def return_version():
 	return __import__('dirtt').get_version()
 
+
 def dirtt(s):
 	return "dirtt"+s
+
 
 setup(
 	name='python-dirtt',
@@ -89,5 +135,5 @@ setup(
 	maintainer_email='rob@dashing.tv',
 	url='https://github.com/dshng/python-dirtt/',
 	license='MIT'
-	)
+)
 

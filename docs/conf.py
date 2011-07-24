@@ -42,7 +42,7 @@ copyright = '2011, Robert Moggach, Dashing Collective Inc.'
 #
 # The short X.Y version.
 
-release = "0.1.3"
+release = "0.1.4"
 version = ".".join(release.split(".")[:2])
 
 # There are two options for replacing |today|: either, you set today to some
