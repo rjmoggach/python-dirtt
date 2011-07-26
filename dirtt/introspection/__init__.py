@@ -91,12 +91,3 @@ class ProjectBuilder:
 		element.setAttribute("username",owner)
 		element.setAttribute("group",group)
 		element.setAttribute("perms",perms)
-						
-
-if __name__ == "__main__":
-	import sys
-	base = sys.argv[1] if len(sys.argv) > 1 else "."
-	pbuilder = ProjectBuilder(base)
-	pbuilder.build_template()
-
-

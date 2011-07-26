@@ -31,7 +31,7 @@ def get_version():
     return version
 
 __version__ = get_version()
-__all__ = ['util']
+__all__ = ['util','introspection']
 
 
 import os

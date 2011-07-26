@@ -9,20 +9,6 @@ def is_package(path):
 		os.path.isfile(os.path.join(path, '__init__.py'))
 		)
 
-def find_packages(path, base="" ):
-	""" Find all packages in path """
-	packages = {}
-	for item in os.listdir(path):
-		dir = os.path.join(path, item)
-		if is_package(dir):
-    			if base:
-				module_name = "%(base)s.%(item)s" % vars()
-    			else:
-				module_name = item
-    			packages[module_name] = dir
-			packages.update(find_packages(dir, module_name))
-	return packages
-
 # Builds a list of data files to be installed aside from 
 # in-package data.
 def find_data_files(base):
@@ -89,12 +75,15 @@ def dirtt(s):
 	return "dirtt"+s
 
 
+packages = find_packages('dirtt').values()
+packages.append('dirtt')
+
 setup(
 	name='python-dirtt',
-	packages=find_packages('.'),
+	packages=packages,
 	package_dir={dirtt(''):'dirtt'},
 	package_data={dirtt('') : ['data/templates/*.xml','data/dtds/*.dtd']},
-	scripts=['scripts/mkdirt',],
+	scripts=['scripts/mkdirt','scripts/btdirt',],
 	data_files = find_data_files(os.path.join('dirtt','data')),
 	version=return_version(),
 	description="Directory Tree Templater",
