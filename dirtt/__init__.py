@@ -141,7 +141,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
 						dirname = attrs.get("dirname")
 					except:
 						dirname = self.current_dir
-					link = os.path.join(dirname,basename)
+					link = os.path.join(basename,dirname)
 					if self.verbose: print "\tCreating symlink: %s => %s" % (link, ref)
 					create_symlink(ref, link)
 				except:
