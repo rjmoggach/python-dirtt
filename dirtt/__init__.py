@@ -31,7 +31,7 @@ def get_version():
     return version
 
 __version__ = get_version()
-__all__ = ['util']
+__all__ = ['util','introspection']
 
 
 import os
@@ -76,6 +76,8 @@ class CreateDirectoryTreeHandler(ContentHandler):
 		self.kwargs = kwargs
 		self.skip_entity = 0
 		self.warn = warn 
+		self.idrefs = {}
+		self.links = []
 		
 	def run(self):
 		"""
@@ -93,6 +95,19 @@ class CreateDirectoryTreeHandler(ContentHandler):
 		if self.verbose: print "Returning to start dir: %s" % self.start_dir
 		os.chdir(self.start_dir)
 		self.current_dir = os.path.abspath(".")
+
+		self._create_symlinks()
+
+	def _create_symlinks(self):
+		for link_info in self.links:
+			parent_dir = link_info['parent_dir']
+			link_name = link_info['name']
+			ref = link_info['target']
+			link = os.path.join(parent_dir, link_name)
+
+			if self.verbose: print "\tCreating symlink: %s => %s" % (link, ref)
+			create_symlink(ref, link)
+	
 	
 	def startElement(self, name, attrs):
 		"""
@@ -109,6 +124,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
 			if self.verbose: print "\tChanging current directory to: %s" % self.dirname
 			os.chdir(self.dirname)
 			self.current_dir = os.path.abspath(".")
+			self.idrefs[attrs.get("id","root-dir")] = self.current_dir
 		if basename:
 			if self.skip_entity: self.skip_entity += 1
 			if name in ('dirtt','dir'):
@@ -127,6 +143,8 @@ class CreateDirectoryTreeHandler(ContentHandler):
 					create_dir(basename, perms, uid, gid, self.warn)
 					os.chdir(basename)
 					self.current_dir = os.path.abspath(".")
+				if attrs.get("id"):
+					self.idrefs[attrs.get("id")] = self.current_dir
 			if name == 'file':
 				if self.verbose: print "\tCreating file: %s/%s (%s/%i:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
 				href = attrs.get("href",None)
@@ -134,22 +152,28 @@ class CreateDirectoryTreeHandler(ContentHandler):
 					template_str = self._read_template(href)
 					content = self._parse_template(template_str, href)
 				create_file(basename, content, perms, uid, gid)
-			if name == 'link':
-				try:
-					ref = attrs.get("ref")
-					try:
-						dirname = attrs.get("dirname")
-					except:
-						dirname = self.current_dir
-					link = os.path.join(dirname,basename)
-					if self.verbose: print "\tCreating symlink: %s => %s" % (link, ref)
-					create_symlink(ref, link)
-				except:
-					pass
 		else:
 			if name in ('dirtt', 'dir'):
 				if not self.skip_entity:
 					self.skip_entity += 1
+		if name == 'link':
+			try:
+				ref = attrs.get("idref")
+				if ref:
+					ref = self.idrefs[ref]
+				elif attrs.get("ref"):
+					ref = attrs.get("ref")
+				if not ref:
+					# If neither the ref attribte nor the idref attribute has been set then skip
+					# this link.
+					return
+				link_name = attrs.get("name")
+				if not link_name:
+					return
+				self.links.append({'name': link_name, 'parent_dir': self.current_dir, 'target': ref})
+			except:
+				pass
+
 		return
 			
 	def _return_perms_uid_gid(self,attrs):
