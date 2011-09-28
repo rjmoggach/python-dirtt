@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.1//EN"
-      "http://opensource.dashing.tv/dtds/dirtt-0_1_1.dtd">
-<dirtt name="Shot Tree" version="0.1.1" dirname="{{projects_root}}/{{project_path}}/shots" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN"
+      "http://opensource.dashing.tv/dtds/dirtt-0_1_4.dtd">
+<dirtt name="Shot Tree" version="0.1.4" dirname="{{projects_root}}/{{project_path}}/shots" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
 
 <!-- L I N K   I N   S E Q U E N C E S   F O L D E R -->
 	<link basename="{{shot_name}}" dirname="{{projects_root}}/{{project_path}}/sequences/{{sequence_name}}"
 		ref="{{projects_root}}/{{project_path}}/shots/{{shot_name}}"/>
 
 <!-- V A R / D A T A   F O L D E R -->
-	<dir name="Shot Data Folder" basename="var" username="pipeline" group="artist" perms="02755">
+	<dir name="Shot Data Folder" basename="data" username="pipeline" group="artist" perms="02755">
 		<dir basename="cache" username="pipeline" group="artist" perms="02755">
 			<dir basename="maya" username="pipeline" group="artist" perms="02775"/>
 			<dir basename="houdini" username="pipeline" group="artist" perms="02775"/>
@@ -50,7 +50,7 @@
 	</dir><!-- etc -->
 
 <!-- I M G / I M A G E S   F O L D E R -->
-	<dir name="Shot Image Folder" basename="img" username="pipeline" group="artist" perms="02755">
+	<dir name="Shot Image Folder" basename="images" username="pipeline" group="artist" perms="02755">
 		<dir basename="2d" username="pipeline" group="artist" perms="02755">
 			<dir basename="comp" username="pipeline" group="artist" perms="02775"/>
 			<dir basename="paint" username="pipeline" group="artist" perms="02775"/>
@@ -65,7 +65,7 @@
 	</dir><!-- img -->
 
 <!-- L I B / L I B R A R Y   F O L D E R -->
-	<dir name="Shot Library Folder" basename="lib" username="pipeline" group="supervisor" perms="02755">
+	<dir name="Shot Library Folder" basename="library" username="pipeline" group="supervisor" perms="02755">
 		<dir basename="audio" username="pipeline" group="artist" perms="02755"/>
 		<dir basename="camera" username="pipeline" group="artist" perms="02755">
 			<dir basename="trk" username="pipeline" group="artist" perms="02775"/>
@@ -79,7 +79,7 @@
 	</dir><!-- lib -->
 	
 <!-- U S R / W O R K   F O L D E R -->
-	<dir name="Shot Work Folder" basename="usr" username="pipeline" group="artist" perms="02755">
+	<dir name="Shot Work Folder" basename="work" username="pipeline" group="artist" perms="02755">
 		<dir basename="2d" username="pipeline" group="artist" perms="02775">
 		</dir><!-- 2d -->
 		<dir basename="cg" username="pipeline" group="artist" perms="02775">

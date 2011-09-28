@@ -13,8 +13,8 @@ with internal methods that read,parse,render,and execute builds of
 user defined XML directory tree templates.
 """
 
-#v0.1.4b11
-VERSION = (0, 1, 4, 'beta', 11)
+#v0.1.4rc1
+VERSION = (0, 1, 4, 'releasecandidate', 1)
 
 STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidiate': 'rc' }
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dirtt name="Project Tree" version="0.1.1" dirname="{{projects_root}}" basename="{{project_path}}" username="pipeline" group="artist" perms="02755">
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN"
+      "http://opensource.dashing.tv/dtds/dirtt-0_1_4.dtd">
+<dirtt name="Project Tree" version="0.1.4" dirname="{{projects_root}}" basename="{{project_path}}" username="pipeline" group="artist" perms="02755">
 
 <!-- A S S E T S   F O L D E R -->
 	<dir name="Project Assets Folder" basename="assets" username="pipeline" group="artist" perms="02755" id="assets-id">
