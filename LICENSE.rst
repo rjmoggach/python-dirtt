@@ -1,7 +1,7 @@
 .. |copy|   unicode:: U+000A9 .. COPYRIGHT SIGN
 
 Copyright |copy| 2011 Dashing Collective Inc.
-==========================================
+=============================================
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
