@@ -13,8 +13,8 @@ with internal methods that read,parse,render,and execute builds of
 user defined XML directory tree templates.
 """
 
-#v0.1.4rc1
-VERSION = (0, 1, 4, 'releasecandidate', 1)
+#v0.1.8b1
+VERSION = (0, 1, 8, 'beta', 1)
 
 STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidate': 'rc' }
 
@@ -101,8 +101,8 @@ class CreateDirectoryTreeHandler(ContentHandler):
 	def _create_symlinks(self):
 		for link_info in self.links:
 			parent_dir = link_info['parent_dir']
-			link_name = link_info['name']
-			ref = link_info['target']
+			link_name = link_info['basename']
+			ref = link_info['ref']
 			link = os.path.join(parent_dir, link_name)
 
 			if self.verbose: print "\tCreating symlink: %s => %s" % (link, ref)
@@ -158,6 +158,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
 					self.skip_entity += 1
 		if name == 'link':
 			try:
+				
 				ref = attrs.get("idref")
 				if ref:
 					ref = self.idrefs[ref]
@@ -167,10 +168,14 @@ class CreateDirectoryTreeHandler(ContentHandler):
 					# If neither the ref attribte nor the idref attribute has been set then skip
 					# this link.
 					return
-				link_name = attrs.get("name")
+				link_name = attrs.get("basename")
 				if not link_name:
 					return
-				self.links.append({'name': link_name, 'parent_dir': self.current_dir, 'target': ref})
+				if attrs.get("dirname"):
+					target_dir = attrs.get("dirname")
+				else:
+					target_dir = self.current_dir
+				self.links.append({'basename': link_name, 'parent_dir': target_dir, 'ref': ref})
 			except:
 				pass
 
