@@ -1,66 +1,85 @@
-import os
 from distutils.core import setup
+from distutils.command.install_data import install_data
+from distutils.command.install import INSTALL_SCHEMES
+import os
+import sys
 
-
-def is_package(path):
-	"""
-	is_package and find_package code borrowed from:
-	http://wiki.python.org/moin/Distutils/Cookbook/AutoPackageDiscovery
-	"""
-	return (
-		os.path.isdir(path) and
-		os.path.isfile(os.path.join(path, '__init__.py'))
-		)
-
-
-def find_packages(path, base="" ):
-	"""
-	Find all packages in path
-	"""
-	packages = {}
-	for item in os.listdir(path):
-		dir = os.path.join(path, item)
-		if is_package(dir):
-			if base:
-				module_name = "%(base)s.%(item)s" % vars()
-			else:
-				module_name = item
-				packages[module_name] = dir
-			packages.update(find_packages(dir, module_name))
-	return packages
-
-
-def find_data_files(base):
-	"""
-	Builds a list of data files to be installed aside from 
-	in-package data.
-	"""
-	data_files = []
-	for item in os.listdir(base):
-		_files = []
-		if os.path.isdir(os.path.join(base,item)):
-			for root, dirs, files in os.walk(os.path.join(base,item)):
-				_files.extend([os.path.join(base,item,f) for f in files])	
-		if len(_files) > 0:
-			data_files.append((item,_files))
-	return data_files	
-	
 
 def return_version():
 	return __import__('dirtt').get_version()
 
 
-def dirtt(s):
-	return "dirtt"+s
+class osx_install_data(install_data):
+  # On MacOS, the platform-specific lib dir is /System/Library/Framework/Python/.../
+  # which is wrong. Python 2.5 supplied with MacOS 10.5 has an Apple-specific fix
+  # for this in distutils.command.install_data#306. It fixes install_lib but not
+  # install_data, which is why we roll our own install_data class.
+
+  def finalize_options(self):
+    # By the time finalize_options is called, install.install_lib is set to the
+    # fixed directory, so we set the installdir to install_lib. The
+    # install_data class uses ('install_data', 'install_dir') instead.
+    self.set_undefined_options('install', ('install_lib', 'install_dir'))
+    install_data.finalize_options(self)
+
+if sys.platform == "darwin": 
+  cmdclasses = {'install_data': osx_install_data} 
+else: 
+  cmdclasses = {'install_data': install_data} 
+
+
+def fullsplit(path, result=None):
+  """
+  Split a pathname into components (the opposite of os.path.join) in a
+  platform-neutral way.
+  """
+  if result is None:
+    result = []
+  head, tail = os.path.split(path)
+  if head == '':
+    return [tail] + result
+  if head == path:
+    return result
+  return fullsplit(head, [tail] + result)
+
+
+# Tell distutils to put the data_files in platform-specific installation
+# locations. See here for an explanation:
+# http://groups.google.com/group/comp.lang.python/browse_thread/thread/35ec7b2fed36eaec/2105ee4d9e8042cb
+for scheme in INSTALL_SCHEMES.values():
+  scheme['data'] = scheme['purelib']
+
+
+# Compile the list of packages available, because distutils doesn't have
+# an easy way to do this.
+packages, data_files = [], []
+root_dir = os.path.dirname(__file__)
+if root_dir != '':
+  os.chdir(root_dir)
+dirtt_dir = 'dirtt'
+
+for dirpath, dirnames, filenames in os.walk(dirtt_dir):
+  # Ignore dirnames that start with '.'
+  for i, dirname in enumerate(dirnames):
+    if dirname.startswith('.'): del dirnames[i]
+  if '__init__.py' in filenames:
+    packages.append('.'.join(fullsplit(dirpath)))
+  elif filenames:
+    data_files.append([dirpath, [os.path.join(dirpath, f) for f in filenames]])
+
+# Small hack for working with bdist_wininst.
+# See http://mail.python.org/pipermail/distutils-sig/2004-August/004134.html
+if len(sys.argv) > 1 and sys.argv[1] == 'bdist_wininst':
+  for file_info in data_files:
+    file_info[0] = '\\PURELIB\\%s' % file_info[0]
 
 
 setup(
 	name='python-dirtt',
-	packages=find_packages('.'),
-	package_dir={dirtt(''):'dirtt'},
-	package_data={dirtt('') : ['data/templates/*.xml','data/dtds/*.dtd']},
-	scripts=['scripts/mkdirt',],
-	data_files = find_data_files(os.path.join('dirtt','data')),
+	packages=packages,
+	cmdclass = cmdclasses,
+	scripts=['dirtt/scripts/mkdirt',],
+	data_files = data_files,
 	version=return_version(),
 	description="Directory Tree Templater",
 	long_description="""
@@ -77,12 +96,9 @@ setup(
 		with internal methods that read,parse,render,and execute builds of
 		user defined XML directory tree templates.
 		
-		https://github.com/dshng/python-dirtt/
-	
-		http://opensource.dashing.tv/python-dirtt/
 		""",
 	classifiers=[
-		'Development Status :: 3 - Alpha',
+		'Development Status :: 2 - Beta',
 		'Intended Audience :: Developers',
 		'Intended Audience :: System Administrators',
 		'License :: OSI Approved :: MIT License',
@@ -98,7 +114,6 @@ setup(
 	author_email='rob@dashing.tv',
 	maintainer='Dashing Collective Inc.',
 	maintainer_email='rob@dashing.tv',
-	url='https://github.com/dshng/python-dirtt/',
 	license='MIT'
 )
 
