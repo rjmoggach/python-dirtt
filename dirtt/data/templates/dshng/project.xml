@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN"
-"file:///dashing/tools/var/dirtt/dtds/dirtt.dtd">
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "/dashing/tools/var/dirtt/dtds/dirtt.dtd">
 <dirtt name="Project Tree" version="0.1.4" dirname="/dashing/jobs" basename="{{project_path}}" username="pipeline" group="artist" perms="02755">
 
 <!-- C O N F I G   F O L D E R -->
@@ -45,7 +44,7 @@
 			<dir basename="moco" username="pipeline" group="supervisor" perms="02775"/>
 		</dir><!-- data -->
 
-		<dir basename="img">
+		<dir basename="images">
 			<dir basename="calibration" username="pipeline" group="supervisor" perms="02775"/>
 			<dir basename="elements" username="pipeline" group="supervisor" perms="02775"/>
 			<dir basename="grain" username="pipeline" group="supervisor" perms="02775"/>
@@ -120,4 +119,8 @@
 	<dir basename="shots" username="pipeline" group="artist" perms="02755">
 	</dir><!-- shots -->
 		
+<!-- I M A G E S   F O L D E R -->
+	<dir basename="images" username="pipeline" group="artist" perms="02755">
+	</dir><!-- shots -->
+
 </dirtt>

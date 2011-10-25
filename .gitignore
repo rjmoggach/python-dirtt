@@ -25,4 +25,4 @@ lib
 include
 .mr.developer.cfg
 src
-
+._*
