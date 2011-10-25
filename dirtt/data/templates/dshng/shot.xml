@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.1//EN"
 "file:///dashing/tools/var/dirtt/dtds/dirtt.dtd">
-<dirtt name="Shot Tree" version="0.1.1" dirname="/dashing/jobs/{{project_path}}/shots" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
+<dirtt name="Shot Tree" version="0.1.1" dirname="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
 
 <!-- L I N K   I N   S E Q U E N C E S   F O L D E R -->
-	<link basename="{{shot_name}}" ref="/dashing/jobs/{{project_path}}/shots/{{shot_name}}"
-		dirname="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}"/>
+	<link basename="{{shot_name}}" dirname="/dashing/jobs/{{project_path}}/shots"
+		ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}"/>
 
 <!-- V A R / D A T A   F O L D E R -->
 	<dir name="Shot Data Folder" basename="data" username="pipeline" group="artist" perms="02755">
