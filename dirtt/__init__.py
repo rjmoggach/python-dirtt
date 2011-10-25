@@ -128,6 +128,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
 		if basename:
 			if self.skip_entity: self.skip_entity += 1
 			if name in ('dirtt','dir'):
+				dirname = attrs.get("dirname", None)
 				if self.interactive:
 					if not self.skip_entity:
 						if not raw_input("Create Directory %s (yes/no)?" % os.path.join(self.current_dir,basename)) in ("yes","Yes","YES","Y","y"):
@@ -135,12 +136,20 @@ class CreateDirectoryTreeHandler(ContentHandler):
 							if self.verbose: print "\tSkipping dir: %s" % os.path.join(self.current_dir,basename)
 						else:
 							if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
-							create_dir(basename, perms, uid, gid, self.warn)
+							if dirname:
+								newdir= os.path.join(dirname,basename)
+								create_dir(newdir, perms, uid, gid, self.warn)
+							else:
+								create_dir(basename, perms, uid, gid, self.warn)
 							os.chdir(basename)
 							self.current_dir = os.path.abspath(".")
 				else:
 					if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
-					create_dir(basename, perms, uid, gid, self.warn)
+					if dirname:
+						newdir= os.path.join(dirname,basename)
+						create_dir(newdir, perms, uid, gid, self.warn)
+					else:
+						create_dir(basename, perms, uid, gid, self.warn)
 					os.chdir(basename)
 					self.current_dir = os.path.abspath(".")
 				if attrs.get("id"):
@@ -159,10 +168,10 @@ class CreateDirectoryTreeHandler(ContentHandler):
 		if name == 'link':
 			try:
 				
-				ref = attrs.get("idref")
+				ref = attrs.get("idref",None)
 				if ref:
 					ref = self.idrefs[ref]
-				elif attrs.get("ref"):
+				elif attrs.get("ref",None):
 					ref = attrs.get("ref")
 				if not ref:
 					# If neither the ref attribte nor the idref attribute has been set then skip
@@ -171,7 +180,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
 				link_name = attrs.get("basename")
 				if not link_name:
 					return
-				if attrs.get("dirname"):
+				if attrs.get("dirname",None):
 					target_dir = attrs.get("dirname")
 				else:
 					target_dir = self.current_dir
