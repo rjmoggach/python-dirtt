@@ -16,7 +16,7 @@ user defined XML directory tree templates.
 #v0.1.4rc1
 VERSION = (0, 1, 4, 'releasecandidate', 1)
 
-STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidiate': 'rc' }
+STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidate': 'rc' }
 
 
 def get_version():
