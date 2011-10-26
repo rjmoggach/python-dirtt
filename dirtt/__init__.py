@@ -49,6 +49,8 @@ DEFAULT_PERMS = "02775"
 DEFAULT_USER = "root"
 DEFAULT_GROUP = "root"
 
+TEMPLATES_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'templates')
+
 def list_available_templates():
   template_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'templates')
   for filename in os.listdir(template_dir):
@@ -163,8 +165,9 @@ class CreateDirectoryTreeHandler(ContentHandler):
         if self.verbose: print "\tCreating file: %s/%s (%s/%i:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
         href = attrs.get("href",None)
         if not href is None:
-          template_str = self._read_template(href)
-          content = self._parse_template(template_str, href)
+          template_file = os.path.join(TEMPLATES_DIR,href)
+          template_str = self._read_template(template_file)
+          content = self._parse_template(template_str, template_file)
         create_file(basename, content, perms, uid, gid)
     else:
       if name in ('dirtt', 'dir'):

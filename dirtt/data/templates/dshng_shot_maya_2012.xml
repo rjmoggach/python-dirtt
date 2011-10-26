@@ -32,5 +32,5 @@
 	<dir basename="sourceimages" username="pipeline" group="artist" perms="02775">
 		<dir basename="3dPaintTextures" username="pipeline" group="artist" perms="02775"/>
 	</dir>
-	<file basename="workspace.mel" username="pipeline" group="artist" perms="02775" href="/dashing/jobs/var/dirtt/templates/dshng_shot_maya_2012.xml"/>
+	<file basename="workspace.mel" username="pipeline" group="artist" perms="02775" href="dshng_shot_maya_2012_workspace.mel"/>
 </dirtt>
