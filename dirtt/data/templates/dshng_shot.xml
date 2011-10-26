@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dirtt name="Shot Tree" version="0.1.1" dirname="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
 
-<!-- L I N K   I N   S E Q U E N C E S   F O L D E R -->
+<!-- L I N K   I N   S H O T S   F O L D E R -->
 	<link basename="{{shot_name}}" dirname="/dashing/jobs/{{project_path}}/shots" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}"/>
 
 <!-- V A R / D A T A   F O L D E R -->
@@ -79,6 +79,7 @@
 		<dir basename="nuke" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="maya" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="houdini" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="design" username="pipeline" group="artist" perms="02775"/>
 	</dir><!-- usr -->
 	
 </dirtt>

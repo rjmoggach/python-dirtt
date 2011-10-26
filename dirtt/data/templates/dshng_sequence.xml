@@ -68,10 +68,6 @@
 			</dir>
 		</dir><!-- edits -->
 
-		<dir basename="fonts" username="pipeline" group="supervisor" perms="02775"/>
-
-		<dir basename="graphics" username="pipeline" group="supervisor" perms="02775"/>
-
 		<dir basename="reference" username="pipeline" group="supervisor" perms="02755">
 			<dir basename="misc" username="pipeline" group="supervisor" perms="02775"/>
 			<dir basename="on_set" username="pipeline" group="supervisor" perms="02755">
@@ -82,6 +78,20 @@
 			</dir><!-- on_set -->
 		</dir><!-- reference -->
 	</dir><!-- library -->
+
+<!-- S E Q / W O R K   F O L D E R -->
+	<dir name="Sequence Work Folder" basename="work" username="pipeline" group="artist" perms="02755">
+		<dir basename="nuke" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="maya" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="houdini" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="design" username="pipeline" group="artist" perms="02775">
+  		<dir basename="assets" username="pipeline" group="artist" perms="02775"/>
+  		<dir basename="work" username="pipeline" group="artist" perms="02775"/>
+  		<dir basename="ref" username="pipeline" group="artist" perms="02775"/>
+  		<link basename="{{sequence_name}}" dirname="/dashing/jobs/{{project_path}}/design" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/work/design"/>
+		</dir>
+	</dir><!-- work -->
+
 
 <dir basename="{{sequence_name}}" dirname="/dashing/jobs/{{project_path}}/images" username="pipeline" group="supervisor" perms="02775" />
 </dirtt>

@@ -30,6 +30,17 @@
 	<dir name="Project Flame Projects Folder" basename="flame" username="flame" group="supervisor" perms="02775">
 	</dir><!-- flame -->
 
+<!-- D E S I G N   F O L D E R -->
+	<dir name="Project Design Folder" basename="design" username="pipeline" group="artist" perms="02775">
+		<dir basename="assets" username="pipeline" group="artist" perms="02775">
+  		<dir basename="ref" username="pipeline" group="artist" perms="02775"/>
+  		<dir basename="elements" username="pipeline" group="artist" perms="02775"/>
+    	<link basename="fonts" ref="/dashing/jobs/{{project_path}}/library/fonts"/>
+    	<link basename="graphics" ref="/dashing/jobs/{{project_path}}/library/graphics"/>
+		</dir>
+		<dir basename="devel" username="pipeline" group="artist" perms="02775"/>
+	</dir><!-- design -->
+
 <!-- L I B R A R Y   F O L D E R -->
 	<dir name= "Project Library Folder" basename="library" username="pipeline" group="supervisor" perms="02755">
 
@@ -71,9 +82,9 @@
 			</dir>
 		</dir><!-- edits -->
 
-		<dir basename="fonts" username="pipeline" group="supervisor" perms="02775"/>
+		<dir basename="fonts" username="pipeline" group="artist" perms="02775"/>
 
-		<dir basename="graphics" username="pipeline" group="supervisor" perms="02775"/>
+		<dir basename="graphics" username="pipeline" group="artist" perms="02775"/>
 
 		<dir basename="reference" username="pipeline" group="supervisor" perms="02755">
 			<dir basename="misc" username="pipeline" group="supervisor" perms="02775"/>
