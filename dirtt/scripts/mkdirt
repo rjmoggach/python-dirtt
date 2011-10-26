@@ -19,6 +19,7 @@ from optparse import OptionParser
 from dirtt import CreateDirectoryTreeHandler, list_available_templates
 from dirtt.util.template import return_placeholders
 
+ENABLED_USERS = [0,1111]
 
 def main():
 	usage = "usage: %prog [-t TEMPLATE]"
@@ -31,8 +32,8 @@ def main():
 	parser.add_option("-w", "--stop-on-warning",dest="warn",action="store_true",default=False)
 	parser.add_option("-l", "--list",dest="list",action="store_true",default=False)
 	(options, args) = parser.parse_args()
-	if os.geteuid() != 0:
-		print "You must be root to run this script."
+	if os.geteuid() not in ENABLED_USERS:
+		print "You are not authorized to run this script."
 		sys.exit(-6)
 	if options.list:
 	  list_available_templates()
