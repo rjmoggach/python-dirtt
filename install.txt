@@ -1,0 +1,1 @@
+pip install --install-option="--install-dir=/dashing/tools/lib/python2.7/site-packages" -e git+git@bitbucket.org:mogga/python-dirtt.git#egg=python-dirtt
