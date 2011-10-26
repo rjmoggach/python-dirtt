@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "/dashing/tools/var/dirtt/dtds/dirtt.dtd">
 <dirtt name="Project Tree" version="0.1.4" dirname="/dashing/jobs" basename="{{project_path}}" username="pipeline" group="artist" perms="02755">
 
 <!-- C O N F I G   F O L D E R -->

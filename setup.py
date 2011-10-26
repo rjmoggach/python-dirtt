@@ -80,6 +80,15 @@ setup(
 	cmdclass = cmdclasses,
 	scripts=['dirtt/scripts/mkdirt',],
 	data_files = data_files,
+#  data_files=[
+#    ('/var/dirtt/dtds/dirtt.dtd', ['dirtt/data/dtds/dirtt.dtd']),
+#    ('/var/dirtt/templates/project.xml', ['dirtt/data/templates/project.xml']),
+#    ('/var/dirtt/templates/sequence.xml', ['dirtt/data/templates/sequence.xml']),
+#    ('/var/dirtt/templates/shot.xml', ['dirtt/data/templates/shot.xml']),
+#    ('/var/dirtt/templates/dshng_project.xml', ['dirtt/data/templates/dshng_project.xml']),
+#    ('/var/dirtt/templates/dshng_sequence.xml', ['dirtt/data/templates/dshng_sequence.xml']),
+#    ('/var/dirtt/templates/dshng_shot.xml', ['dirtt/data/templates/dshng_shot.xml'])
+#  ],
 	version=return_version(),
 	description="Directory Tree Templater",
 	long_description="""

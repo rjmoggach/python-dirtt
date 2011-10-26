@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "/dashing/tools/var/dirtt/dtds/dirtt.dtd">
 <dirtt name="Shot Tree" version="0.1.1" dirname="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
 
 <!-- L I N K   I N   S E Q U E N C E S   F O L D E R -->
@@ -48,7 +47,7 @@
 	</dir><!-- etc -->
 
 <!-- I M A G E S   F O L D E R -->
-	<dir name="Shot Images Folder" dirname="/dashing/jobs/{{project_path}}/images/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
+	<dir name="Shot Images Folder" basename="images" username="pipeline" group="artist" perms="02755">
 		<dir basename="cg" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="comp" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="design" username="pipeline" group="artist" perms="02775"/>
@@ -58,8 +57,8 @@
 		<dir basename="reference" username="pipeline" group="artist" perms="02775"/>
 	</dir><!-- images -->
 
-<!-- L I N K   I N   I M A G E S   F O L D E R -->
-	<link name="Shot Images Link" basename="images" ref="/dashing/jobs/{{project_path}}/images/{{sequence_name}}/{{shot_name}}"/>
+<!-- L I N K   T O   I M A G E S -->
+	<link name="Shot Images Link" dirname="/dashing/jobs/{{project_path}}/images/{{sequence_name}}" basename="{{shot_name}}" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/images"/>
 
 <!-- L I B / L I B R A R Y   F O L D E R -->
 	<dir name="Shot Library Folder" basename="library" username="pipeline" group="supervisor" perms="02755">
