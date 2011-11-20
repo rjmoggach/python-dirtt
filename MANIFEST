@@ -21,6 +21,7 @@ dirtt/data/templates/dshng_project.xml
 dirtt/data/templates/dshng_sequence.xml
 dirtt/data/templates/dshng_shot.xml
 dirtt/scripts/mkdirt
+dirtt/scripts/mkproj
 docs/index.rst
 docs/news.rst
 tests/__init__.py

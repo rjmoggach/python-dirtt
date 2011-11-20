@@ -78,7 +78,7 @@ setup(
 	name='python-dirtt',
 	packages=packages,
 	cmdclass = cmdclasses,
-	scripts=['dirtt/scripts/mkdirt',],
+	scripts=['dirtt/scripts/mkdirt','dirtt/scripts/mkproj'],
 	data_files = data_files,
 #  data_files=[
 #    ('/var/dirtt/dtds/dirtt.dtd', ['dirtt/data/dtds/dirtt.dtd']),

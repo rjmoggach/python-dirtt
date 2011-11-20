@@ -2,14 +2,14 @@
 <dirtt name="Shot Maya Tree" version="0.1.1" dirname="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/work" basename="maya" username="pipeline" group="artist" perms="02755">
 	<dir basename="assets" username="pipeline" group="artist" perms="02775"/>
 	<dir basename="autosave" username="pipeline" group="artist" perms="02775"/>
-	<link basename="cache" ref="../../../{{shot_name}}/data/cache/maya"/>
+	<link basename="cache" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/data/cache/maya"/>
 	<dir basename="clips" username="pipeline" group="artist" perms="02775"/>
-	<link basename="etc" ref="../../../{{shot_name}}/etc/maya"/>
-	<link basename="data" ref="../../../{{shot_name}}/data"/>
-	<link basename="library" ref="../../../{{shot_name}}/library"/>
-	<link basename="images" ref="../../images/cg"/>
-	<link basename="movies" ref="../../../{{shot_name}}/movies"/>
-	<link basename="design" ref="../../../{{shot_name}}/work/design"/>
+	<link basename="etc" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/etc/maya"/>
+	<link basename="data" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/data"/>
+	<link basename="library" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/library"/>
+	<link basename="images" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/images/cg"/>
+	<link basename="movies" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/movies"/>
+	<link basename="design" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/work/design"/>
 	<dir basename="particles" username="pipeline" group="artist" perms="02775"/>
 	<dir basename="renderData" username="pipeline" group="artist" perms="02775">
 		<dir basename="depth" username="pipeline" group="artist" perms="02775"/>
@@ -27,8 +27,8 @@
 	<dir basename="scenes" username="pipeline" group="artist" perms="02775">
 		<dir basename="edits" username="pipeline" group="artist" perms="02775"/>
 	</dir>
-	<link basename="scripts" ref="../../../{{shot_name}}/etc/maya/scripts"/>
-	<link basename="sound" ref="../../../{{shot_name}}/library/audio"/>
+	<link basename="scripts" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/etc/maya/scripts"/>
+	<link basename="sound" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/library/audio"/>
 	<dir basename="sourceimages" username="pipeline" group="artist" perms="02775">
 		<dir basename="3dPaintTextures" username="pipeline" group="artist" perms="02775"/>
 	</dir>

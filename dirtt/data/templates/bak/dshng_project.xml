@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dirtt name="Sequence Tree" version="0.1.4" dirname="/dashing/jobs/{{project_path}}/sequences" basename="{{sequence_name}}" username="pipeline" group="artist" perms="02755">
+<dirtt name="Project Tree" version="0.1.4" dirname="/dashing/jobs" basename="{{project_path}}" username="pipeline" group="artist" perms="02755">
 
 <!-- C O N F I G   F O L D E R -->
-	<dir name="Sequence Config Folder" basename="etc" username="pipeline" group="supervisor" perms="02755">
+	<dir name="Project Config Folder" basename="etc" username="pipeline" group="supervisor" perms="02755">
 		<dir basename="houdini" username="pipeline" group="supervisor" perms="02755">
 			<dir basename="dso" username="pipeline" group="supervisor" perms="02775"/>
             <dir basename="otls" username="pipeline" group="supervisor" perms="02775"/>
@@ -12,8 +12,8 @@
             <dir basename="modules" username="pipeline" group="supervisor" perms="02775"/>
             <dir basename="plugins" username="pipeline" group="supervisor" perms="02775"/>
             <dir basename="scripts" username="pipeline" group="supervisor" perms="02755">
-                <dir basename="mel" username="pipeline" group="artist" perms="02775"/>
-                <dir basename="py" username="pipeline" group="artist" perms="02775"/>
+                <dir basename="mel" username="pipeline" group="supervisor" perms="02775"/>
+                <dir basename="py" username="pipeline" group="supervisor" perms="02775"/>
             </dir>
 			<dir basename="shelves" username="pipeline" group="supervisor" perms="02775"/>
 		</dir><!-- maya -->
@@ -22,12 +22,27 @@
 			<dir basename="menu" username="pipeline" group="supervisor" perms="02775"/>
 			<dir basename="scripts" username="pipeline" group="supervisor" perms="02775"/>
 		</dir><!-- nuke -->
-		<dir basename="user" username="pipeline" group="artist" perms="02775"/>
-		<dir basename="vray" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="user" username="pipeline" group="supervisor" perms="02775"/>
+		<dir basename="vray" username="pipeline" group="supervisor" perms="02775"/>
 	</dir><!-- etc -->
 
+<!-- F L A M E   F O L D E R -->
+	<dir name="Project Flame Projects Folder" basename="flame" username="flame" group="supervisor" perms="02775">
+	</dir><!-- flame -->
+
+<!-- D E S I G N   F O L D E R -->
+	<dir name="Project Design Folder" basename="design" username="pipeline" group="artist" perms="02775">
+		<dir basename="assets" username="pipeline" group="artist" perms="02775">
+  		<dir basename="ref" username="pipeline" group="artist" perms="02775"/>
+  		<dir basename="elements" username="pipeline" group="artist" perms="02775"/>
+    	<link basename="fonts" ref="/dashing/jobs/{{project_path}}/library/fonts"/>
+    	<link basename="graphics" ref="/dashing/jobs/{{project_path}}/library/graphics"/>
+		</dir>
+		<dir basename="devel" username="pipeline" group="artist" perms="02775"/>
+	</dir><!-- design -->
+
 <!-- L I B R A R Y   F O L D E R -->
-	<dir name= "Sequence Library Folder" basename="library" username="pipeline" group="supervisor" perms="02755">
+	<dir name= "Project Library Folder" basename="library" username="pipeline" group="supervisor" perms="02755">
 
 		<dir basename="audio" username="pipeline" group="artist" perms="02775"/>
 
@@ -48,7 +63,6 @@
 			<dir basename="paint" username="pipeline" group="supervisor" perms="02775"/>
 			<dir basename="textures" username="pipeline" group="supervisor" perms="02775"/>
 			<dir basename="stock" username="pipeline" group="supervisor" perms="02775"/>
-			<dir basename="reference" username="pipeline" group="supervisor" perms="02775"/>
 		</dir><!-- img -->
 
 		<dir basename="models" username="pipeline" group="supervisor" perms="02775"/>
@@ -68,6 +82,10 @@
 			</dir>
 		</dir><!-- edits -->
 
+		<dir basename="fonts" username="pipeline" group="artist" perms="02775"/>
+
+		<dir basename="graphics" username="pipeline" group="artist" perms="02775"/>
+
 		<dir basename="reference" username="pipeline" group="supervisor" perms="02755">
 			<dir basename="misc" username="pipeline" group="supervisor" perms="02775"/>
 			<dir basename="on_set" username="pipeline" group="supervisor" perms="02755">
@@ -79,19 +97,40 @@
 		</dir><!-- reference -->
 	</dir><!-- library -->
 
-<!-- S E Q / W O R K   F O L D E R -->
-	<dir name="Sequence Work Folder" basename="work" username="pipeline" group="artist" perms="02755">
-		<dir basename="nuke" username="pipeline" group="artist" perms="02775"/>
-		<dir basename="maya" username="pipeline" group="artist" perms="02775"/>
-		<dir basename="houdini" username="pipeline" group="artist" perms="02775"/>
-		<dir basename="design" username="pipeline" group="artist" perms="02775">
-	  		<dir basename="assets" username="pipeline" group="artist" perms="02775"/>
-	  		<dir basename="work" username="pipeline" group="artist" perms="02775"/>
-	  		<dir basename="ref" username="pipeline" group="artist" perms="02775"/>
-	  		<link basename="{{sequence_name}}" dirname="/dashing/jobs/{{project_path}}/design" ref="../sequences/{{sequence_name}}/work/design"/>
-		</dir>
-	</dir><!-- work -->
+<!-- P R O D U C T I O N   F O L D E R -->
+	<dir basename="production" username="pipeline" group="production" perms="02755">
+		<dir basename="financial" username="pipeline" group="production" perms="02750">
+			<dir basename="bid" username="pipeline" group="production" perms="02770"/>
+			<dir basename="invoices" username="pipeline" group="production" perms="02770"/>
+			<dir basename="purchases" username="pipeline" group="production" perms="02770"/>
+		</dir><!-- financial -->
+		<dir basename="creative" username="pipeline" group="production" perms="02755">
+			<dir basename="breakdown" username="pipeline" group="production" perms="02775"/>
+			<dir basename="script" username="pipeline" group="production" perms="02775"/>
+			<dir basename="storyboard" username="pipeline" group="production" perms="02775"/>
+			<dir basename="treatment" username="pipeline" group="production" perms="02775"/>
+			<dir basename="reference" username="pipeline" group="production" perms="02775"/>
+		</dir><!-- creative -->
+		<dir basename="notes" username="pipeline" group="production" perms="02775"/>
+		<dir basename="postings" username="pipeline" group="production" perms="02755">
+			<dir basename="data" username="pipeline" group="production" perms="02775"/>
+			<dir basename="stills" username="pipeline" group="production" perms="02775"/>
+			<dir basename="movies" username="pipeline" group="production" perms="02775"/>
+		</dir><!-- postings -->
+		<dir basename="schedule" username="pipeline" group="production" perms="02775"/>
+		<dir basename="shotsheets" username="pipeline" group="production" perms="02775"/>
+	</dir><!-- production -->
 
+<!-- S E Q U E N C E S   F O L D E R -->
+	<dir basename="sequences" username="pipeline" group="artist" perms="02755">
+	</dir><!-- sequences -->
 
-<dir basename="{{sequence_name}}" dirname="/dashing/jobs/{{project_path}}/images" username="pipeline" group="supervisor" perms="02775" />
+<!-- S H O T S   F O L D E R -->
+	<dir basename="shots" username="pipeline" group="artist" perms="02755">
+	</dir><!-- shots -->
+		
+<!-- I M A G E S   F O L D E R -->
+	<dir basename="images" username="pipeline" group="artist" perms="02755">
+	</dir><!-- shots -->
+
 </dirtt>

@@ -85,10 +85,10 @@
 		<dir basename="maya" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="houdini" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="design" username="pipeline" group="artist" perms="02775">
-	  		<dir basename="assets" username="pipeline" group="artist" perms="02775"/>
-	  		<dir basename="work" username="pipeline" group="artist" perms="02775"/>
-	  		<dir basename="ref" username="pipeline" group="artist" perms="02775"/>
-	  		<link basename="{{sequence_name}}" dirname="/dashing/jobs/{{project_path}}/design" ref="../sequences/{{sequence_name}}/work/design"/>
+  		<dir basename="assets" username="pipeline" group="artist" perms="02775"/>
+  		<dir basename="work" username="pipeline" group="artist" perms="02775"/>
+  		<dir basename="ref" username="pipeline" group="artist" perms="02775"/>
+  		<link basename="{{sequence_name}}" dirname="/dashing/jobs/{{project_path}}/design" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/work/design"/>
 		</dir>
 	</dir><!-- work -->
 

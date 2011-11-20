@@ -2,7 +2,9 @@
 <dirtt name="Shot Tree" version="0.1.1" dirname="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
 
 <!-- L I N K   I N   S H O T S   F O L D E R -->
-	<link basename="{{shot_name}}" dirname="/dashing/jobs/{{project_path}}/shots" ref="../sequences/{{sequence_name}}/{{shot_name}}"/>
+	<link basename="{{shot_name}}" dirname="/dashing/jobs/{{project_path}}/shots" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}"/>
+
+
 
 <!-- V A R / D A T A   F O L D E R -->
 	<dir name="Shot Data Folder" basename="data" username="pipeline" group="artist" perms="02775">
@@ -62,7 +64,7 @@
 	</dir><!-- images -->
 
 <!-- L I N K   T O   I M A G E S -->
-	<link name="Shot Images Link" dirname="/dashing/jobs/{{project_path}}/images/{{sequence_name}}" basename="{{shot_name}}" ref="../../sequences/{{sequence_name}}/{{shot_name}}/images"/>
+	<link name="Shot Images Link" dirname="/dashing/jobs/{{project_path}}/images/{{sequence_name}}" basename="{{shot_name}}" ref="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}/{{shot_name}}/images"/>
 
 <!-- M O V I E S   F O L D E R -->
 	<dir name="Shot Movies Folder" basename="movies" username="pipeline" group="artist" perms="02755">

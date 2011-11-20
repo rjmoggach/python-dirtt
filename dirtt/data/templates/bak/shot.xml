@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dirtt name="Shot Tree" version="0.1.1" dirname="/dashing/jobs/{{project_path}}/sequences/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN"
+      "http://opensource.dashing.tv/dtds/dirtt-0_1_4.dtd">
+<dirtt name="Shot Tree" version="0.1.4" dirname="{{projects_root}}/{{project_path}}/shots" basename="{{shot_name}}" username="pipeline" group="artist" perms="02755">
 
-<!-- L I N K   I N   S H O T S   F O L D E R -->
-	<link basename="{{shot_name}}" dirname="/dashing/jobs/{{project_path}}/shots" ref="../sequences/{{sequence_name}}/{{shot_name}}"/>
+<!-- L I N K   I N   S E Q U E N C E S   F O L D E R -->
+	<link basename="{{shot_name}}" dirname="{{projects_root}}/{{project_path}}/sequences/{{sequence_name}}"
+		ref="{{projects_root}}/{{project_path}}/shots/{{shot_name}}"/>
 
 <!-- V A R / D A T A   F O L D E R -->
-	<dir name="Shot Data Folder" basename="data" username="pipeline" group="artist" perms="02775">
-		<dir basename="cache" username="pipeline" group="artist" perms="02775">
-			<dir basename="maya" username="pipeline" group="artist" perms="02775">
-				<dir basename="fluid" username="pipeline" group="artist" perms="02775"/>
-				<dir basename="renderData" username="pipeline" group="artist" perms="02775"/>
-			</dir>
+	<dir name="Shot Data Folder" basename="data" username="pipeline" group="artist" perms="02755">
+		<dir basename="cache" username="pipeline" group="artist" perms="02755">
+			<dir basename="maya" username="pipeline" group="artist" perms="02775"/>
 			<dir basename="houdini" username="pipeline" group="artist" perms="02775"/>
 			<dir basename="rman" username="pipeline" group="artist" perms="02775"/>
 			<dir basename="nuke" username="pipeline" group="artist" perms="02775"/>
@@ -26,14 +26,13 @@
 
 <!-- E T C / C O N F I G   F O L D E R -->
 	<dir name="Shot Config Folder" basename="etc" username="pipeline" group="supervisor" perms="02755">
-		<dir basename="houdini" username="pipeline" group="supervisor" perms="02775">
+		<dir basename="houdini" username="pipeline" group="supervisor" perms="02755">
 			<dir basename ="dso" username="pipeline" group="supervisor" perms="02775"/>
             <dir basename ="otls" username="pipeline" group="supervisor" perms="02775"/>
             <dir basename ="scripts" username="pipeline" group="supervisor" perms="02775"/>
         </dir><!-- houdini -->
-		<dir basename="maya" username="pipeline" group="supervisor" perms="02775">
+		<dir basename="maya" username="pipeline" group="supervisor" perms="02755">
             <dir basename="modules" username="pipeline" group="supervisor" perms="02775"/>
-            <dir basename="templates" username="pipeline" group="supervisor" perms="02775"/>
             <dir basename="plugins" username="pipeline" group="supervisor" perms="02775"/>
             <dir basename="scripts" username="pipeline" group="supervisor" perms="02755">
                 <dir basename="mel" username="pipeline" group="supervisor" perms="02775"/>
@@ -54,26 +53,18 @@
 	<dir name="Shot Images Folder" basename="images" username="pipeline" group="artist" perms="02755">
 		<dir basename="cg" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="comp" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="cuts" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="design" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="elements" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="paint" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="plates" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="reference" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="roto" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="textures" username="pipeline" group="artist" perms="02775"/>
 	</dir><!-- images -->
 
-<!-- L I N K   T O   I M A G E S -->
-	<link name="Shot Images Link" dirname="/dashing/jobs/{{project_path}}/images/{{sequence_name}}" basename="{{shot_name}}" ref="../../sequences/{{sequence_name}}/{{shot_name}}/images"/>
-
-<!-- M O V I E S   F O L D E R -->
-	<dir name="Shot Movies Folder" basename="movies" username="pipeline" group="artist" perms="02755">
-		<dir basename="cg" username="pipeline" group="artist" perms="02775"/>
-		<dir basename="comp" username="pipeline" group="artist" perms="02775"/>
-		<dir basename="design" username="pipeline" group="artist" perms="02775"/>
-		<dir basename="reference" username="pipeline" group="artist" perms="02775"/>
-	</dir><!-- movies -->
-
 <!-- L I B / L I B R A R Y   F O L D E R -->
-	<dir name="Shot Library Folder" basename="library" username="pipeline" group="supervisor" perms="02775">
+	<dir name="Shot Library Folder" basename="library" username="pipeline" group="supervisor" perms="02755">
 		<dir basename="audio" username="pipeline" group="artist" perms="02755"/>
 		<dir basename="camera" username="pipeline" group="artist" perms="02755">
 			<dir basename="trk" username="pipeline" group="artist" perms="02775"/>
@@ -87,11 +78,10 @@
 	</dir><!-- lib -->
 	
 <!-- U S R / W O R K   F O L D E R -->
-	<dir name="Shot Work Folder" basename="work" username="pipeline" group="supervisor" perms="02775">
+	<dir name="Shot Work Folder" basename="work" username="pipeline" group="artist" perms="02755">
 		<dir basename="nuke" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="maya" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="houdini" username="pipeline" group="artist" perms="02775"/>
-		<dir basename="design" username="pipeline" group="artist" perms="02775"/>
 	</dir><!-- usr -->
 	
 </dirtt>
