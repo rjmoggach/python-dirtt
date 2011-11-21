@@ -14,7 +14,7 @@ user defined XML directory tree templates.
 """
 
 #v0.1.8b1
-VERSION = (0, 1, 8, 'beta', 1)
+VERSION = (0, 1, 8, 'beta', 2)
 
 STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidate': 'rc' }
 
