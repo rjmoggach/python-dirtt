@@ -61,9 +61,9 @@ def main():
 	template_variables = {}
 	print "Enter the project_path:\n\tEg. hyundai/etne"
 	project_path=raw_input("\tproject_path >  ")
-	project_path=os.path.join(PROJECT_ROOT,project_path)
-	if not os.path.isdir(project_path):
-		template_variables["project_path"] = project_path
+	project_path_full=os.path.join(PROJECT_ROOT,project_path)
+	template_variables["project_path"] = project_path
+	if not os.path.isdir(project_path_full):
 		c = CreateDirectoryTreeHandler(verbose,PROJECT_TEMPLATE,template_variables,interactive,warn)
 		c.run()
 		print "Created Project Tree."
@@ -72,9 +72,9 @@ def main():
 	
 	print "Enter the sequence_name:\n\tEg. veloster"
 	sequence_name=raw_input("\tsequence_name >  ")
-	sequence_path=os.path.join(project_path,"sequences",sequence_name)
+	sequence_path=os.path.join(project_path_full,"sequences",sequence_name)
+	template_variables["sequence_name"] = sequence_name
 	if not os.path.isdir(sequence_path):
-		template_variables["sequence_name"] = sequence_name
 		c = CreateDirectoryTreeHandler(verbose,SEQUENCE_TEMPLATE,template_variables,interactive,warn)
 		c.run()
 		print "Created Sequence Tree."
@@ -85,17 +85,19 @@ def main():
 	shot_name_raw=raw_input("\tshot_name >  ")
 	shot_list=shot_name_raw.split(",")
 	for shot_name in shot_list:
-		shot_path=os.path.join(project_path,"sequences",sequence_name,shot_name)
+		template_variables["shot_name"] = shot_name
+		shot_path=os.path.join(sequence_path,shot_name)
 		if not os.path.isdir(shot_path):
-			template_variables["shot_name"] = shot_name
 			c = CreateDirectoryTreeHandler(verbose,SHOT_TEMPLATE,template_variables,interactive,warn)
-			c.run()
-			c = CreateDirectoryTreeHandler(verbose,MAYA_TEMPLATE,template_variables,interactive,warn)
 			c.run()
 			print "Created Shot Tree."
 		else:
 			print "Shot Exists."
-	
+		maya_scenes_path=os.path.join(project_path,"sequences",sequence_name,shot_name,"work/maya/scenes")
+		if not os.path.isdir(maya_scenes_path):
+			c = CreateDirectoryTreeHandler(verbose,MAYA_TEMPLATE,template_variables,interactive,warn)
+			c.run()
+			print "Created Shot Maya Work Dir."
 
 	print "Created Tree."
 	sys.exit(0)
