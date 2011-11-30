@@ -15,7 +15,7 @@ Status and License
 ------------------
 
 dshng-loginhooks was written by Rob Moggach, for `Dashing Collective Inc. <http://dashing.tv>`_
-It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.txt>`_.
+It is licensed under an `MIT-style permissive license <https://bitbucket.org/mogga/python-dirtt/raw/master/LICENSE.txt>`_.
 
 |copy| 2011 Dashing Collective Inc. and contributors.
 
@@ -24,11 +24,11 @@ Status and License
 ------------------
 
 python-dirtt was written by Rob Moggach, for `Dashing Collective Inc. <http://dashing.tv>`_
-and is  maintained by a `group of developers <https://github.com/dshng/python-dirtt/raw/master/AUTHORS.txt>`_.
+and is  maintained by a `group of developers <https://bitbucket.org/mogga/python-dirtt/raw/master/AUTHORS.txt>`_.
 
 You can install it with ``easy_install dirtt``.
 
-It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.txt>`_.
+It is licensed under an `MIT-style permissive license <https://bitbucket.org/mogga/python-dirtt/raw/master/LICENSE.txt>`_.
 
 |copy| 2011 Dashing Collective Inc. and contributors.
 
@@ -78,16 +78,16 @@ Currently we need to implement the following:
 -modular exceptions
 -better documentation
 
-Forking through Github
-~~~~~~~~~~~~~~~~~~~~~~
+Forking through Bitbucket
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you need to fork from the official repository, which is 
-`https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
+`https://bitbucket.org/mogga/python-dirtt <https://bitbucket.org/mogga/python-dirtt>`_.
 
-Log in to Github, go to the dirtt repository page, follow the fork link, 
-wait for Github to copy the repository and then clone your fork, like:
+Log in to Bitbucket, go to the dirtt repository page, follow the fork link, 
+wait for Bitbucket to copy the repository and then clone your fork, like:
 
-	``git clone https://github.com/YOUR_USER_NAME/python-dirtt``
+	``git clone https://bitbucket.org/YOUR_USER_NAME/python-dirtt``
 
 Now you can change whatever you want, commit, push to your fork and when 
 your contribution is done, follow the pull request link and send us a 
@@ -225,6 +225,5 @@ Links
 
 Here's the links:
 
-`Github <https://github.com/dshng/python-dirtt>`_
+`Bitbucket <https://bitbucket.org/mogga/python-dirtt>`_
 
-`Dashing Opensource <http://opensource.dashing.tv/python-dirtt>`_
