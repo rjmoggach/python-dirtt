@@ -19,7 +19,7 @@ from optparse import OptionParser
 from dirtt import CreateDirectoryTreeHandler, list_available_templates
 from dirtt.util.template import return_placeholders
 
-ENABLED_USERS = [0,1111]
+ENABLED_USERS = [0,1111,1003]
 
 def main():
 	usage = "usage: %prog [-t TEMPLATE]"
