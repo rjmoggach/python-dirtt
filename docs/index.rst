@@ -13,6 +13,7 @@ python-dirtt - Directory Tree Templater
    news
 
 .. comment: split here
+.. |copy|   unicode:: U+000A9 .. COPYRIGHT SIGN
 
 
 Status and License
@@ -24,7 +25,7 @@ It is licensed under an `MIT-style permissive license <https://github.com/dshng/
 
 You can install it with ``easy_install dirtt``.
 
-(c) 2011 Dashing Collective Inc. and contributors.
+|copy| 2011 Dashing Collective Inc. and contributors.
 
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
@@ -35,6 +36,8 @@ What It Does
 ``python-dirtt`` is a standalone tool and library used to generate 
 directory and file structures from xml templates that describe 
 repeatedly used filesystem layouts such as complex project structures.
+
+Take a look at the `screencast <http://opensource.dashing.tv/python-dirtt/dirtt-screencast.mov>`_.
 
 The general problem being tackled is one of inconsistent directory structures 
 for visual effects projects, from a lack of industry standards, resulting in 
@@ -47,11 +50,12 @@ filesystem attributes and reference Cheetah templates for static file
 customizations. The specifics of how it gets used as a tool are generic enough
 that it can be used for any similar task.
 
-The basic usage is:
+The package doesn't supply specific tools to do this but does include a simple example python
+shell script called ``mkdirt``. It's basic usage is:
 
 	``mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive``
 
-The templates that come with ``python-dirtt`` provide one generic example of how to use
+The templates that are included with ``python-dirtt`` provide one generic example of how to use
 the tools. They use a simple template language that is part of the package to
 create a solution that is quick to customize and rapid to deploy.
 These can easily be edited to create working templates tailored to your needs.
@@ -70,20 +74,21 @@ Currently we need to implement the following:
 -modular exceptions
 -better documentation
 
-Forking through Github
-~~~~~~~~~~~~~~~~~~~~~~
+Forking through Bitbucket
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you need to fork from the official repository, which is 
-`https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
+`https://bitbucket.org/mogga/python-dirtt <https://bitbucket.org/mogga/python-dirtt>`_.
 
-Log in to Github, go to the dirtt repository page, follow the fork link, 
-wait for Github to copy the repository and then clone your fork, like:
+Log in to Bitbucket, go to the dirtt repository page, follow the fork link, 
+wait for Bitbucket to copy the repository and then clone your fork, like:
 
-	``git clone https://github.com/YOUR_USER_NAME/python-dirtt``
+	``git clone https://bitbucket.org/YOUR_USER_NAME/python-dirtt``
 
 Now you can change whatever you want, commit, push to your fork and when 
 your contribution is done, follow the pull request link and send us a 
 request explaining what you did and why.
+
 
 Running the tests
 ~~~~~~~~~~~~~~~~~
@@ -117,6 +122,13 @@ and then to get the example templates and needed dtd locally:
 	``python setup.py install_data``
 
 Try it out in a python-virtualenv environment to play around and it should make sense quickly.
+
+If you want to install to a custom location here's how I do it:
+
+  ``pip install --install-option="--install-dir=/dashing/tools/lib/python2.7/site-packages" -e git+git@bitbucket.org:mogga/python-dirtt.git#egg=python-dirtt``
+  
+That will download and do the package build as necessary.
+
 
 XML Schema & Templates
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -217,6 +229,5 @@ Links
 
 Here's the links:
 
-`Github <https://github.com/dshng/python-dirtt>`_
+`Bitbucket <https://bitbucket.org/mogga/python-dirtt>`_
 
-`Dashing Opensource <http://opensource.dashing.tv/python-dirtt>`_

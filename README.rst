@@ -3,6 +3,8 @@
 python-dirtt - Directory Tree Templater
 =======================================
 
+* `Bugs <https://github.com/dshng/python-dirtt/issues/>`_
+
 .. contents::
 
 .. toctree::
@@ -14,21 +16,11 @@ python-dirtt - Directory Tree Templater
 Status and License
 ------------------
 
-dshng-loginhooks was written by Rob Moggach, for `Dashing Collective Inc. <http://dashing.tv>`_
-It is licensed under an `MIT-style permissive license <https://bitbucket.org/mogga/python-dirtt/raw/master/LICENSE.txt>`_.
-
-|copy| 2011 Dashing Collective Inc. and contributors.
-
-
-Status and License
-------------------
-
 python-dirtt was written by Rob Moggach, for `Dashing Collective Inc. <http://dashing.tv>`_
-and is  maintained by a `group of developers <https://bitbucket.org/mogga/python-dirtt/raw/master/AUTHORS.txt>`_.
+and is  maintained by a `group of developers <https://github.com/dshng/python-dirtt/raw/master/AUTHORS.txt>`_.
+It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.txt>`_.
 
 You can install it with ``easy_install dirtt``.
-
-It is licensed under an `MIT-style permissive license <https://bitbucket.org/mogga/python-dirtt/raw/master/LICENSE.txt>`_.
 
 |copy| 2011 Dashing Collective Inc. and contributors.
 
@@ -55,11 +47,12 @@ filesystem attributes and reference Cheetah templates for static file
 customizations. The specifics of how it gets used as a tool are generic enough
 that it can be used for any similar task.
 
-The basic usage is:
+The package doesn't supply specific tools to do this but does include a simple example python
+shell script called ``mkdirt``. It's basic usage is:
 
 	``mkdirt --template file:///path/to/xmls/TEMPLATE.xml --verbose --interactive``
 
-The templates that come with ``python-dirtt`` provide one generic example of how to use
+The templates that are included with ``python-dirtt`` provide one generic example of how to use
 the tools. They use a simple template language that is part of the package to
 create a solution that is quick to customize and rapid to deploy.
 These can easily be edited to create working templates tailored to your needs.
@@ -125,6 +118,13 @@ and then to get the example templates and needed dtd locally:
 	``python setup.py install_data``
 
 Try it out in a python-virtualenv environment to play around and it should make sense quickly.
+
+If you want to install to a custom location here's how I do it:
+
+  ``pip install --install-option="--install-dir=/dashing/tools/lib/python2.7/site-packages" -e git+git@bitbucket.org:mogga/python-dirtt.git#egg=python-dirtt``
+  
+That will download and do the package build as necessary.
+
 
 XML Schema & Templates
 ~~~~~~~~~~~~~~~~~~~~~~
