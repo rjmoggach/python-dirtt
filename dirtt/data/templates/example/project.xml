@@ -1,45 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dirtt name="Project Tree" version="0.1.4" dirname="/dashing/jobs" basename="{{project_path}}" username="pipeline" group="artist" perms="02755">
-
-<!-- C O N F I G   F O L D E R -->
-	<dir name="Project Config Folder" basename="etc" username="pipeline" group="supervisor" perms="02755">
-		<dir basename="houdini" username="pipeline" group="supervisor" perms="02755">
-			<dir basename="dso" username="pipeline" group="supervisor" perms="02775"/>
-            <dir basename="otls" username="pipeline" group="supervisor" perms="02775"/>
-            <dir basename="scripts" username="pipeline" group="supervisor" perms="02775"/>
-        </dir><!-- houdini -->
-		<dir basename="maya" username="pipeline" group="supervisor" perms="02755">
-            <dir basename="modules" username="pipeline" group="supervisor" perms="02775"/>
-            <dir basename="plugins" username="pipeline" group="supervisor" perms="02775"/>
-            <dir basename="scripts" username="pipeline" group="supervisor" perms="02755">
-                <dir basename="mel" username="pipeline" group="supervisor" perms="02775"/>
-                <dir basename="py" username="pipeline" group="supervisor" perms="02775"/>
-            </dir>
-			<dir basename="shelves" username="pipeline" group="supervisor" perms="02775"/>
-		</dir><!-- maya -->
-		<dir basename="nuke" username="pipeline" group="supervisor" perms="02755">
-			<dir basename="gizmos" username="pipeline" group="supervisor" perms="02775"/>
-			<dir basename="menu" username="pipeline" group="supervisor" perms="02775"/>
-			<dir basename="scripts" username="pipeline" group="supervisor" perms="02775"/>
-		</dir><!-- nuke -->
-		<dir basename="user" username="pipeline" group="supervisor" perms="02775"/>
-		<dir basename="vray" username="pipeline" group="supervisor" perms="02775"/>
-	</dir><!-- etc -->
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN"
+      "http://opensource.dashing.tv/dtds/dirtt-0_1_4.dtd">
+<dirtt name="Project Tree" version="0.1.4" dirname="{{projects_root}}" basename="{{project_path}}" username="pipeline" group="artist" perms="02755">
 
 <!-- F L A M E   F O L D E R -->
 	<dir name="Project Flame Projects Folder" basename="flame" username="flame" group="supervisor" perms="02775">
 	</dir><!-- flame -->
-
-<!-- D E S I G N   F O L D E R -->
-	<dir name="Project Design Folder" basename="design" username="pipeline" group="artist" perms="02775">
-		<dir basename="assets" username="pipeline" group="artist" perms="02775">
-  		<dir basename="ref" username="pipeline" group="artist" perms="02775"/>
-  		<dir basename="elements" username="pipeline" group="artist" perms="02775"/>
-    	<link basename="fonts" ref="/dashing/jobs/{{project_path}}/library/fonts"/>
-    	<link basename="graphics" ref="/dashing/jobs/{{project_path}}/library/graphics"/>
-		</dir>
-		<dir basename="devel" username="pipeline" group="artist" perms="02775"/>
-	</dir><!-- design -->
 
 <!-- L I B R A R Y   F O L D E R -->
 	<dir name= "Project Library Folder" basename="library" username="pipeline" group="supervisor" perms="02755">
@@ -54,7 +20,7 @@
 			<dir basename="moco" username="pipeline" group="supervisor" perms="02775"/>
 		</dir><!-- data -->
 
-		<dir basename="images">
+		<dir basename="img">
 			<dir basename="calibration" username="pipeline" group="supervisor" perms="02775"/>
 			<dir basename="elements" username="pipeline" group="supervisor" perms="02775"/>
 			<dir basename="grain" username="pipeline" group="supervisor" perms="02775"/>
@@ -82,9 +48,9 @@
 			</dir>
 		</dir><!-- edits -->
 
-		<dir basename="fonts" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="fonts" username="pipeline" group="supervisor" perms="02775"/>
 
-		<dir basename="graphics" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="graphics" username="pipeline" group="supervisor" perms="02775"/>
 
 		<dir basename="reference" username="pipeline" group="supervisor" perms="02755">
 			<dir basename="misc" username="pipeline" group="supervisor" perms="02775"/>
@@ -129,8 +95,4 @@
 	<dir basename="shots" username="pipeline" group="artist" perms="02755">
 	</dir><!-- shots -->
 		
-<!-- I M A G E S   F O L D E R -->
-	<dir basename="images" username="pipeline" group="artist" perms="02755">
-	</dir><!-- shots -->
-
 </dirtt>

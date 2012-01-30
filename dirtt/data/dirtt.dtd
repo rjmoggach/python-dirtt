@@ -15,8 +15,8 @@
 <!--
   dirtt is an XML language - Typical usage:
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.8//EN"
-      "http://opensource.dashing.tv/dtds/dirtt-0_1_8.dtd">
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.9b1//EN"
+      "http://opensource.dashing.tv/dtds/dirtt.dtd">
 <dirtt>
 </dirtt>
 -->
