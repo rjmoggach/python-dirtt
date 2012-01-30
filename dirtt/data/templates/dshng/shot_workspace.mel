@@ -1,0 +1,59 @@
+workspace -fr "scene"                 "scenes";
+workspace -fr "mayaAscii"             "scenes";
+workspace -fr "mayaBinary"            "scenes";
+workspace -fr "autoSave"              "scenes/autosave";
+
+workspace -fr "images"                "images/cg";
+
+workspace -fr "sourceImages"          "images/textures";
+workspace -fr "3dPaintTextures"       "images/textures/3dPaintTextures";
+
+workspace -fr "eps"                   "images/design";
+workspace -fr "OBJexport"             "data/geo";
+workspace -fr "STEP_DC"               "data/geo";
+workspace -fr "Autodesk Packet File"  "data/geo";
+workspace -fr "DXF_DCE"               "data/geo";
+workspace -fr "DWG_DC"                "data/geo";
+workspace -fr "translatorData"        "data/geo";
+workspace -fr "DXF_DC"                "data/geo";
+workspace -fr "SPF_DC"                "data/geo";
+workspace -fr "OBJ"                   "data/geo";
+workspace -fr "STL_DC"                "data/geo";
+workspace -fr "IGES_DCE"              "data/geo";
+workspace -fr "SPF_DCE"               "data/geo";
+workspace -fr "studioImport"          "data/geo";
+workspace -fr "STL_DCE"               "data/geo";
+workspace -fr "DWG_DCE"               "data/geo";
+workspace -fr "IGES_DC"               "data/geo";
+workspace -fr "illustrator"           "images/design";
+workspace -fr "diskCache"             "data/cache";
+workspace -fr "fluidCache"            "data/cache/fluid";
+workspace -fr "move"                  "data/chan";
+workspace -fr "DAE_FBX export"        "data";
+workspace -fr "DAE_FBX"               "data";
+workspace -fr "Fbx"                   "data";
+workspace -fr "particles"             "data/particles";
+
+workspace -fr "renderData"            "data/renderData";
+workspace -fr "depth"                 "data/renderData/depth";
+workspace -fr "furFiles"              "data/renderData/fur/furFiles";
+workspace -fr "furShadowMap"          "data/renderData/fur/furShadowMap";
+workspace -fr "furAttrMap"            "data/renderData/fur/furAttrMap";
+workspace -fr "furImages"             "data/renderData/fur/furImages";
+workspace -fr "furEqualMap"           "data/renderData/fur/furEqualMap";
+workspace -fr "mentalRay"             "data/renderData/mentalray";
+workspace -fr "iprImages"             "data/renderData/iprImages";
+workspace -fr "shaders"               "data/renderData/shaders";
+
+workspace -fr "scripts"               "tools/maya";
+workspace -fr "mel"                   "tools/maya/mel";
+workspace -fr "python"                "tools/maya/python";
+workspace -fr "templates"             "tools/maya/templates";
+
+workspace -fr "sound"                 "media/audio";
+workspace -fr "audio"                 "media/audio";
+workspace -fr "clips"                 "media/movies";
+workspace -fr "movie"                 "media/movies";
+workspace -fr "offlineEdit"           "media/edits";
+
+

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dirtt name="Production Tree" version="0.1.9b1" dirname="{{project_root}}/{{project_path}}" basename="production" username="pipeline" group="production" perms="02775">
+
+  <!-- E D I T S   F O L D E R -->
+  <dir basename="edits" username="pipeline" group="production" perms="02777">
+    <dir basename="_yyyy_mm_dd_template" username="pipeline" group="artist" perms="02777">
+      <dir basename="edl" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="movies" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="images" username="pipeline" group="artist" perms="02775"/>
+    </dir>
+  </dir><!-- edits -->
+
+
+  <!-- P O S T I N G S   F O L D E R -->
+  <dir basename="postings" username="pipeline" group="production" perms="02777">
+    <dir basename="_yyyy_mm_dd_template" username="pipeline" group="artist" perms="02777">
+      <dir basename="other" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="movies" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="images" username="pipeline" group="artist" perms="02775"/>
+    </dir>
+  </dir><!-- postings -->
+
+
+  <!-- C R E A T I V E   F O L D E R -->
+  <dir basename="creative" username="pipeline" group="production" perms="02777">
+    <dir basename="animatic" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="storyboard" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="script" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="breakdown" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="treatment" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="reference" username="pipeline" group="artist" perms="02775">
+      <dir basename="client" username="pipeline" group="production" perms="02775"/>
+      <dir basename="development" username="pipeline" group="artist" perms="02777"/>
+    </dir>
+  </dir><!-- creative -->
+
+
+  <!-- F I N A N C I A L   F O L D E R -->
+  <dir basename="business" username="pipeline" group="production" perms="02770">
+    <dir basename="bid" username="pipeline" group="production" perms="02770"/>
+    <dir basename="legal" username="pipeline" group="production" perms="02770">
+      <dir basename="contracts" username="pipeline" group="production" perms="02770"/>
+      <dir basename="nda" username="pipeline" group="production" perms="02770"/>
+    </dir>
+    <dir basename="invoices" username="pipeline" group="production" perms="02770"/>
+    <dir basename="purchases" username="pipeline" group="production" perms="02770"/>
+    <dir basename="budget" username="pipeline" group="production" perms="02770"/>
+  </dir><!-- financial -->
+
+
+  <!-- G R A P H I C S   F O L D E R -->
+  <dir basename="graphics" username="pipeline" group="artist" perms="02775">
+    <dir basename="logos" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="endtags" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="legals" username="pipeline" group="artist" perms="02775"/>
+    <link basename="fonts" ref="../../master/data/fonts"/>
+  </dir><!-- graphics -->
+
+
+  <!-- A U D I O   F O L D E R -->
+  <dir basename="audio" username="pipeline" group="artist" perms="02775"/>
+
+
+  <!-- S L A T E S   F O L D E R -->
+  <dir basename="slates" username="pipeline" group="production" perms="02777"/>
+
+
+  <!-- N O T E S   F O L D E R -->
+  <dir basename="notes" username="pipeline" group="production" perms="02775"/>
+
+
+  <!-- S H O T S H E E T S   F O L D E R -->
+  <dir basename="shotsheets" username="pipeline" group="production" perms="02775">
+    <dir basename="frames" username="pipeline" group="artist" perms="02775"/>
+  </dir>
+
+
+  <!-- S C H E D U L E   F O L D E R -->
+  <dir basename="schedule" username="pipeline" group="production" perms="02775"/>
+
+
+
+
+</dirtt>

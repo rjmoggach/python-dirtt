@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dirtt name="Project Work Tree" version="0.1.9b1" dirname="{{project_root}}/{{project_path}}" basename="work" username="pipeline" group="supervisor" perms="02755">
+
+
+  <!-- I M A G E S   F O L D E R -->
+  <dir basename="images" username="pipeline" group="supervisor" perms="02775">
+    <dir basename="cg" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="comp" username="pipeline" group="artist" perms="02775">
+      <link basename="plates" ref="../plates"/>
+      <link basename="master" ref="../../../master/images"/>
+    </dir>
+    <dir basename="design" username="pipeline" group="artist" perms="02775"/>
+      <link basename="master" ref="../../../master/images/design"/>
+      <link basename="fonts" ref="../../data/fonts"/>
+      <link basename="reference" ref="../reference"/>
+    </dir>
+    <dir basename="paint" username="pipeline" group="artist" perms="02775"/>
+      <link basename="master" ref="../../../master/images/paint"/>
+      <link basename="reference" ref="../reference"/>
+    </dir>
+    <dir basename="plates" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="reference" username="pipeline" group="artist" perms="02775">
+      <dir basename="client" username="pipeline" group="artist" perms="02777"/>
+      <dir basename="development" username="pipeline" group="artist" perms="02777"/>
+    </dir>
+    <dir basename="textures" username="pipeline" group="artist" perms="02775">
+      <link basename="master" ref="../../master/images/textures"/>
+      <dir basename="3dPaintTextures" username="pipeline" group="artist" perms="02775"/>
+    </dir>
+    <link basename="reference" ref="../../production/creative/reference"/>
+    <dir basename="survey" username="pipeline" group="artist" perms="02775">
+      <dir basename="hdri" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="char" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="env" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
+    </dir>
+  </dir>
+
+
+  <!-- D A T A   F O L D E R -->
+  <dir basename="data" username="pipeline" group="supervisor" perms="02775">
+    <link basename="master" ref="../../master/data"/>
+    <dir basename="cache" username="pipeline" group="artist" perms="02775">
+      <dir basename="fluid" username="pipeline" group="artist" perms="02775"/>
+    </dir>
+    <dir basename="chan" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="fbx" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="particles" username="pipeline" group="artist" perms="02775"/>
+    <link basename="fonts" ref="../../master/data/fonts"/>
+  </dir>
+
+
+  <!-- T O O L S   F O L D E R -->
+  <dir basename="tools" username="pipeline" group="supervisor" perms="02775">
+    <dir basename="maya" username="pipeline" group="supervisor" perms="02775">
+      <link basename="master" ref="../../../master/tools/maya"/>
+      <dir basename="mel" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="python" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="shelves" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="modules" username="pipeline" group="supervisor" perms="02775"/>
+      <dir basename="templates" username="pipeline" group="supervisor" perms="02775"/>
+    </dir>
+	  <dir basename="houdini" username="pipeline" group="supervisor" perms="02775">
+		<dir basename ="dso" username="pipeline" group="supervisor" perms="02775"/>
+    <dir basename ="otls" username="pipeline" group="supervisor" perms="02775"/>
+    <dir basename ="scripts" username="pipeline" group="supervisor" perms="02775"/>
+    </dir><!-- houdini -->
+    <dir basename="nuke" username="pipeline" group="supervisor" perms="02775">
+      <link basename="master" ref="../../../master/tools/nuke"/>
+      <dir basename="gizmos" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="plugins" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="shelves" username="pipeline" group="artist" perms="02775"/>
+    </dir>
+    <dir basename="user" username="pipeline" group="artist" perms="02775"/>
+  </dir>
+
+
+  <!-- S U R V E Y   F O L D E R -->
+  <dir basename="survey" username="pipeline" group="supervisor" perms="02755">
+    <dir basename="scenes" username="pipeline" group="artist" perms="02775">
+      <link basename="master" ref="../../../master"/>
+      <dir basename="char" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="env" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="autosave" username="pipeline" group="artist" perms="02777"/>
+    </dir>
+    <link basename="images" ref="../images"/>
+    <link basename="data" ref="../data"/>
+    <link basename="tools" ref="../tools/maya"/>
+    <dir basename="lens" username="pipeline" group="supervisor" perms="02775">
+      <dir basename="uv" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="grids" username="pipeline" group="artist" perms="02775"/>
+    </dir>
+    <dir basename="notes" username="pipeline" group="artist" perms="02775"/>
+  </dir><!-- survey -->
+
+
+  <!-- M O D E L   F O L D E R -->
+  <dir basename="model" username="pipeline" group="supervisor" perms="02755">
+    <dir basename="scenes" username="pipeline" group="artist" perms="02775">
+      <link basename="master" ref="../../../master"/>
+      <dir basename="char" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="env" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="autosave" username="pipeline" group="artist" perms="02777"/>
+    </dir>
+    <link basename="images" ref="../images"/>
+    <link basename="data" ref="../data"/>
+    <link basename="tools" ref="../tools"/>
+  </dir><!-- model -->
+
+
+  <!-- R I G   F O L D E R -->
+  <dir basename="rig" username="pipeline" group="supervisor" perms="02755">
+    <dir basename="scenes" username="pipeline" group="artist" perms="02775">
+      <link basename="master" ref="../../../master"/>
+      <dir basename="char" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="env" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="autosave" username="pipeline" group="artist" perms="02777"/>
+    </dir>
+    <link basename="images" ref="../images"/>
+    <link basename="tools" ref="../tools"/>
+  </dir><!-- rig -->
+
+
+  <!-- F X   F O L D E R -->
+  <dir basename="fx" username="pipeline" group="supervisor" perms="02755">
+    <dir basename="scenes" username="pipeline" group="artist" perms="02775">
+      <link basename="master" ref="../../../../master"/>
+      <dir basename="char" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="env" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="autosave" username="pipeline" group="artist" perms="02777"/>
+    </dir>
+    <link basename="images" ref="../images"/>
+    <link basename="data" ref="../data"/>
+    <link basename="tools" ref="../tools"/>
+  </dir><!-- fx -->
+
+
+  <!-- L I G H T   F O L D E R -->
+  <dir basename="light" username="pipeline" group="supervisor" perms="02755">
+    <dir basename="scenes" username="pipeline" group="artist" perms="02775">
+      <link basename="master" ref="../../../../master"/>
+      <dir basename="char" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="env" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="autosave" username="pipeline" group="artist" perms="02777"/>
+    </dir>
+    <link basename="images" ref="../images"/>
+    <link basename="data" ref="../data"/>
+  </dir><!-- light -->
+
+
+  <!-- C O M P   F O L D E R -->
+  <dir basename="comp" username="pipeline" group="supervisor" perms="02755">
+    <dir basename="nuke" username="pipeline" group="supervisor" perms="02775"/>
+    <dir basename="tools" username="pipeline" group="supervisor" perms="02775">
+      <link basename="nuke" ref="../../tools/nuke"/>
+    </dir>
+    <link basename="images" ref="../images"/>
+    <link basename="data" ref="../data"/>
+  </dir><!-- comp -->
+
+
+  <!-- P A I N T   F O L D E R -->
+  <link basename="paint" ref="./images/paint"/>
+
+
+  <!-- D E S I G N   F O L D E R -->
+  <link basename="design" ref="./images/design"/>
+
+
+</dirtt>

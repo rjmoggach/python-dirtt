@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dirtt name="Project Tree" version="0.1.9b1" dirname="{{project_root}}" basename="{{project_path}}" username="pipeline" group="artist" perms="02755">
+
+
+<!-- M A S T E R   F O L D E R -->
+  <dir name="Project Master Directory" basename="master" username="pipeline" group="supervisor" perms="02755">
+  </dir><!-- master -->
+
+
+<!-- W O R K   F O L D E R -->
+  <dir name="Project Work Directory" basename="work" username="pipeline" group="supervisor" perms="02755">
+  </dir><!-- work -->
+
+
+<!-- S E Q U E N C E S   F O L D E R -->
+  <dir name="Project Sequences Directory" basename="sequences" username="pipeline" group="supervisor" perms="02755">
+  </dir><!-- sequences -->
+
+
+<!-- I N C O M I N G   F O L D E R -->
+  <dir name="Project Incoming Directory" basename="sequences" username="pipeline" group="artist" perms="02777">
+  </dir><!-- incoming -->
+
+
+<!-- P R O D U C T I O N   F O L D E R -->
+  <dir name="Project Production Directory" basename="production" username="pipeline" group="supervisor" perms="02775">
+  </dir><!-- production -->
+
+
+<!-- F L A M E   F O L D E R -->
+  <dir name="Project Flame Directory" basename="flame" username="pipeline" group="supervisor" perms="02777">
+  </dir><!-- flame -->
+
+
+</dirtt>
