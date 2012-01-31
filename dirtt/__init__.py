@@ -54,6 +54,7 @@ TEMPLATES_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data',
 def list_available_templates():
   print "\n  These are the available templates. Reference using the full path provided."
   template_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'templates')
+  print "Template Path: %s" % template_dir
   template_list = []
   for root, subdirs, files in os.walk(template_dir):
     for subdir in subdirs:
