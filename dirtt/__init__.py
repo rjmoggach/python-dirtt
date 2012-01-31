@@ -52,9 +52,21 @@ DEFAULT_GROUP = "root"
 TEMPLATES_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'templates')
 
 def list_available_templates():
+  print "\n  These are the available templates. Reference using the full path provided."
   template_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'templates')
-  for filename in os.listdir(template_dir):
-    print "  %s" % os.path.join(template_dir,filename)
+  template_list = []
+  for root, subdirs, files in os.walk(template_dir):
+    for subdir in subdirs:
+      print "\n  -> %s" % subdir
+      for filename in os.listdir(os.path.join(template_dir, subdir)):
+        print "  %s" % os.path.join(template_dir, subdir, filename)
+  print "\n"
+#    for file in files:
+#      print subdirs
+#      template_list.append(os.path.join(root,file))
+#      print "  %s" % os.path.join(root, file)
+#  for filename in os.listdir(template_dir):
+#    print "  %s" % os.path.join(template_dir,filename)
 
 class CreateDirectoryTreeHandler(ContentHandler):
   """
@@ -65,7 +77,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
   and executing the xml elements and their attributes.
   """
 
-  def __init__(self, verbose, tree_template, kwargs, interactive=False,warn=False):
+  def __init__(self, verbose, tree_template, kwargs, interactive = False, warn = False):
     """
     define from the class initialization the verbosity level,
     the template to use, the user's starting directory, and any
@@ -95,10 +107,15 @@ class CreateDirectoryTreeHandler(ContentHandler):
     # parser = make_parser()
     # parser.setContentHandler(self)
     # parser.parse(self.tree_template)
+
+    # read and parse the template
     tree_template_str = self._read_template(self.tree_template)
-    tree_template_str = self._parse_template(tree_template_str,self.tree_template)
-    parseString(tree_template_str,self)
-    if self.verbose: print "Returning to start dir: %s" % self.start_dir
+    tree_template_str = self._parse_template(tree_template_str, self.tree_template)
+
+    # now we can parse the string as XML
+    parseString(tree_template_str, self)
+    if self.verbose:
+      print "Returning to start dir: %s" % self.start_dir
     os.chdir(self.start_dir)
     self.current_dir = os.path.abspath(".")
 
@@ -111,7 +128,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
       ref = link_info['ref']
       link = os.path.join(parent_dir, link_name)
 
-      if self.verbose: print "\tCreating symlink: %s => %s" % (link, ref)
+      if self.verbose: print "\tCreating symlink: %s = > %s" % (link, ref)
       create_symlink(ref, link)
   
   
@@ -121,18 +138,32 @@ class CreateDirectoryTreeHandler(ContentHandler):
     to process it's attributes and content before moving on
     to it's contents and then endElement
     """
+    
+    # set the current directory
     self.current_dir = os.path.abspath(".")
+    
+    # get the basename attribute or None
     basename = attrs.get("basename", None)
-    perms,uid,gid = self._return_perms_uid_gid(attrs)
-    self.dirname = attrs.get("dirname",None)
+    
+    # get the permissions and ownership
+    perms, uid, gid = self._return_perms_uid_gid(attrs)
+    
+    # get the directory name attribute or None
+    self.dirname = attrs.get("dirname", None)
+    
+    # if xml elementname is dirtt let's get started
     if name == 'dirtt':
       if self.verbose: print "Starting Directory Tree Template Build..."
       if self.verbose: print "\tChanging current directory to: %s" % self.dirname
+      # change to our starting directory
       os.chdir(self.dirname)
       self.current_dir = os.path.abspath(".")
-      self.idrefs[attrs.get("id","root-dir")] = self.current_dir
+      self.idrefs[attrs.get("id", "root-dir")] = self.current_dir
+
     if basename:
       if self.skip_entity: self.skip_entity += 1
+      
+      # if the entity is our main dirtt entity or a directory proceed here
       if name in ('dirtt','dir'):
         dirname = attrs.get("dirname", None)
         if self.interactive:
@@ -143,7 +174,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
             else:
               if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
               if dirname:
-                newdir= os.path.join(dirname,basename)
+                newdir = os.path.join(dirname,basename)
                 create_dir(newdir, perms, uid, gid, self.warn)
               else:
                 create_dir(basename, perms, uid, gid, self.warn)
@@ -152,7 +183,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
         else:
           if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
           if dirname:
-            newdir= os.path.join(dirname,basename)
+            newdir = os.path.join(dirname,basename)
             create_dir(newdir, perms, uid, gid, self.warn)
             os.chdir(newdir)
           else:
@@ -161,6 +192,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
           self.current_dir = os.path.abspath(".")
         if attrs.get("id"):
           self.idrefs[attrs.get("id")] = self.current_dir
+
       if name == 'file':
         if self.verbose: print "\tCreating file: %s/%s (%s/%i:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
         href = attrs.get("href",None)
@@ -169,10 +201,12 @@ class CreateDirectoryTreeHandler(ContentHandler):
           template_str = self._read_template(template_file)
           content = self._parse_template(template_str, template_file)
         create_file(basename, content, perms, uid, gid)
+
     else:
       if name in ('dirtt', 'dir'):
         if not self.skip_entity:
           self.skip_entity += 1
+
     if name == 'link':
       try:
         ref = attrs.get("idref",None)
@@ -181,8 +215,8 @@ class CreateDirectoryTreeHandler(ContentHandler):
         elif attrs.get("ref",None):
           ref = attrs.get("ref")
         if not ref:
-          # If neither the ref attribte nor the idref attribute has been set then skip
-          # this link.
+          # If neither the ref attribute nor the idref attribute has been set,
+          # then skip this link.
           return
         link_name = attrs.get("basename")
         if not link_name:
@@ -194,8 +228,10 @@ class CreateDirectoryTreeHandler(ContentHandler):
         self.links.append({'basename': link_name, 'parent_dir': target_dir, 'ref': ref})
       except:
         pass
+
     return
       
+
   def _return_perms_uid_gid(self,attrs):
     """
     internal function to return the OS uid and gid numbers
@@ -210,7 +246,8 @@ class CreateDirectoryTreeHandler(ContentHandler):
     gid = get_gid_for_name(group)
     return (perms, uid, gid)
 
-  def _read_template(self, template_ref=None):
+
+  def _read_template(self, template_ref = None):
     """
     internal function that checks if an element
     has provided a reference to a template or use
@@ -229,7 +266,8 @@ class CreateDirectoryTreeHandler(ContentHandler):
       content = None
     return content
 
-  def _parse_template(self, template_str=None, template_ref=None):
+
+  def _parse_template(self, template_str = None, template_ref = None):
     """
     use our built-in Template class and substitute the
     provided placeholder attributes where possible
@@ -241,12 +279,14 @@ class CreateDirectoryTreeHandler(ContentHandler):
     content = template.substitute(self.kwargs)
     return content
 
+
   def characters (self, ch):
     """
     required method from the original SAX class
     """
     pass
   
+
   def endElement(self, name):
     """
     if our element is a directory, close it when

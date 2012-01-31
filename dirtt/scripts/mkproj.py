@@ -5,7 +5,7 @@ python-dirtt - Directory Tree Templater
 (c) 2011 Dashing Collective Inc. and contributors
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-	mkshots
+	mkproj.py
 	
 	This is a generic command line tool that prompts for template
 	variables in a given template and renders the tree.

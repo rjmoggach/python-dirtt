@@ -5,7 +5,7 @@ python-dirtt - Directory Tree Templater
 (c) 2011 Dashing Collective Inc. and contributors
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-	mkdirt
+	mkdirt.py
 	
 	This is a generic command line tool that prompts for template
 	variables in a given template and renders the tree.
@@ -32,24 +32,31 @@ def main():
 	parser.add_option("-w", "--stop-on-warning",dest="warn",action="store_true",default=False)
 	parser.add_option("-l", "--list",dest="list",action="store_true",default=False)
 	(options, args) = parser.parse_args()
+
 	if os.geteuid() not in ENABLED_USERS:
 		print "You are not authorized to run this script."
 		sys.exit(-6)
+
 	if options.list:
 	  list_available_templates()
 	  sys.exit(-6)
+
 	if options.template_loc:
 		template_loc = options.template_loc
 	else:
 		template_loc = None
 		print "\n  You must specify a template file with -t or --template  to run this script.\n  Alternatively you can list  the available templates  with -l or --list.\n  For a complete list of options -h or --help.\n"
 		sys.exit(-6)
+
 	if options.verbose: verbose = True
 	else: verbose = False
+
 	if options.interactive: interactive = True
 	else: interactive = False
+
 	if options.warn:  warn = True
 	else: warn = False	
+
 	template_file = open(template_loc,'r')
 	template_str = template_file.read()
 	template_file.close()
