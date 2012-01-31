@@ -56,18 +56,18 @@ def list_available_templates():
   template_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'templates')
   print "Template Path: %s" % template_dir
   template_list = []
-  for root, subdirs, files in os.walk(template_dir):
-    for subdir in subdirs:
-      print "\n  -> %s" % subdir
-      for filename in os.listdir(os.path.join(template_dir, subdir)):
-        print "  %s" % os.path.join(template_dir, subdir, filename)
-  print "\n"
+  for filename in os.listdir(template_dir):
+    print "  %s" % os.path.join(template_dir,filename)
+#  for root, subdirs, files in os.walk(template_dir):
+#    for subdir in subdirs:
+#      print "\n  -> %s" % subdir
+#      for filename in os.listdir(os.path.join(template_dir, subdir)):
+#        print "  %s" % os.path.join(template_dir, subdir, filename)
+#  print "\n"
 #    for file in files:
 #      print subdirs
 #      template_list.append(os.path.join(root,file))
 #      print "  %s" % os.path.join(root, file)
-#  for filename in os.listdir(template_dir):
-#    print "  %s" % os.path.join(template_dir,filename)
 
 class CreateDirectoryTreeHandler(ContentHandler):
   """
