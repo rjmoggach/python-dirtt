@@ -7,9 +7,6 @@ python-dirtt - Directory Tree Templater
 
 .. contents::
 
-.. toctree::
-   :maxdepth: 1
-
 .. comment: split here
 .. |copy|   unicode:: U+000A9 .. COPYRIGHT SIGN
 

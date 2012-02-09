@@ -7,9 +7,6 @@ python-dirtt - Directory Tree Templater
 
 .. contents::
 
-.. toctree::
-   :maxdepth: 1
-
    news
 
 .. comment: split here

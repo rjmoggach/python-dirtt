@@ -23,10 +23,13 @@ ENABLED_USERS = [0,1111]
 
 TEMPLATE_DIR="/dashing/tools/var/dirtt/templates"
 PROJECT_ROOT="/dashing/jobs"
-PROJECT_TEMPLATE=os.path.join(TEMPLATE_DIR,"dshng_project.xml")
-SEQUENCE_TEMPLATE=os.path.join(TEMPLATE_DIR,"dshng_sequence.xml")
-SHOT_TEMPLATE=os.path.join(TEMPLATE_DIR,"dshng_shot.xml")
-MAYA_TEMPLATE=os.path.join(TEMPLATE_DIR,"dshng_shot_maya_2012.xml")
+PROJECT_PATHS=["master", "production", "work"]
+PROJECT_TEMPLATE=os.path.join(TEMPLATE_DIR,"project.xml")
+PRODUCTION_TEMPLATE=os.path.join(TEMPLATE_DIR,"project_production.xml")
+WORK_TEMPLATE=os.path.join(TEMPLATE_DIR,"project_work.xml")
+MASTER_TEMPLATE=os.path.join(TEMPLATE_DIR,"project_master.xml")
+SEQUENCE_TEMPLATE=os.path.join(TEMPLATE_DIR,"project_sequence.xml")
+SHOT_TEMPLATE=os.path.join(TEMPLATE_DIR,"project_shot.xml")
 
 def main():
 	usage = "usage: %prog [-t TEMPLATE]"
@@ -59,6 +62,7 @@ def main():
 	else: warn = False
 	
 	template_variables = {}
+	template_variables["project_root"] = PROJECT_ROOT
 	print "Enter the project_path:\n\tEg. hyundai/etne"
 	project_path=raw_input("\tproject_path >  ")
 	project_path_full=os.path.join(PROJECT_ROOT,project_path)
@@ -69,7 +73,7 @@ def main():
 		print "Created Project Tree."
 	else:
 		print "Project Exists."
-	
+
 	print "Enter the sequence_name:\n\tEg. veloster"
 	sequence_name=raw_input("\tsequence_name >  ")
 	sequence_path=os.path.join(project_path_full,"sequences",sequence_name)
