@@ -16,7 +16,7 @@ import os
 import sys
 from optparse import OptionParser
 
-from dirtt import CreateDirectoryTreeHandler, list_available_templates
+from dirtt import DirectoryTreeHandler, list_available_templates
 from dirtt.util.template import return_placeholders
 
 ENABLED_USERS = [0,1111]
@@ -64,7 +64,7 @@ def main():
 	project_path_full=os.path.join(PROJECT_ROOT,project_path)
 	template_variables["project_path"] = project_path
 	if not os.path.isdir(project_path_full):
-		c = CreateDirectoryTreeHandler(verbose,PROJECT_TEMPLATE,template_variables,interactive,warn)
+		c = DirectoryTreeHandler(verbose,PROJECT_TEMPLATE,template_variables,interactive,warn)
 		c.run()
 		print "Created Project Tree."
 	else:
@@ -75,7 +75,7 @@ def main():
 	sequence_path=os.path.join(project_path_full,"sequences",sequence_name)
 	template_variables["sequence_name"] = sequence_name
 	if not os.path.isdir(sequence_path):
-		c = CreateDirectoryTreeHandler(verbose,SEQUENCE_TEMPLATE,template_variables,interactive,warn)
+		c = DirectoryTreeHandler(verbose,SEQUENCE_TEMPLATE,template_variables,interactive,warn)
 		c.run()
 		print "Created Sequence Tree."
 	else:
@@ -88,14 +88,14 @@ def main():
 		template_variables["shot_name"] = shot_name
 		shot_path=os.path.join(sequence_path,shot_name)
 		if not os.path.isdir(shot_path):
-			c = CreateDirectoryTreeHandler(verbose,SHOT_TEMPLATE,template_variables,interactive,warn)
+			c = DirectoryTreeHandler(verbose,SHOT_TEMPLATE,template_variables,interactive,warn)
 			c.run()
 			print "Created Shot Tree."
 		else:
 			print "Shot Exists."
 		maya_scenes_path=os.path.join(project_path,"sequences",sequence_name,shot_name,"work/maya/scenes")
 		if not os.path.isdir(maya_scenes_path):
-			c = CreateDirectoryTreeHandler(verbose,MAYA_TEMPLATE,template_variables,interactive,warn)
+			c = DirectoryTreeHandler(verbose,MAYA_TEMPLATE,template_variables,interactive,warn)
 			c.run()
 			print "Created Shot Maya Work Dir."
 

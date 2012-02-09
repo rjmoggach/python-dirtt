@@ -16,7 +16,7 @@ import os
 import sys
 from optparse import OptionParser
 
-from dirtt import CreateDirectoryTreeHandler, list_available_templates
+from dirtt import DirectoryTreeHandler, list_available_templates
 from dirtt.util.template import return_placeholders
 
 ENABLED_USERS = [0,1111,1003]
@@ -74,7 +74,7 @@ def main():
 			template_variables[key]=eval(key)
 	else: template_variables = {}
 
-	c = CreateDirectoryTreeHandler(verbose,template_loc,template_variables,interactive,warn)
+	c = DirectoryTreeHandler(verbose,template_loc,template_variables,interactive,warn)
 	c.run()
 	print "Created Tree."
 	sys.exit(0)

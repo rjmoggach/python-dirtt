@@ -3,6 +3,7 @@ from distutils.command.install_data import install_data
 from distutils.command.install import INSTALL_SCHEMES
 import os
 import sys
+from setup_commands import TestCommand, CleanCommand
 
 
 def return_version():
@@ -26,6 +27,9 @@ if sys.platform == "darwin":
   cmdclasses = {'install_data': osx_install_data} 
 else: 
   cmdclasses = {'install_data': install_data} 
+
+cmdclasses['test'] = TestCommand
+cmdclasses['clean'] = CleanCommand
 
 
 def fullsplit(path, result=None):
