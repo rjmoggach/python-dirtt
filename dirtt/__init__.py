@@ -89,7 +89,6 @@ class DirectoryTreeHandler(ContentHandler):
     assert tree_template is not None 
     self.verbose = verbose
     self.tree_template = tree_template
-    self.start_dir = self.dirname = os.path.abspath(".")
     # Location of tree_template
     self.tree_template_loc = os.path.dirname(self.tree_template)
     if kwargs is None:
@@ -125,9 +124,6 @@ class DirectoryTreeHandler(ContentHandler):
 
     # now we can parse the string as XML
     parseString(tree_template_str, self)
-    if self.verbose:
-      print "Returning to start dir: %s" % self.start_dir
-    os.chdir(self.start_dir)
     self.current_dir = os.path.abspath(".")
 
     self._create_symlinks()
@@ -281,13 +277,10 @@ class DirectoryTreeHandler(ContentHandler):
     """
     if template_ref is None:
       template_ref = self.template
-    try:
-      if template_ref[0:7] in ('http://','file://'):
+    if template_ref[0:7] in ('http://','file://'):
         content = read_url(template_ref)
-      else:
+    else:
         content = read_file(template_ref)
-    except:
-      content = None
     return content
 
 
