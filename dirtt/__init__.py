@@ -318,4 +318,3 @@ class DirectoryTreeHandler(ContentHandler):
     if self.skip_entity: self.skip_entity -= 1
     pass
 
-
