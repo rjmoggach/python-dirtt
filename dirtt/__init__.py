@@ -78,7 +78,7 @@ class CreateDirectoryTreeHandler(ContentHandler):
   and executing the xml elements and their attributes.
   """
 
-  def __init__(self, verbose, tree_template, kwargs, interactive = False, warn = False):
+  def __init__(self, verbose, tree_template, kwargs, interactive = False, warn = False, processed_templates=[]):
     """
     define from the class initialization the verbosity level,
     the template to use, the user's starting directory, and any
@@ -89,6 +89,8 @@ class CreateDirectoryTreeHandler(ContentHandler):
     self.verbose = verbose
     self.tree_template = tree_template
     self.start_dir = self.dirname = os.path.abspath(".")
+    # Location of tree_template
+    self.tree_template_loc = os.path.dirname(self.tree_template)
     if kwargs is None:
       kwargs = {}
     self.interactive = interactive
@@ -97,6 +99,12 @@ class CreateDirectoryTreeHandler(ContentHandler):
     self.warn = warn 
     self.idrefs = {}
     self.links = []
+    # List of templates already processed
+    if not self.tree_template in processed_templates:
+        self.processed_templates = processed_templates
+        self.processed_templates.append(self.tree_template)
+    else:
+        raise Exception("Template %s already in process" % self.tree_template)
     
   def run(self):
     """
@@ -229,6 +237,18 @@ class CreateDirectoryTreeHandler(ContentHandler):
         self.links.append({'basename': link_name, 'parent_dir': target_dir, 'ref': ref})
       except:
         pass
+
+    if name == 'xi:include':
+      href = attrs.get("href")
+      # Check for an HTTP url or an absolute file location
+      if href[0:7] in ('http://'):
+        template_loc = href
+      elif href[0:8] in ('file:///'):
+        template_loc = href
+      else:
+        template_loc = os.path.join(self.tree_template_loc,href)
+      c = CreateDirectoryTreeHandler(self.verbose, template_loc, self.kwargs, self.interactive, self.warn, self.processed_templates)
+      c.run()
 
     return
       
