@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "http://opensource.dashing.tv/dtds/dirtt.dtd">
 <dirtt name="Project Work Tree" version="0.1.9b1" dirname="{{project_root}}/{{project_path}}" basename="work" username="pipeline" group="supervisor" perms="02755">
-
-
   <!-- I M A G E S   F O L D E R -->
   <dir basename="images" username="pipeline" group="supervisor" perms="02775">
     <link basename="master" ref="../../master/images"/>
@@ -26,8 +25,6 @@
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
     </dir>
   </dir>
-
-
   <!-- D A T A   F O L D E R -->
   <dir basename="data" username="pipeline" group="supervisor" perms="02775">
     <link basename="master" ref="../../master/data"/>
@@ -50,8 +47,6 @@
 	    </dir>
 	  </dir>
   </dir>
-
-
   <!-- T O O L S   F O L D E R -->
   <dir basename="tools" username="pipeline" group="supervisor" perms="02775">
     <dir basename="maya" username="pipeline" group="supervisor" perms="02775">
@@ -65,7 +60,7 @@
 		<dir basename ="dso" username="pipeline" group="supervisor" perms="02775"/>
     <dir basename ="otls" username="pipeline" group="supervisor" perms="02775"/>
     <dir basename ="scripts" username="pipeline" group="supervisor" perms="02775"/>
-    </dir><!-- houdini -->
+    </dir>
     <dir basename="nuke" username="pipeline" group="supervisor" perms="02775">
       <dir basename="gizmos" username="pipeline" group="artist" perms="02775"/>
       <dir basename="plugins" username="pipeline" group="artist" perms="02775"/>
@@ -73,12 +68,11 @@
     </dir>
     <dir basename="user" username="pipeline" group="artist" perms="02775"/>
   </dir>
-
-
   <!-- S U R V E Y   F O L D E R -->
   <dir basename="survey" username="pipeline" group="supervisor" perms="02755">
     <dir basename="scenes" username="pipeline" group="artist" perms="02775">
       <link basename="master" ref="../../../master"/>
+      <dir basename="cam" username="pipeline" group="artist" perms="02775"/>
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
@@ -93,9 +87,7 @@
     <link basename="data" ref="../data"/>
     <link basename="tools" ref="../tools"/>
   	<file basename="workspace.mel" username="pipeline" group="supervisor" perms="02775" href="workspace.mel"/>
-  </dir><!-- survey -->
-
-
+  </dir>
   <!-- M O D E L   F O L D E R -->
   <dir basename="model" username="pipeline" group="supervisor" perms="02755">
     <dir basename="scenes" username="pipeline" group="artist" perms="02775">
@@ -109,13 +101,12 @@
     <link basename="data" ref="../data"/>
     <link basename="tools" ref="../tools"/>
   	<file basename="workspace.mel" username="pipeline" group="supervisor" perms="02775" href="workspace.mel"/>
-  </dir><!-- model -->
-
-
+  </dir>
   <!-- R I G   F O L D E R -->
   <dir basename="rig" username="pipeline" group="supervisor" perms="02755">
     <dir basename="scenes" username="pipeline" group="artist" perms="02775">
       <link basename="master" ref="../../../master"/>
+      <dir basename="cam" username="pipeline" group="artist" perms="02775"/>
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
@@ -125,10 +116,8 @@
     <link basename="data" ref="../data"/>
     <link basename="tools" ref="../tools"/>
   	<file basename="workspace.mel" username="pipeline" group="supervisor" perms="02775" href="workspace.mel"/>
-  </dir><!-- rig -->
-
-
-  <!-- R I G   F O L D E R -->
+  </dir>
+  <!-- A N I M   F O L D E R -->
   <dir basename="anim" username="pipeline" group="supervisor" perms="02755">
     <dir basename="scenes" username="pipeline" group="artist" perms="02775">
       <link basename="master" ref="../../../master"/>
@@ -141,9 +130,7 @@
     <link basename="data" ref="../data"/>
     <link basename="tools" ref="../tools"/>
   	<file basename="workspace.mel" username="pipeline" group="supervisor" perms="02775" href="workspace.mel"/>
-  </dir><!-- anim -->
-
-
+  </dir>
   <!-- F X   F O L D E R -->
   <dir basename="fx" username="pipeline" group="supervisor" perms="02755">
     <dir basename="scenes" username="pipeline" group="artist" perms="02775">
@@ -157,9 +144,7 @@
     <link basename="data" ref="../data"/>
     <link basename="tools" ref="../tools"/>
   	<file basename="workspace.mel" username="pipeline" group="supervisor" perms="02775" href="workspace.mel"/>
-  </dir><!-- fx -->
-
-
+  </dir>
   <!-- L I G H T   F O L D E R -->
   <dir basename="light" username="pipeline" group="supervisor" perms="02755">
     <dir basename="scenes" username="pipeline" group="artist" perms="02775">
@@ -173,23 +158,15 @@
     <link basename="data" ref="../data"/>
     <link basename="tools" ref="../tools"/>
   	<file basename="workspace.mel" username="pipeline" group="supervisor" perms="02775" href="workspace.mel"/>
-  </dir><!-- light -->
-
-
+  </dir>
   <!-- C O M P   F O L D E R -->
   <dir basename="comp" username="pipeline" group="supervisor" perms="02755">
     <dir basename="nuke" username="pipeline" group="supervisor" perms="02775"/>
     <link basename="images" ref="../images"/>
     <link basename="tools" ref="../tools"/>
-  </dir><!-- comp -->
-
-
+  </dir>
   <!-- P A I N T   F O L D E R -->
   <link basename="paint" ref="./images/paint"/>
-
-
   <!-- D E S I G N   F O L D E R -->
   <link basename="design" ref="./images/design"/>
-
-
 </dirtt>

@@ -1,46 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "http://opensource.dashing.tv/dtds/dirtt.dtd">
 <dirtt name="Master Tree" version="0.1.9b1" dirname="{{project_root}}/{{project_path}}" basename="master" username="pipeline" group="supervisor" perms="02775">
     <!-- R I G   F O L D E R -->
     <dir basename="rig" username="pipeline" group="supervisor" perms="02755">
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
-    </dir><!-- rig -->
-  
-  
+    </dir>
     <!-- S U R V E Y   F O L D E R -->
-     <dir basename="survey" username="pipeline" group="supervisor" perms="02755">
+    <dir basename="survey" username="pipeline" group="supervisor" perms="02755">
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
-    </dir><!-- survey -->
-  
-     
+    </dir>
     <!-- M O D E L   F O L D E R -->
     <dir basename="model" username="pipeline" group="supervisor" perms="02755">
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
-    </dir><!-- model -->
-  
-  
+    </dir>
     <!-- F X   F O L D E R -->
     <dir basename="fx" username="pipeline" group="supervisor" perms="02755">
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
-    </dir><!-- fx -->
-  
-  
+    </dir>
     <!-- L I G H T   F O L D E R -->
     <dir basename="light" username="pipeline" group="supervisor" perms="02755">
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
       <link basename="sourceimages" ref="../images/textures"/>
-    </dir><!-- light -->
-  
-  
+    </dir>
     <!-- C O M P   F O L D E R -->
     <dir basename="comp" username="pipeline" group="supervisor" perms="02755">
       <link basename="lut" ref="../data/lut"/>
@@ -55,9 +46,7 @@
       <dir basename="tools" username="pipeline" group="supervisor" perms="02775">
         <link basename="nuke" ref="../../tools/nuke"/>
       </dir>
-    </dir><!-- light -->
-  
-  
+    </dir>
     <!-- I M A G E S   F O L D E R -->
     <dir basename="images" username="pipeline" group="supervisor" perms="02755">
       <dir basename="grain" username="pipeline" group="artist" perms="02775"/>
@@ -69,9 +58,7 @@
       <dir basename="hdri" username="pipeline" group="artist" perms="02775"/>
       <dir basename="design" username="pipeline" group="artist" perms="02775"/>
       <dir basename="paint" username="pipeline" group="artist" perms="02775"/>
-    </dir><!-- images -->
-  
-  
+    </dir>
     <!-- D A T A   F O L D E R -->
     <dir basename="data" username="pipeline" group="supervisor" perms="02755">
       <dir basename="audio" username="pipeline" group="artist" perms="02775"/>
@@ -84,9 +71,7 @@
       <dir basename="lut" username="pipeline" group="supervisor" perms="02775"/>
       <dir basename="timewarp" username="pipeline" group="artist" perms="02775"/>
       <dir basename="cache" username="pipeline" group="artist" perms="02775"/>
-    </dir><!-- data -->
-  
-  
+    </dir>
     <!-- T O O L S   F O L D E R -->
     <dir basename="tools" username="pipeline" group="supervisor" perms="02755">
       <dir basename="config" username="pipeline" group="artist" perms="02775"/>
@@ -105,5 +90,5 @@
       </dir>
       <dir basename="scripts" username="pipeline" group="artist" perms="02775"/>
       <dir basename="vray" username="pipeline" group="artist" perms="02775"/>
-    </dir><!-- tools -->
+    </dir>
 </dirtt>
