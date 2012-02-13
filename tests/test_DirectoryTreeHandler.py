@@ -5,7 +5,9 @@ from dirtt import DirectoryTreeHandler
 
 class DirectoryTreeHandlerTestCase(unittest.TestCase):
     def setUp(self):
-        self.default_project_location = "project.xml"
+        self.tests_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)))
+        self.project_path = os.path.basename(self.tests_dir)
+        self.default_project_location = os.path.join(os.path.abspath(os.path.dirname(__file__)), "default_test_project.xml")
 
     def test_01_new_DirectoryTreeHandler_with_None_tree_template_raises_AssertError(self):
         """
@@ -57,6 +59,107 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         handler = DirectoryTreeHandler(False,self.default_project_location, {})
         self.assertEquals(self.default_project_location, handler.tree_template)
 
+
+    def test_07_get_interactive_after_create_DirectoryTreeHandler_with_interactive_True_returns_True(self):
+        """
+        Create a directory with interactive set to True and make sure the value is properly set.
+        """
+        handler = DirectoryTreeHandler(True,self.default_project_location,{},True)
+        self.assertEquals(True,handler.interactive)
+
+    def test_08_get_interactive_after_create_DirectoryTreeHandler_with_interactive_False_returns_False(self):
+        """
+        Create a DirectoryTreeHandler with interactive set to True and make sure the value is properly set.
+        """
+        handler = DirectoryTreeHandler(True,self.default_project_location,{},False)
+        self.assertEquals(False,handler.interactive)
+
+    def test_09_get_interactive_after_create_DirectoryTreeHandler_with_default_interactive_value_returns_Fale(self):
+        """
+        Make sure DirectoryTreeHandler.interactive is set to default value (False) after created.
+        """
+        handler = DirectoryTreeHandler(True,self.default_project_location,{})
+        self.assertEquals(False,handler.interactive)
+
+    def test_10_get_kwargs_after_create_DirectoryTreeHandler_with_None_kwargs_returns_empty_dictionary(self):
+        """
+        If argument kwargs is set to None then DirectoryTreeHandler.kwargs must return an emtpy dictionary
+        """
+        handler = DirectoryTreeHandler(True, self.default_project_location, None)
+        self.assertEquals({}, handler.kwargs)
+
+    def test_11_get_kwargs_after_create_DirectoryTreeHandler_with_dictionary_X_returns_dictionary_X(self):
+        """
+        If DirectoryTreeHandler is created with a non empty dictionary, then we need to make sure the
+        kwargs variable is properly set
+        """
+        kwargs = {"key_1":"value_1", "key_2":"value_2"}
+        handler = DirectoryTreeHandler(True, self.default_project_location, kwargs)
+        self.assertEquals(kwargs, handler.kwargs)
+
+    def test_12_get_warn_after_create_DirectoryTreeHandler_with_warn_False_returns_False(self):
+        """
+        Create a DirectoryTreeHandler with warn set to True and make sure the value is properly set.
+        """
+        handler = DirectoryTreeHandler(True, self.default_project_location, {}, warn = False)
+        self.assertEquals(False, handler.warn)
+
+    def test_13_get_warn_after_create_DirectoryTreeHandler_with_warn_True_returns_True(self):
+        """
+        Create a DirectoryTreeHandler with warn set to True and make sure the value is properly set.
+        """
+        handler = DirectoryTreeHandler(True, self.default_project_location, {}, warn = True)
+        self.assertEquals(True, handler.warn)
+
+    def test_14_get_warn_after_create_DirectoryTreeHandler_with_warn_default_value_returns_False(self):
+        """
+        Create a DirectoryTreeHandler with warn set to True and make sure the value is properly set.
+        """
+        handler = DirectoryTreeHandler(True, self.default_project_location, {})
+        self.assertEquals(False, handler.warn)
+
+    def test_15_get_processed_templates_after_create_DirectoryTreeHandler_with_processed_templates_default_value_returns_list_containin_tree_template_location(self):
+        """
+        Make sure the tree template location is included in the list of processed templates.
+        """
+        handler = DirectoryTreeHandler(True, self.default_project_location, {})
+        self.assertTrue(self.default_project_location in handler.processed_templates)
+    
+    def test_16_get_processed_templates_after_create_DirectoryTreeHandler_with_list_X_returns_list_containing_all_elements_from_list_X(self):
+        """
+        Create a DirectoryTreeHandler with a list of already processed templates. Make sure all elements from the given list
+        are present in DirectoryTreeHandler.processed_templates
+        """
+        p_templates = ["template_1.xml", "template_2.xml", "template_3.xml"]
+        handler = DirectoryTreeHandler(True, self.default_project_location, {}, processed_templates = p_templates)
+
+        for p_template in p_templates:
+            self.assertTrue(p_template in handler.processed_templates)
+
+    def test_17_run_with_tree_template_location_from_local_filesystem(self):
+        """
+        Create a DirectoryTreeHandler poiting to a valid existing tree template in the local filesystem.
+        """
+        handler = DirectoryTreeHandler(False, self.default_project_location, {"project_root":self.project_root, "project_path": self.project_path})
+        handler.run()
+
+#    def test_18_run_with_tree_template_location_from_http_resource(self):
+#        """
+#        Create a DirectoryTreeHandler with a tree template location pointing to an HTTP resource.
+#        """
+#        os.chdir(self.tests_dir)
+#        import SimpleHTTPServer
+#        import SocketServer
+#
+#        PORT = 8000
+#
+#        Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+#
+#        httpd = SocketServer.TCPServer(("", PORT), Handler)
+#        httpd.serve_forever()
+        
+
+ 
     
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(DirectoryTreeHandlerTestCase)
