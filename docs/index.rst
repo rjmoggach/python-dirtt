@@ -65,9 +65,7 @@ All kinds of contributions are welcome - code, tests, documentation, bug reports
 
 Currently we need to implement the following:
 
--better testing
 -better error checking of values and process
--introspection of existing trees
 -modular exceptions
 -better documentation
 

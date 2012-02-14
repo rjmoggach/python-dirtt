@@ -105,7 +105,7 @@ def read_file(path):
 		file.close()
 		return content
 	else:
-		raise OSError, "File does not exist or is not a file", path
+		raise OSError, "File '%s' does not exist or is not a file" %  path
 
 
 def read_url(href):

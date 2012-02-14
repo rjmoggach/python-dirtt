@@ -31,7 +31,7 @@ def get_version():
     return version
 
 __version__ = get_version()
-__all__ = ['util','introspection']
+__all__ = ['util']
 
 
 import os
@@ -69,7 +69,7 @@ def list_available_templates():
 #      template_list.append(os.path.join(root,file))
 #      print "  %s" % os.path.join(root, file)
 
-class CreateDirectoryTreeHandler(ContentHandler):
+class DirectoryTreeHandler(ContentHandler):
   """
   Main SAX Interface for handling directory tree XML templates
 
@@ -86,9 +86,9 @@ class CreateDirectoryTreeHandler(ContentHandler):
     defined as part of the self context to allow for local
     reference in the builtin functions
     """
+    assert tree_template is not None 
     self.verbose = verbose
     self.tree_template = tree_template
-    self.start_dir = self.dirname = os.path.abspath(".")
     # Location of tree_template
     self.tree_template_loc = os.path.dirname(self.tree_template)
     if kwargs is None:
@@ -99,9 +99,9 @@ class CreateDirectoryTreeHandler(ContentHandler):
     self.warn = warn 
     self.idrefs = {}
     self.links = []
-    # List of templates already processed
+    #List of templates been processed
     if not self.tree_template in processed_templates:
-        self.processed_templates = processed_templates
+        self.processed_templates = processed_templates[:]
         self.processed_templates.append(self.tree_template)
     else:
         raise Exception("Template %s already in process" % self.tree_template)
@@ -121,11 +121,9 @@ class CreateDirectoryTreeHandler(ContentHandler):
     tree_template_str = self._read_template(self.tree_template)
     tree_template_str = self._parse_template(tree_template_str, self.tree_template)
 
+
     # now we can parse the string as XML
     parseString(tree_template_str, self)
-    if self.verbose:
-      print "Returning to start dir: %s" % self.start_dir
-    os.chdir(self.start_dir)
     self.current_dir = os.path.abspath(".")
 
     self._create_symlinks()
@@ -247,9 +245,8 @@ class CreateDirectoryTreeHandler(ContentHandler):
         template_loc = href
       else:
         template_loc = os.path.join(self.tree_template_loc,href)
-      c = CreateDirectoryTreeHandler(self.verbose, template_loc, self.kwargs, self.interactive, self.warn, self.processed_templates)
+      c = DirectoryTreeHandler(self.verbose, template_loc, self.kwargs, self.interactive, self.warn, self.processed_templates)
       c.run()
-
     return
       
 
@@ -278,13 +275,10 @@ class CreateDirectoryTreeHandler(ContentHandler):
     """
     if template_ref is None:
       template_ref = self.template
-    try:
-      if template_ref[0:7] in ('http://','file://'):
+    if template_ref[0:7] in ('http://','file://'):
         content = read_url(template_ref)
-      else:
+    else:
         content = read_file(template_ref)
-    except:
-      content = None
     return content
 
 
@@ -321,5 +315,4 @@ class CreateDirectoryTreeHandler(ContentHandler):
         self.current_dir = os.path.abspath(".")
     if self.skip_entity: self.skip_entity -= 1
     pass
-
 

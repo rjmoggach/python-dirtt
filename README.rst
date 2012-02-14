@@ -64,7 +64,6 @@ Currently we need to implement the following:
 
 -better testing
 -better error checking of values and process
--introspection of existing trees
 -modular exceptions
 -better documentation
 

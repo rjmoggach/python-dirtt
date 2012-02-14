@@ -13,7 +13,7 @@ with internal methods that read,parse,render,and execute builds of
 user defined XML directory tree templates.
 """
 
-__all__ = ['general','io','looper','template']
+__all__ = ['general','io','looper','template','introspection']
 from general import *
 import io
 import looper
