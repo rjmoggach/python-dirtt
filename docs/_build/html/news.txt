@@ -4,7 +4,7 @@ Changes & News
 Next release (0.2) schedule
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Beta release mid-July 2011, final release early August.
+* Beta release mid-July 2012, final release early August.
 
 HEAD
 ~~~~

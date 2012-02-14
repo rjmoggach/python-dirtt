@@ -22,7 +22,7 @@ It is licensed under an `MIT-style permissive license <https://github.com/dshng/
 
 You can install it with ``easy_install dirtt``.
 
-|copy| 2011 Dashing Collective Inc. and contributors.
+|copy| 2012 Dashing Collective Inc. and contributors.
 
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 

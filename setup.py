@@ -82,7 +82,7 @@ setup(
 	name='python-dirtt',
 	packages=packages,
 	cmdclass = cmdclasses,
-	scripts=['dirtt/scripts/mkdirt.py','dirtt/scripts/mkproj.py'],
+	scripts=['dirtt/scripts/mkdirt.py','dirtt/scripts/mkdirtt.py','dirtt/scripts/mkproj.py'],
 	data_files = data_files,
 #  data_files=[
 #    ('/var/dirtt/dtds/dirtt.dtd', ['dirtt/data/dtds/dirtt.dtd']),
@@ -97,7 +97,7 @@ setup(
 	description="Directory Tree Templater",
 	long_description="""
 		python-dirtt - Directory Tree Templater
-		(c) 2011 Dashing Collective Inc. and contributors
+		(c) 2012 Dashing Collective Inc. and contributors
 		Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 		
 		dirtt is a standalone tool and library used to generate 

@@ -1,6 +1,6 @@
 .. |copy|   unicode:: U+000A9 .. COPYRIGHT SIGN
 
-Copyright |copy| 2011 Dashing Collective Inc.
+Copyright |copy| 2012 Dashing Collective Inc.
 =============================================
 
 Permission is hereby granted, free of charge, to any person obtaining
