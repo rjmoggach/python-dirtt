@@ -40,6 +40,7 @@ from xml.etree import ElementTree
 #from xml.sax import make_parser
 from xml.sax import parseString
 from xml.sax.handler import ContentHandler
+import logging
 
 from dirtt.util import get_uid_for_name, get_gid_for_name
 from dirtt.util.io import create_dir, create_file, create_symlink, set_perms_uid_gid, read_file, read_url
@@ -87,7 +88,19 @@ class DirectoryTreeHandler(ContentHandler):
     reference in the builtin functions
     """
     assert tree_template is not None 
-    self.verbose = verbose
+
+    self.logger = logging.getLogger(__name__)
+
+    ch = logging.StreamHandler()
+    ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+
+    self.logger.addHandler(ch)
+
+    if verbose:
+        self.logger.setLevel(logging.DEBUG)
+    else:
+        self.logger.setLevel(logging.ERROR)
+
     self.tree_template = tree_template
     # Location of tree_template
     self.tree_template_loc = os.path.dirname(self.tree_template)
@@ -135,7 +148,7 @@ class DirectoryTreeHandler(ContentHandler):
       ref = link_info['ref']
       link = os.path.join(parent_dir, link_name)
 
-      if self.verbose: print "\tCreating symlink: %s = > %s" % (link, ref)
+      self.logger.debug("Creating symlink: %s = > %s" % (link, ref))
       create_symlink(ref, link)
   
   
@@ -160,8 +173,8 @@ class DirectoryTreeHandler(ContentHandler):
     
     # if xml elementname is dirtt let's get started
     if name == 'dirtt':
-      if self.verbose: print "Starting Directory Tree Template Build..."
-      if self.verbose: print "\tChanging current directory to: %s" % self.dirname
+      self.logger.debug("Starting Directory Tree Template Build...")
+      self.logger.debug("Changing current directory to: %s" % self.dirname)
       # change to our starting directory
       os.chdir(self.dirname)
       self.current_dir = os.path.abspath(".")
@@ -177,9 +190,9 @@ class DirectoryTreeHandler(ContentHandler):
           if not self.skip_entity:
             if not raw_input("Create Directory %s (yes/no)?" % os.path.join(self.current_dir,basename)) in ("yes","Yes","YES","Y","y"):
               self.skip_entity += 1
-              if self.verbose: print "\tSkipping dir: %s" % os.path.join(self.current_dir,basename)
+              self.logger.debug("Skipping dir: %s" % os.path.join(self.current_dir,basename))
             else:
-              if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
+              self.logger.debug("Creating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
               if dirname:
                 newdir = os.path.join(dirname,basename)
                 create_dir(newdir, perms, uid, gid, self.warn)
@@ -188,7 +201,7 @@ class DirectoryTreeHandler(ContentHandler):
                 os.chdir(basename)
               self.current_dir = os.path.abspath(".")
         else:
-          if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
+          self.logger.debug("Creating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
           if dirname:
             newdir = os.path.join(dirname,basename)
             create_dir(newdir, perms, uid, gid, self.warn)
@@ -197,12 +210,14 @@ class DirectoryTreeHandler(ContentHandler):
             create_dir(basename, perms, uid, gid, self.warn)
             os.chdir(basename)
           self.current_dir = os.path.abspath(".")
+
         if attrs.get("id"):
           self.idrefs[attrs.get("id")] = self.current_dir
 
       if name == 'file':
-        if self.verbose: print "\tCreating file: %s/%s (%s/%i:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
+        self.logger.debug("Creating file: %s/%s (%s/%i:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
         href = attrs.get("href",None)
+        content = ""
         if not href is None:
           template_file = os.path.join(TEMPLATES_DIR,href)
           template_str = self._read_template(template_file)

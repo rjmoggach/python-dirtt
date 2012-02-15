@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-import unittest,os
+import unittest,os,shutil
 import threading
 import SimpleHTTPServer
 import SocketServer
+import logging
 from dirtt import DirectoryTreeHandler
 
 class HttpServerThread(threading.Thread):
@@ -38,9 +39,10 @@ class HttpServerThread(threading.Thread):
 
 class DirectoryTreeHandlerTestCase(unittest.TestCase):
     def setUp(self):
-        self.tests_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)),'templates')
-        self.project_path = os.path.basename(self.tests_dir)
-        self.default_project_location = os.path.join(self.tests_dir, "default_test_project.xml")
+        self.tests_dir = os.path.abspath(os.path.dirname(__file__))
+        self.templates_dir = os.path.join(self.tests_dir, "templates")
+        self.project_path = "data"
+        self.default_project_location = os.path.join(self.templates_dir, "default_test_project.xml")
         self.default_args = {"project_root":self.tests_dir, "project_path": self.project_path}
         self.http_port = 8080
 
@@ -50,19 +52,19 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         """
         self.assertRaises(AssertionError, DirectoryTreeHandler,True,None,{})
 
-    def test_02_get_verbose_after_create_DirectoryTreeHandler_with_verbose_True_returns_True(self):
+    def test_02_get_logger_level_after_create_DirectoryTreeHandler_with_verbose_True_returns_DEBUG(self):
         """
         Create a DirectoryTreeHandler with verbose set to True
         """
         handler = DirectoryTreeHandler(True,self.default_project_location,{})
-        self.assertEqual(True, handler.verbose, "Verbose level must be true")
+        self.assertEquals(logging.DEBUG, handler.logger.level)
 
-    def test_03_get_verbose_after_create_DirectoryTreeHandler_with_verbose_False_returns_False(self):
+    def test_03_get_logger_level_after_create_DirectoryTreeHandler_with_verbose_False_returns_ERROR(self):
         """
         Create a DirectoryTreeHandler with verbose set to False
         """
         handler = DirectoryTreeHandler(False,self.default_project_location,{})
-        self.assertEqual(False, handler.verbose, "Verbose level must be false")
+        self.assertEquals(logging.ERROR, handler.logger.level)
 
     def test_04_new_DirectoryTreeHandler_with_non_existing_tree_template_raises_OSError(self):
         """
@@ -77,11 +79,10 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         Create a DirectoryTreeHandler with a tree template path pointing to a directory. We expect
         an OSError exception to be raised.
         """
-        test_dir_name = "test_dir"
-        if not os.path.exists(test_dir_name):
-            os.mkdir(test_dir_name)
-        else:
+        test_dir_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),"test_dir")
+        if os.path.exists(test_dir_name):
             os.rmdir(test_dir_name)
+        os.mkdir(test_dir_name)
 
         handler = DirectoryTreeHandler(False,test_dir_name, {})
         self.assertRaises(OSError, handler.run)
@@ -182,7 +183,7 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         """
         Create a DirectoryTreeHandler with a tree template location pointing to an HTTP resource.
         """
-        http_server_thread = HttpServerThread(self.tests_dir)
+        http_server_thread = HttpServerThread(self.templates_dir)
         http_server_thread.start()
 
 
@@ -197,6 +198,48 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         while http_server_thread.running:
             http_server_thread.stop()
  
+    def test_19_run_with_tree_template_location_from_file_resource(self):
+        """
+        Create a DirectoryTreeHandler with a tree template location pointing to a file resource (url is of the form
+        file:///
+        """
+        handler = DirectoryTreeHandler(False,"file://%s" % self.default_project_location, self.default_args)
+        handler.run()
+
+
+    def test_20_variables_substitution(self):
+        """
+        Make sure variables gets substituted
+        """
+        handler = DirectoryTreeHandler(False, self.default_project_location, self.default_args)  
+        tree_template_str = handler._read_template(handler.tree_template)
+        tree_template_str = handler._parse_template(tree_template_str, handler.tree_template)
+        self.assertFalse("project_root" in tree_template_str)
+        self.assertFalse("project_path" in tree_template_str)
+        self.assertTrue('dirname="%s"' % self.tests_dir in tree_template_str)
+        self.assertTrue('basename="%s"' % self.project_path in tree_template_str)
+
+
+    def test_21_create_DirectoryTreeHandler_with_verbose_True_logs_messages(self):
+        """
+        Make sure messages gets logged when verbose is set to true
+        """
+        data_dir = os.path.join(self.tests_dir,"data")
+        log_file = os.path.join(self.tests_dir, "test_21.log")
+
+        if os.path.exists(data_dir):
+            shutil.rmtree(data_dir)
+
+        if os.path.exists(log_file):
+            os.unlink(log_file)
+
+
+        logging.basicConfig(filename = log_file)
+        handler = DirectoryTreeHandler(True, os.path.join(self.templates_dir,"test_logging.xml"), self.default_args)
+        handler.run()
+        os.unlink(os.path.join(self.tests_dir, "test_21.log"))
+        logging.basicConfig()
+
     
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(DirectoryTreeHandlerTestCase)
