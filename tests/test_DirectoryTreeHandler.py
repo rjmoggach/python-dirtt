@@ -1,13 +1,48 @@
 #!/usr/bin/env python
 
 import unittest,os
+import threading
+import SimpleHTTPServer
+import SocketServer
 from dirtt import DirectoryTreeHandler
+
+class HttpServerThread(threading.Thread):
+    
+    def __init__(self, start_dir, port = 8080):
+        threading.Thread.__init__(self)
+        self.start_dir = start_dir
+        self.port = port
+        self.running = False
+        self.httpd = None
+        os.chdir(self.start_dir)
+
+    def run(self):
+        os.chdir(self.start_dir)
+        Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+
+        self.running = True
+        try:
+            self.httpd = SocketServer.TCPServer(("", self.port), Handler)
+            self.httpd.handle_request()
+        except Exception as e:
+            self.running = False
+            raise e
+
+    def stop(self):
+        if self.running and self.httpd is not None:
+            self.httpd.server_close()
+            self.running = False
+
+
+
 
 class DirectoryTreeHandlerTestCase(unittest.TestCase):
     def setUp(self):
-        self.tests_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)))
+        self.tests_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)),'templates')
         self.project_path = os.path.basename(self.tests_dir)
-        self.default_project_location = os.path.join(os.path.abspath(os.path.dirname(__file__)), "default_test_project.xml")
+        self.default_project_location = os.path.join(self.tests_dir, "default_test_project.xml")
+        self.default_args = {"project_root":self.tests_dir, "project_path": self.project_path}
+        self.http_port = 8080
 
     def test_01_new_DirectoryTreeHandler_with_None_tree_template_raises_AssertError(self):
         """
@@ -140,25 +175,27 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         """
         Create a DirectoryTreeHandler poiting to a valid existing tree template in the local filesystem.
         """
-        handler = DirectoryTreeHandler(False, self.default_project_location, {"project_root":self.project_root, "project_path": self.project_path})
+        handler = DirectoryTreeHandler(False, self.default_project_location, self.default_args)
         handler.run()
 
-#    def test_18_run_with_tree_template_location_from_http_resource(self):
-#        """
-#        Create a DirectoryTreeHandler with a tree template location pointing to an HTTP resource.
-#        """
-#        os.chdir(self.tests_dir)
-#        import SimpleHTTPServer
-#        import SocketServer
-#
-#        PORT = 8000
-#
-#        Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-#
-#        httpd = SocketServer.TCPServer(("", PORT), Handler)
-#        httpd.serve_forever()
-        
+    def test_18_run_with_tree_template_location_from_http_resource(self):
+        """
+        Create a DirectoryTreeHandler with a tree template location pointing to an HTTP resource.
+        """
+        http_server_thread = HttpServerThread(self.tests_dir)
+        http_server_thread.start()
 
+
+        # Wait for the server to start
+        while not http_server_thread.running:
+            pass
+
+        handler = DirectoryTreeHandler(False, "http://localhost:%s/%s" % (self.http_port, "default_test_project.xml"), self.default_args) 
+        handler.run()
+        
+        # Wait for the server to stop
+        while http_server_thread.running:
+            http_server_thread.stop()
  
     
 if __name__ == "__main__":
