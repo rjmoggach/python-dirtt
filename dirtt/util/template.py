@@ -33,14 +33,15 @@
 	If there are syntax errors ``TemplateError`` will be raised.
 """
 
+
 import re
 import sys
 import cgi
 import urllib
 import looper
 
-__all__ = ['TemplateError', 'Template', 'sub', 'HTMLTemplate',
-		   'sub_html', 'html', 'bunch']
+
+__all__ = ['TemplateError', 'Template', 'sub', 'HTMLTemplate', 'sub_html', 'html', 'bunch']
 
 token_re = re.compile(r'\{\{|\}\}')
 in_re = re.compile(r'\s+in\s+')
@@ -311,6 +312,7 @@ class bunch(dict):
 			self.__class__.__name__,
 			' '.join(['%s=%r' % (k, v) for k, v in items]))
 
+
 ############################################################
 ## HTML Templating
 ############################################################
@@ -323,6 +325,7 @@ class html(object):
 	def __repr__(self):
 		return '<%s %r>' % (
 			self.__class__.__name__, self.value)
+
 
 def html_quote(value):
 	if value is None:
@@ -337,6 +340,7 @@ def html_quote(value):
 		value = value.encode('ascii', 'xmlcharrefreplace')
 	return value
 
+
 def url(v):
 	if not isinstance(v, basestring):
 		if hasattr(v, '__unicode__'):
@@ -346,6 +350,7 @@ def url(v):
 	if isinstance(v, unicode):
 		v = v.encode('utf8')
 	return urllib.quote(v)
+
 
 def attr(**kw):
 	kw = kw.items()
@@ -358,6 +363,7 @@ def attr(**kw):
 			name = name[:-1]
 		parts.append('%s="%s"' % (html_quote(name), html_quote(value)))
 	return html(' '.join(parts))
+
 
 class HTMLTemplate(Template):
 
@@ -375,6 +381,7 @@ class HTMLTemplate(Template):
 		else:
 			return html_quote(plain)
 
+
 def sub_html(content, **kw):
 	name = kw.get('__name')
 	tmpl = HTMLTemplate(content, name=name)
@@ -389,6 +396,7 @@ def sub_html(content, **kw):
 def f7(seq):
 	S,L = set, list
 	return S(L(seq))
+
 
 def return_placeholders(s, name=None):
 	in_expr = False
@@ -478,6 +486,7 @@ single_statements = ['endif', 'endfor', 'continue', 'break']
 trail_whitespace_re = re.compile(r'\n[\t ]*$')
 lead_whitespace_re = re.compile(r'^[\t ]*\n')
 
+
 def trim_lex(tokens):
 	r"""
 	Takes a lexed set of tokens, and removes whitespace when there is
@@ -526,6 +535,7 @@ def find_position(string, index):
 	"""Given a string and index, return (line, column)"""
 	leading = string[:index].splitlines()
 	return (len(leading), len(leading[-1])+1)
+
 
 def parse(s, name=None):
 	r"""
@@ -584,6 +594,7 @@ def parse(s, name=None):
 		result.append(next)
 	return result
 
+
 def parse_expr(tokens, name, context=()):
 	if isinstance(tokens[0], basestring):
 		return tokens[0], tokens[1:]
@@ -628,6 +639,7 @@ def parse_expr(tokens, name, context=()):
 		return ('comment', pos, tokens[0][0]), tokens[1:]
 	return ('expr', pos, tokens[0][0]), tokens[1:]
 
+
 def parse_cond(tokens, name, context):
 	start = tokens[0][1]
 	pieces = []
@@ -642,6 +654,7 @@ def parse_cond(tokens, name, context):
 			return ('cond', start) + tuple(pieces), tokens[1:]
 		next, tokens = parse_one_cond(tokens, name, context)
 		pieces.append(next)
+
 
 def parse_one_cond(tokens, name, context):
 	(first, pos), tokens = tokens[0], tokens[1:]
@@ -669,6 +682,7 @@ def parse_one_cond(tokens, name, context):
 		next, tokens = parse_expr(tokens, name, context)
 		content.append(next)
 		
+
 def parse_for(tokens, name, context):
 	first, pos = tokens[0]
 	tokens = tokens[1:]
@@ -703,6 +717,7 @@ def parse_for(tokens, name, context):
 		next, tokens = parse_expr(tokens, name, context)
 		content.append(next)
 
+
 def parse_default(tokens, name, context):
 	first, pos = tokens[0]
 	assert first.startswith('default ')
@@ -730,6 +745,7 @@ _fill_command_usage = """\
 Use py:arg=value to set a Python value; otherwise all values are
 strings.
 """
+
 
 def fill_command(args=None):
 	import sys, optparse, pkg_resources, os
@@ -792,6 +808,7 @@ def fill_command(args=None):
 		f.close()
 	else:
 		sys.stdout.write(result)
+
 
 if __name__ == '__main__':
 	from dirtt.util.template import fill_command

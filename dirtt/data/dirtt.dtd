@@ -61,4 +61,3 @@
            idref        IDREF        #IMPLIED
            ref          CDATA        #IMPLIED
            dirname      CDATA        #IMPLIED>
-

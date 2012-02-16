@@ -60,6 +60,7 @@ packages, data_files = [], []
 root_dir = os.path.dirname(__file__)
 if root_dir != '':
   os.chdir(root_dir)
+
 dirtt_dir = 'dirtt'
 
 for dirpath, dirnames, filenames in os.walk(dirtt_dir):

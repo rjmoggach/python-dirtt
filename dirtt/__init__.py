@@ -35,7 +35,6 @@ __all__ = ['util']
 
 
 import os
-
 from xml.etree import ElementTree
 #from xml.sax import make_parser
 from xml.sax import parseString
@@ -50,6 +49,7 @@ DEFAULT_USER = "root"
 DEFAULT_GROUP = "root"
 
 TEMPLATES_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'templates')
+
 
 def list_available_templates():
   print "\n  These are the available templates. Reference using the full path provided."
@@ -68,6 +68,7 @@ def list_available_templates():
 #      print subdirs
 #      template_list.append(os.path.join(root,file))
 #      print "  %s" % os.path.join(root, file)
+
 
 class DirectoryTreeHandler(ContentHandler):
   """

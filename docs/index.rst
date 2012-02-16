@@ -73,12 +73,12 @@ Forking through Bitbucket
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you need to fork from the official repository, which is 
-`https://bitbucket.org/mogga/python-dirtt <https://bitbucket.org/mogga/python-dirtt>`_.
+`https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
 
 Log in to Bitbucket, go to the dirtt repository page, follow the fork link, 
 wait for Bitbucket to copy the repository and then clone your fork, like:
 
-	``git clone https://bitbucket.org/YOUR_USER_NAME/python-dirtt``
+	``git clone https://github.com/YOUR_USER_NAME/python-dirtt``
 
 Now you can change whatever you want, commit, push to your fork and when 
 your contribution is done, follow the pull request link and send us a 
@@ -224,5 +224,5 @@ Links
 
 Here's the links:
 
-`Bitbucket <https://bitbucket.org/mogga/python-dirtt>`_
+`Bitbucket <https://github.com/dshng/python-dirtt>`_
 

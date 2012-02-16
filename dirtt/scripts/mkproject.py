@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
 """
-python-dirtt - Directory Tree Templater
-(c) 2012 Dashing Collective Inc. and contributors
-Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+  python-dirtt - Directory Tree Templater
+  (c) 2012 Dashing Collective Inc. and contributors
+  Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-	mkproj.py
+	mkproject.py
 	
 	This is a generic command line tool that prompts for template
 	variables in a given template and renders the tree.
@@ -30,6 +30,7 @@ WORK_TEMPLATE=os.path.join(TEMPLATE_DIR,"project_work.xml")
 MASTER_TEMPLATE=os.path.join(TEMPLATE_DIR,"project_master.xml")
 SEQUENCE_TEMPLATE=os.path.join(TEMPLATE_DIR,"project_sequence.xml")
 SHOT_TEMPLATE=os.path.join(TEMPLATE_DIR,"project_shot.xml")
+
 
 def main():
 	usage = "usage: %prog [-t TEMPLATE]"

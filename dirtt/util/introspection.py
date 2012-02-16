@@ -15,7 +15,7 @@ import os,pwd,grp
 from xml.dom.minidom import Document
 from stat import *
 
-class ProjectBuilder:
+class TreeIntrospector:
 
 	def __init__(self, base="."):
 		self.base = os.path.realpath(base)

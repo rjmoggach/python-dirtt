@@ -19,9 +19,9 @@ dirtt/data/templates/project_sequence.xml
 dirtt/data/templates/project_shot.xml
 dirtt/data/templates/project_work.xml
 dirtt/data/templates/workspace.mel
-dirtt/scripts/mkdirt
-dirtt/scripts/mkdirtt
-dirtt/scripts/mkproj
+dirtt/scripts/mkproject.py
+dirtt/scripts/mktemplate.py
+dirtt/scripts/mktree.py
 docs/index.rst
 docs/news.rst
 tests/__init__.py
