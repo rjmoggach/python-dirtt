@@ -34,7 +34,7 @@ __version__ = get_version()
 __all__ = ['util','introspection']
 
 
-import os
+import os,sys
 
 from xml.etree import ElementTree
 #from xml.sax import make_parser
@@ -89,9 +89,9 @@ class DirectoryTreeHandler(ContentHandler):
     """
     assert tree_template is not None 
 
-    self.logger = logging.getLogger(__name__)
+    self.logger = logging.Logger(__name__)
 
-    ch = logging.StreamHandler()
+    ch = logging.StreamHandler(sys.stdout)
     ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
 
     self.logger.addHandler(ch)
@@ -100,6 +100,7 @@ class DirectoryTreeHandler(ContentHandler):
         self.logger.setLevel(logging.DEBUG)
     else:
         self.logger.setLevel(logging.ERROR)
+
 
     self.tree_template = tree_template
     # Location of tree_template
@@ -148,7 +149,7 @@ class DirectoryTreeHandler(ContentHandler):
       ref = link_info['ref']
       link = os.path.join(parent_dir, link_name)
 
-      self.logger.debug("Creating symlink: %s = > %s" % (link, ref))
+      self.logger.debug("Creating symlink: %s => %s" % (link, ref))
       create_symlink(ref, link)
   
   
@@ -215,7 +216,7 @@ class DirectoryTreeHandler(ContentHandler):
           self.idrefs[attrs.get("id")] = self.current_dir
 
       if name == 'file':
-        self.logger.debug("Creating file: %s/%s (%s/%i:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
+        self.logger.debug("Creating file: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
         href = attrs.get("href",None)
         content = ""
         if not href is None:

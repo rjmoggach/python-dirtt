@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dirtt name="Project Tree" version="0.1.9b1" dirname="{{project_root}}" basename="{{project_path}}" username="pipeline" group="artist" perms="02755">
 
-  <dir name="dir1" basename="dir1" username="root" group="root" perms="02755"/>
+  <dir name="dir1" basename="dir1" username="root" group="root" perms="02775"/>
   <file basename="file.txt" username="root" group="root" perms="02775"/>
+  <link basename="images" ref="dir1"/>
 
 </dirtt>

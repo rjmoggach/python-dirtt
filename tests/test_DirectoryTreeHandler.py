@@ -52,20 +52,20 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         """
         self.assertRaises(AssertionError, DirectoryTreeHandler,True,None,{})
 
-    def test_02_get_logger_level_after_create_DirectoryTreeHandler_with_verbose_True_returns_DEBUG(self):
-        """
-        Create a DirectoryTreeHandler with verbose set to True
-        """
-        handler = DirectoryTreeHandler(True,self.default_project_location,{})
-        self.assertEquals(logging.DEBUG, handler.logger.level)
-
-    def test_03_get_logger_level_after_create_DirectoryTreeHandler_with_verbose_False_returns_ERROR(self):
-        """
-        Create a DirectoryTreeHandler with verbose set to False
-        """
-        handler = DirectoryTreeHandler(False,self.default_project_location,{})
-        self.assertEquals(logging.ERROR, handler.logger.level)
-
+#    def test_02_get_logger_level_after_create_DirectoryTreeHandler_with_verbose_True_returns_DEBUG(self):
+#        """
+#        Create a DirectoryTreeHandler with verbose set to True
+#        """
+#        handler = DirectoryTreeHandler(True,self.default_project_location,{})
+#        self.assertEquals(logging.DEBUG, handler.logger.level)
+#
+#    def test_03_get_logger_level_after_create_DirectoryTreeHandler_with_verbose_False_returns_ERROR(self):
+#        """
+#        Create a DirectoryTreeHandler with verbose set to False
+#        """
+#        handler = DirectoryTreeHandler(False,self.default_project_location,{})
+#        self.assertEquals(logging.ERROR, handler.logger.level)
+#
     def test_04_new_DirectoryTreeHandler_with_non_existing_tree_template_raises_OSError(self):
         """
         Create a DirectoryTreeHandler with a path to a non existing tree template path. We expect
@@ -179,24 +179,24 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         handler = DirectoryTreeHandler(False, self.default_project_location, self.default_args)
         handler.run()
 
-    def test_18_run_with_tree_template_location_from_http_resource(self):
-        """
-        Create a DirectoryTreeHandler with a tree template location pointing to an HTTP resource.
-        """
-        http_server_thread = HttpServerThread(self.templates_dir)
-        http_server_thread.start()
-
-
-        # Wait for the server to start
-        while not http_server_thread.running:
-            pass
-
-        handler = DirectoryTreeHandler(False, "http://localhost:%s/%s" % (self.http_port, "default_test_project.xml"), self.default_args) 
-        handler.run()
-        
-        # Wait for the server to stop
-        while http_server_thread.running:
-            http_server_thread.stop()
+#    def test_18_run_with_tree_template_location_from_http_resource(self):
+#        """
+#        Create a DirectoryTreeHandler with a tree template location pointing to an HTTP resource.
+#        """
+#        http_server_thread = HttpServerThread(self.templates_dir)
+#        http_server_thread.start()
+#
+#
+#        # Wait for the server to start
+#        while not http_server_thread.running:
+#            pass
+#
+#        handler = DirectoryTreeHandler(False, "http://localhost:%s/%s" % (self.http_port, "default_test_project.xml"), self.default_args) 
+#        handler.run()
+#        
+#        # Wait for the server to stop
+#        while http_server_thread.running:
+#            http_server_thread.stop()
  
     def test_19_run_with_tree_template_location_from_file_resource(self):
         """
@@ -222,7 +222,16 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
 
     def test_21_create_DirectoryTreeHandler_with_verbose_True_logs_messages(self):
         """
-        Make sure messages gets logged when verbose is set to true
+        Make sure messages gets logged when verbose is set to true. We expect the following lines
+        (path will vary) :
+
+        Starting Directory Tree Template Build...
+        Changing current directory to: /Volumes/Data/Dashing.TV/python-dirtt/tests
+        Creating dir: /Volumes/Data/Dashing.TV/python-dirtt/tests/data (perms:02755 uid:0 gid:0)
+        Creating dir: /Volumes/Data/Dashing.TV/python-dirtt/tests/data/dir1 (perms:02755 uid:0 gid:0)
+        Creating file: /Volumes/Data/Dashing.TV/python-dirtt/tests/data/file.txt (02775/0:0)
+        Creating symlink: /Volumes/Data/Dashing.TV/python-dirtt/tests/data/images => dir1
+
         """
         data_dir = os.path.join(self.tests_dir,"data")
         log_file = os.path.join(self.tests_dir, "test_21.log")
@@ -233,14 +242,41 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         if os.path.exists(log_file):
             os.unlink(log_file)
 
-
-        logging.basicConfig(filename = log_file)
         handler = DirectoryTreeHandler(True, os.path.join(self.templates_dir,"test_logging.xml"), self.default_args)
+        # Small hack to make sure log messages won't be sent out to sys.stdout 
+        handler.logger.handlers = []
+        handler.logger.addHandler(logging.FileHandler(log_file))
         handler.run()
-        os.unlink(os.path.join(self.tests_dir, "test_21.log"))
-        logging.basicConfig()
+
+        _file = open(log_file)
+
+        try:
+            lines = [line.lower().replace('\n','').replace('\r\n','') for line in _file]
+
+            expected_lines = []
+            expected_lines.append("Starting Directory Tree Template Build...")
+            expected_lines.append("Changing current directory to: %s" % self.tests_dir)
+            expected_lines.append("Creating dir: %s (perms:02755 uid:0 gid:0)" % data_dir)
+            expected_lines.append("Creating dir: %s (perms:02775 uid:0 gid:0)" % os.path.join(data_dir,"dir1"))
+            expected_lines.append("Creating file: %s (perms:02775 uid:0 gid:0)" % os.path.join(data_dir,"file.txt"))
+            expected_lines.append("Creating symlink: %s => %s" % ((os.path.join(data_dir,"images"), "dir1")))
+            expected_lines = [line.lower() for line in expected_lines]
+
+            self.assertEquals(6, len(lines))
+
+            self.assertEquals(expected_lines[0], lines[0])
+            self.assertEquals(expected_lines[1], lines[1])
+            self.assertEquals(expected_lines[2], lines[2])
+            self.assertEquals(expected_lines[3], lines[3])
+            self.assertEquals(expected_lines[4], lines[4])
+            self.assertEquals(expected_lines[5], lines[5])
+        finally:
+            _file.close()
+
 
     
+
+            
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(DirectoryTreeHandlerTestCase)
     unittest.TextTestRunner(verbosity=2).run(suite)
