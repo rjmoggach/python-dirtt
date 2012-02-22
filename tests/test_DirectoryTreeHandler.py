@@ -45,6 +45,11 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         self.default_project_location = os.path.join(self.templates_dir, "default_test_project.xml")
         self.default_args = {"project_root":self.tests_dir, "project_path": self.project_path}
         self.http_port = 8080
+        
+
+        self.data_dir = os.path.join(self.tests_dir,self.project_path)
+        shutil.rmtree(os.path.join(self.tests_dir, self.project_path))
+        os.mkdir(os.path.join(self.tests_dir, self.project_path))
 
     def test_01_new_DirectoryTreeHandler_with_None_tree_template_raises_AssertError(self):
         """
@@ -233,11 +238,7 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         Creating symlink: /Volumes/Data/Dashing.TV/python-dirtt/tests/data/images => dir1
 
         """
-        data_dir = os.path.join(self.tests_dir,"data")
         log_file = os.path.join(self.tests_dir, "test_21.log")
-
-        if os.path.exists(data_dir):
-            shutil.rmtree(data_dir)
 
         if os.path.exists(log_file):
             os.unlink(log_file)
@@ -256,10 +257,10 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             expected_lines = []
             expected_lines.append("Starting Directory Tree Template Build...")
             expected_lines.append("Changing current directory to: %s" % self.tests_dir)
-            expected_lines.append("Creating dir: %s (perms:02755 uid:0 gid:0)" % data_dir)
-            expected_lines.append("Creating dir: %s (perms:02775 uid:0 gid:0)" % os.path.join(data_dir,"dir1"))
-            expected_lines.append("Creating file: %s (perms:02775 uid:0 gid:0)" % os.path.join(data_dir,"file.txt"))
-            expected_lines.append("Creating symlink: %s => %s" % ((os.path.join(data_dir,"images"), "dir1")))
+            expected_lines.append("Creating dir: %s (perms:02755 uid:0 gid:0)" % os.path.join(self.data_dir))
+            expected_lines.append("Creating dir: %s (perms:02775 uid:0 gid:0)" % os.path.join(self.data_dir,"dir1"))
+            expected_lines.append("Creating file: %s (perms:02775 uid:0 gid:0)" % os.path.join(self.data_dir,"file.txt"))
+            expected_lines.append("Creating symlink: %s => %s" % ((os.path.join(self.data_dir,"images"), "dir1")))
             expected_lines = [line.lower() for line in expected_lines]
 
             self.assertEquals(6, len(lines))
@@ -273,9 +274,13 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         finally:
             _file.close()
 
+    def test_22_test_create_directories_using_dirname_attribute(self):
+        handler = DirectoryTreeHandler(False, os.path.join(self.templates_dir, "test_dirname.xml"), self.default_args)
+        handler.run()
 
-    
-
+        self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1","d2","d3","d4")))
+        self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1","d2","d4")))
+        self.assertEquals([], handler.path_stack)
             
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(DirectoryTreeHandlerTestCase)

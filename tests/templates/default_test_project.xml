@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dirtt name="Project Tree" version="0.1.9b1" dirname="{{project_root}}" basename="{{project_path}}" username="pipeline" group="artist" perms="02755"/>
+<dirtt name="Project Tree" version="0.1.9b1" dirname="{{project_root}}" basename="{{project_path}}"  username="pipeline" group="artist" perms="02755"/>

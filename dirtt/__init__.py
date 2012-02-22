@@ -119,6 +119,8 @@ class DirectoryTreeHandler(ContentHandler):
         self.processed_templates.append(self.tree_template)
     else:
         raise Exception("Template %s already in process" % self.tree_template)
+
+    self.path_stack = []
     
   def run(self):
     """
@@ -199,6 +201,7 @@ class DirectoryTreeHandler(ContentHandler):
                 create_dir(newdir, perms, uid, gid, self.warn)
               else:
                 create_dir(basename, perms, uid, gid, self.warn)
+                self._push_dir()
                 os.chdir(basename)
               self.current_dir = os.path.abspath(".")
         else:
@@ -206,9 +209,11 @@ class DirectoryTreeHandler(ContentHandler):
           if dirname:
             newdir = os.path.join(dirname,basename)
             create_dir(newdir, perms, uid, gid, self.warn)
+            self._push_dir()
             os.chdir(newdir)
           else:
             create_dir(basename, perms, uid, gid, self.warn)
+            self._push_dir()
             os.chdir(basename)
           self.current_dir = os.path.abspath(".")
 
@@ -328,9 +333,16 @@ class DirectoryTreeHandler(ContentHandler):
     """
     if not self.skip_entity:
       if name in ('dir','dirtt'):
-        if self.dirname: print self.dirname
-        os.chdir("..")
+        self._pop_dir()
         self.current_dir = os.path.abspath(".")
     if self.skip_entity: self.skip_entity -= 1
     pass
+
+  def _push_dir(self):
+    dir = os.path.abspath(".")
+    self.path_stack.append(dir)
+
+  def _pop_dir(self):
+    dir = self.path_stack.pop()
+    os.chdir(dir)
 
