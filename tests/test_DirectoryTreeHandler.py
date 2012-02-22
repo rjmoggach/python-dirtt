@@ -275,12 +275,30 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             _file.close()
 
     def test_22_test_create_directories_using_dirname_attribute(self):
-        handler = DirectoryTreeHandler(False, os.path.join(self.templates_dir, "test_dirname.xml"), self.default_args)
+        """
+        Make sure the dirname attribute is properly used.
+        """
+        handler = DirectoryTreeHandler(False, os.path.join(self.templates_dir, "test_dirname_01.xml"), self.default_args)
         handler.run()
 
         self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1","d2","d3","d4")))
         self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1","d2","d4")))
         self.assertEquals([], handler.path_stack)
+
+    def test_23_test_create_directories_using_dirname_and_no_basename_attribute_in_dirtt_tag(self):
+        """
+        With this test the following scenario is covered:
+            A tree template is loaded. The dirtt tag in the tree template is missing the basename attribute.
+            Here we expect the dirname directory to be created.
+
+        """
+        handler = DirectoryTreeHandler(False, os.path.join(self.templates_dir, "test_dirname_02.xml"), self.default_args)
+        handler.run()
+
+        self.assertEquals(True, os.path.exists(os.path.join(self.data_dir,"root", "d1","d2","d3","d4")))
+        self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "root", "d1","d2","d4")))
+        self.assertEquals([], handler.path_stack)
+
             
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(DirectoryTreeHandlerTestCase)

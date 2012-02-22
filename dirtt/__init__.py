@@ -179,6 +179,8 @@ class DirectoryTreeHandler(ContentHandler):
       self.logger.debug("Starting Directory Tree Template Build...")
       self.logger.debug("Changing current directory to: %s" % self.dirname)
       # change to our starting directory
+      if not basename:
+        self.dirname, basename = os.path.split(self.dirname)
       os.chdir(self.dirname)
       self.current_dir = os.path.abspath(".")
       self.idrefs[attrs.get("id", "root-dir")] = self.current_dir
@@ -207,6 +209,11 @@ class DirectoryTreeHandler(ContentHandler):
         else:
           self.logger.debug("Creating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
           if dirname:
+            if name == 'dirtt':
+                # When dealding with a 'dirtt' tag use self.dirname as the current dirname
+                # as at this point self.dirname has been properly set (i.e if no basename was
+                # provided then the value for the basename it's inferred from the dirname
+                dirname = self.dirname
             newdir = os.path.join(dirname,basename)
             create_dir(newdir, perms, uid, gid, self.warn)
             self._push_dir()
