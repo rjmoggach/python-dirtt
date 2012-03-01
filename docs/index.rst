@@ -7,9 +7,6 @@ python-dirtt - Directory Tree Templater
 
 .. contents::
 
-.. toctree::
-   :maxdepth: 1
-
    news
 
 .. comment: split here
@@ -25,7 +22,7 @@ It is licensed under an `MIT-style permissive license <https://github.com/dshng/
 
 You can install it with ``easy_install dirtt``.
 
-|copy| 2011 Dashing Collective Inc. and contributors.
+|copy| 2012 Dashing Collective Inc. and contributors.
 
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
@@ -68,9 +65,7 @@ All kinds of contributions are welcome - code, tests, documentation, bug reports
 
 Currently we need to implement the following:
 
--better testing
 -better error checking of values and process
--introspection of existing trees
 -modular exceptions
 -better documentation
 
@@ -78,12 +73,12 @@ Forking through Bitbucket
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you need to fork from the official repository, which is 
-`https://bitbucket.org/mogga/python-dirtt <https://bitbucket.org/mogga/python-dirtt>`_.
+`https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
 
 Log in to Bitbucket, go to the dirtt repository page, follow the fork link, 
 wait for Bitbucket to copy the repository and then clone your fork, like:
 
-	``git clone https://bitbucket.org/YOUR_USER_NAME/python-dirtt``
+	``git clone https://github.com/YOUR_USER_NAME/python-dirtt``
 
 Now you can change whatever you want, commit, push to your fork and when 
 your contribution is done, follow the pull request link and send us a 
@@ -229,5 +224,5 @@ Links
 
 Here's the links:
 
-`Bitbucket <https://bitbucket.org/mogga/python-dirtt>`_
+`Bitbucket <https://github.com/dshng/python-dirtt>`_
 

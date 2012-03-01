@@ -1,6 +1,6 @@
 """
 python-dirtt - Directory Tree Templater
-(c) 2011 Dashing Collective Inc. and contributors
+(c) 2012 Dashing Collective Inc. and contributors
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
 dirtt is a standalone tool and library used to generate 
@@ -15,7 +15,7 @@ import os,pwd,grp
 from xml.dom.minidom import Document
 from stat import *
 
-class ProjectBuilder:
+class TreeIntrospector:
 
 	def __init__(self, base="."):
 		self.base = os.path.realpath(base)

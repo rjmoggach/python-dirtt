@@ -1,36 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "http://opensource.dashing.tv/dtds/dirtt.dtd">
 <dirtt name="Project Tree" version="0.1.9b1" dirname="{{project_root}}" basename="{{project_path}}" username="pipeline" group="artist" perms="02755" xmlns:xi="http://www.w3.org/2001/XInclude">
-
-
 <!-- M A S T E R   F O L D E R -->
   <dir name="Project Master Directory" basename="master" username="pipeline" group="supervisor" perms="02755" xmlns:xi="http://www.w3.org/2001/XInclude">
   <xi:include href="project_master.xml" parse="xml"/>
-  </dir><!-- master -->
-
-
+  </dir>
 <!-- W O R K   F O L D E R -->
   <dir name="Project Work Directory" basename="work" username="pipeline" group="supervisor" perms="02755">
-  </dir><!-- work -->
-
-
+  </dir>
 <!-- S E Q U E N C E S   F O L D E R -->
   <dir name="Project Sequences Directory" basename="sequences" username="pipeline" group="supervisor" perms="02755">
-  </dir><!-- sequences -->
-
-
+  </dir>
 <!-- I N C O M I N G   F O L D E R -->
   <dir name="Project Incoming Directory" basename="sequences" username="pipeline" group="artist" perms="02777">
-  </dir><!-- incoming -->
-
-
+  </dir>
 <!-- P R O D U C T I O N   F O L D E R -->
   <dir name="Project Production Directory" basename="production" username="pipeline" group="supervisor" perms="02775">
-  </dir><!-- production -->
-
-
+  </dir>
 <!-- F L A M E   F O L D E R -->
   <dir name="Project Flame Directory" basename="flame" username="pipeline" group="supervisor" perms="02777">
-  </dir><!-- flame -->
-
-
+  </dir>
 </dirtt>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "http://opensource.dashing.tv/dtds/dirtt.dtd">
 <dirtt name="Shot Tree" version="0.1.9b1" dirname="{{project_root}}/{{project_path}}/sequences/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="supervisor" perms="02775">
-
 <!-- I M A G E S   F O L D E R -->
 	<dir name="Shot Images Folder" basename="images" username="pipeline" group="supervisor" perms="02755">
 	  <link basename="master" ref="../../../../master/images"/>
@@ -15,18 +15,14 @@
 	    <link basename="master" ref="../../../../master/images/textures"/>
   		<dir basename="3dPaintTextures" username="pipeline" group="artist" perms="02775"/>
 		</dir>
-	</dir><!-- images -->
-
-
-<!-- M E D I A    F O L D E R -->
+	</dir>
+  <!-- M E D I A    F O L D E R -->
 	<dir name="Shot Media Folder" basename="media" username="pipeline" group="supervisor" perms="02775">
 		<dir basename="audio" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="movies" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="edits" username="pipeline" group="artist" perms="02775"/>
-	</dir><!-- media -->
-
-
-<!-- D A T A   F O L D E R -->
+	</dir>
+	<!-- D A T A   F O L D E R -->
 	<dir name="Shot Data Folder" basename="data" username="pipeline" group="artist" perms="02775">
     <link basename="master" ref="../../../../master/data"/>
 		<dir basename="cache" username="pipeline" group="artist" perms="02775">
@@ -47,7 +43,6 @@
 		  <dir basename="iprImages" username="pipeline" group="artist" perms="02775"/>
 		  <dir basename="shaders" username="pipeline" group="artist" perms="02775"/>
 		</dir>
-
 		<dir basename="particles" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="camera" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="chan" username="pipeline" group="artist" perms="02775"/>
@@ -56,9 +51,7 @@
 		<dir basename="mocap" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="moco" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="timewarp" username="pipeline" group="artist" perms="02775"/>
-	</dir><!-- var -->
-
-
+	</dir>
   <!-- T O O L S   F O L D E R -->
   <dir basename="tools" username="pipeline" group="supervisor" perms="02775">
     <dir basename="maya" username="pipeline" group="supervisor" perms="02775">
@@ -72,7 +65,7 @@
 		<dir basename ="dso" username="pipeline" group="artist" perms="02775"/>
     <dir basename ="otls" username="pipeline" group="artist" perms="02775"/>
     <dir basename ="scripts" username="pipeline" group="artist" perms="02775"/>
-    </dir><!-- houdini -->
+    </dir>
     <dir basename="nuke" username="pipeline" group="artist" perms="02775">
       <dir basename="gizmos" username="pipeline" group="artist" perms="02775"/>
       <dir basename="plugins" username="pipeline" group="artist" perms="02775"/>
@@ -81,9 +74,6 @@
     <dir basename="scripts" username="pipeline" group="artist" perms="02775"/>
     <dir basename="vray" username="pipeline" group="artist" perms="02775"/>
   </dir>
-
-
-
 <!-- S C E N E S   F O L D E R -->
   <dir name="Shot Scenes Folder" basename="scenes" username="pipeline" group="artist" perms="02775">
     <link basename="master" ref="../../../../master/"/>
@@ -91,25 +81,15 @@
     <dir basename="anim" username="pipeline" group="artist" perms="02775"/>
     <dir basename="light" username="pipeline" group="artist" perms="02775"/>
     <dir basename="autosave" username="pipeline" group="artist" perms="02777"/>
-  </dir><!-- scenes -->
-
-
+  </dir>
 	<file basename="workspace.mel" username="pipeline" group="supervisor" perms="02775" href="workspace.mel"/>
-	
-
 <!-- C O M P   F O L D E R -->
   <dir name="Shot Comp Folder" basename="comp" username="pipeline" group="supervisor" perms="02755">
     <dir basename="nuke" username="pipeline" group="artist" perms="02775"/>
     <dir basename="roto" username="pipeline" group="artist" perms="02775"/>
   </dir>
-
-
   <!-- P A I N T   F O L D E R -->
   <link basename="paint" ref="./images/paint"/>
-
-
   <!-- D E S I G N   F O L D E R -->
   <link basename="design" ref="./images/design"/>
-
-
 </dirtt>

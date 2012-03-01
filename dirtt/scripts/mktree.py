@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
 """
-python-dirtt - Directory Tree Templater
-(c) 2011 Dashing Collective Inc. and contributors
-Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+  python-dirtt - Directory Tree Templater
+  (c) 2012 Dashing Collective Inc. and contributors
+  Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-	mkdirt.py
+	mktree.py
 	
 	This is a generic command line tool that prompts for template
 	variables in a given template and renders the tree.
@@ -15,11 +15,11 @@ Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.p
 import os
 import sys
 from optparse import OptionParser
-
 from dirtt import DirectoryTreeHandler, list_available_templates
 from dirtt.util.template import return_placeholders
 
 ENABLED_USERS = [0,1111,1003]
+
 
 def main():
 	usage = "usage: %prog [-t TEMPLATE]"

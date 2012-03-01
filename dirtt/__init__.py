@@ -1,6 +1,6 @@
 """
 python-dirtt - Directory Tree Templater
-(c) 2011 Dashing Collective Inc. and contributors
+(c) 2012 Dashing Collective Inc. and contributors
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
 dirtt is a standalone tool and library used to generate 
@@ -31,11 +31,10 @@ def get_version():
     return version
 
 __version__ = get_version()
-__all__ = ['util','introspection']
+__all__ = ['util']
 
 
 import os,sys
-
 from xml.etree import ElementTree
 #from xml.sax import make_parser
 from xml.sax import parseString
@@ -51,6 +50,7 @@ DEFAULT_USER = "root"
 DEFAULT_GROUP = "root"
 
 TEMPLATES_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'templates')
+
 
 def list_available_templates():
   print "\n  These are the available templates. Reference using the full path provided."
@@ -69,6 +69,7 @@ def list_available_templates():
 #      print subdirs
 #      template_list.append(os.path.join(root,file))
 #      print "  %s" % os.path.join(root, file)
+
 
 class DirectoryTreeHandler(ContentHandler):
   """
@@ -265,18 +266,16 @@ class DirectoryTreeHandler(ContentHandler):
         pass
 
     if name == 'xi:include':
-        href = attrs.get("href")
-
-        # Check for an HTTP url or an absolute file location
-        if href[0:7] in ('http://'):
-           template_loc = href
-        elif href[0:8] in ('file:///'):
-           template_loc = href
-        else:
-           template_loc = os.path.join(self.tree_template_loc,href)
-
-        c = DirectoryTreeHandler(self.verbose, template_loc, self.kwargs, self.interactive, self.warn, self.processed_templates)
-        c.run()
+      href = attrs.get("href")
+      # Check for an HTTP url or an absolute file location
+      if href[0:7] in ('http://'):
+        template_loc = href
+      elif href[0:8] in ('file:///'):
+        template_loc = href
+      else:
+        template_loc = os.path.join(self.tree_template_loc,href)
+      c = DirectoryTreeHandler(self.verbose, template_loc, self.kwargs, self.interactive, self.warn, self.processed_templates)
+      c.run()
     return
       
 
@@ -352,4 +351,3 @@ class DirectoryTreeHandler(ContentHandler):
   def _pop_dir(self):
     dir = self.path_stack.pop()
     os.chdir(dir)
-

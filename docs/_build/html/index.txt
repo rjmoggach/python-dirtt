@@ -7,9 +7,6 @@ python-dirtt - Directory Tree Templater
 
 .. contents::
 
-.. toctree::
-   :maxdepth: 1
-
    news
 
 .. comment: split here
@@ -24,7 +21,7 @@ It is licensed under an `MIT-style permissive license <https://github.com/dshng/
 
 You can install it with ``easy_install dirtt``.
 
-(c) 2011 Dashing Collective Inc. and contributors.
+(c) 2012 Dashing Collective Inc. and contributors.
 
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
@@ -66,7 +63,6 @@ Currently we need to implement the following:
 
 -better testing
 -better error checking of values and process
--introspection of existing trees
 -modular exceptions
 -better documentation
 
