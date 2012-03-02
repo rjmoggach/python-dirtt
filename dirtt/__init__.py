@@ -122,7 +122,7 @@ class DirectoryTreeHandler(ContentHandler):
         raise Exception("Template %s already in process" % self.tree_template)
 
     self.path_stack = []
-    
+        
   def run(self):
     """
     top level application logic. From here we read, parse and perform any
@@ -213,7 +213,7 @@ class DirectoryTreeHandler(ContentHandler):
             if name == 'dirtt':
                 # When dealding with a 'dirtt' tag use self.dirname as the current dirname
                 # as at this point self.dirname has been properly set (i.e if no basename was
-                # provided then the value for the basename it's inferred from the dirname
+                # provided then the value for the basename it's inferred from dirname)
                 dirname = self.dirname
             newdir = os.path.join(dirname,basename)
             create_dir(newdir, perms, uid, gid, self.warn)

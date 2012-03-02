@@ -6,6 +6,8 @@ import SimpleHTTPServer
 import SocketServer
 import logging
 from dirtt import DirectoryTreeHandler
+import test_utils
+from tempfile import NamedTemporaryFile
 
 class HttpServerThread(threading.Thread):
     
@@ -243,7 +245,11 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         if os.path.exists(log_file):
             os.unlink(log_file)
 
-        handler = DirectoryTreeHandler(True, os.path.join(self.templates_dir,"test_logging.xml"), self.default_args)
+        tmp_file = NamedTemporaryFile(delete = False)
+        tmp_file.write(test_utils.get_test_logging_xml())
+        tmp_file.close()
+
+        handler = DirectoryTreeHandler(True, tmp_file.name, self.default_args)
         # Small hack to make sure log messages won't be sent out to sys.stdout 
         handler.logger.handlers = []
         handler.logger.addHandler(logging.FileHandler(log_file))
@@ -273,6 +279,7 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             self.assertEquals(expected_lines[5], lines[5])
         finally:
             _file.close()
+            os.unlink(tmp_file.name)
 
     def test_22_test_create_directories_using_dirname_attribute(self):
         """
@@ -292,13 +299,22 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             Here we expect the dirname directory to be created.
 
         """
+        current_dir = os.path.abspath(".")
         handler = DirectoryTreeHandler(False, os.path.join(self.templates_dir, "test_dirname_02.xml"), self.default_args)
         handler.run()
 
         self.assertEquals(True, os.path.exists(os.path.join(self.data_dir,"root", "d1","d2","d3","d4")))
         self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "root", "d1","d2","d4")))
         self.assertEquals([], handler.path_stack)
+        os.chdir(current_dir)
 
+    def test_24_test_create_nested_directories(self):
+        handler = DirectoryTreeHandler(False, os.path.join(self.templates_dir, "test_nested_dirs.xml"), self.default_args) 
+        handler.run()
+
+        self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1", "d2", "d3")))
+        self.assertEquals([], handler.path_stack)
+    
             
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(DirectoryTreeHandlerTestCase)
