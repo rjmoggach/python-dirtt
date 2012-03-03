@@ -11,7 +11,66 @@ def set_top_element_attrs(top_element):
              "basename":"{{project_path}}", "username":"root", "group":"root",\
              "perms":"02755"}
     set_element_attrs(top_element, attrs)
-   
+
+def get_test_nested_files(top_level_dirs = 5, nested_dirs = 5, files = 5, default_file_attrs = {"username":"root",\
+                         "group":"root", "perms" : "02755"}):
+    impl = getDOMImplementation()
+
+    newdoc = impl.createDocument(None, "dirtt", None)
+    top_element = newdoc.documentElement
+    set_top_element_attrs(top_element)
+    attrs = default_file_attrs 
+
+    for i in range(0, files):
+        file_element = newdoc.createElement("file")
+        attrs["basename"] = "%s%d" % ("file", i)
+        set_element_attrs(file_element, attrs)
+
+        top_element.appendChild(file_element)
+
+    for i in range(0, top_level_dirs):
+        top_dir_element = newdoc.createElement("dir")
+
+        for j in range(0, files):
+            file_element = newdoc.createElement("file")
+            attrs["basename"] = "%s%d" % ("file", j)
+            set_element_attrs(file_element, attrs)
+
+            top_dir_element.appendChild(file_element)
+
+        attrs["name"] = "%s%d" % ("top_dir", i)
+        attrs["basename"] = "%s%d" % ("top_dir", i)
+
+        set_element_attrs(top_dir_element, attrs)
+
+        del attrs["name"]
+        del attrs["basename"]
+
+        element = top_dir_element
+        for j in range(0, nested_dirs):
+           new_element = newdoc.createElement("dir") 
+
+           attrs["name"] = "%s%d" % ("nested_dir", j)
+           attrs["basename"] = "%s%d" % ("nested_dir", j)
+
+           set_element_attrs(new_element, attrs)
+
+           del attrs["name"]
+           del attrs["basename"]
+
+           for k in range(0, files):
+               file_element = newdoc.createElement("file")
+               attrs["basename"] = "%s%d" % ("file", k)
+               set_element_attrs(file_element, attrs)
+
+               new_element.appendChild(file_element)
+
+           element.appendChild(new_element)
+           element = new_element
+        
+        top_element.appendChild(top_dir_element)
+
+    return newdoc.toprettyxml()
 
 def get_test_nested_dirs(top_level_dirs = 5, nested_dirs = 5, default_dir_attrs = {"username":"root",\
                          "group":"root", "perms" : "02755"}):
@@ -139,4 +198,4 @@ def get_test_dirname2_xml():
     return newdoc.toprettyxml()
      
 if __name__ == "__main__":
-    print get_test_nested_dirs()
+    print get_test_nested_files()

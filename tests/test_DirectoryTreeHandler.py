@@ -352,6 +352,45 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             if tmp_file:
                 os.unlink(tmp_file.name)
             
+    def test_25_test_create_nested_files(self):
+        try:
+            tmp_file = NamedTemporaryFile(delete = False)
+
+            top_level_dirs = 5
+            nested_dirs = 5
+            files = 5
+
+            tmp_file.write(test_utils.get_test_nested_files(top_level_dirs = top_level_dirs, nested_dirs = nested_dirs,\
+                           files = files))
+            tmp_file.close()
+    
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+            handler.run()
+
+            for i in range (0, files):
+                current_path = os.path.join(self.default_args["project_root"], self.default_args["project_path"], "file%d" % i)
+                self.assertEquals(True, os.path.exists(current_path))
+
+            for i in range(0, top_level_dirs):
+                current_path = os.path.join(self.data_dir,"top_dir%d" % i)
+                self.assertEquals(True, os.path.exists(current_path))
+
+                for j in range(0, top_level_dirs):
+                    self.assertEquals(True, os.path.exists(os.path.join(current_path,"file%d" % j)))
+
+                for j in range(0, nested_dirs):
+                    current_path = os.path.join(current_path,"nested_dir%d" %j)
+                    self.assertEquals(True, os.path.exists(current_path))
+                    self.assertEquals(True, os.path.exists(os.path.join(current_path,"file%d" % j)))
+
+            self.assertEquals([], handler.path_stack)
+        finally:
+            if tmp_file:
+                os.unlink(tmp_file.name)
+
+
+
+
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(DirectoryTreeHandlerTestCase)
     unittest.TextTestRunner(verbosity=2).run(suite)
