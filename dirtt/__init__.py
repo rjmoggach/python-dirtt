@@ -245,22 +245,13 @@ class DirectoryTreeHandler(ContentHandler):
 
     if name == 'link':
       try:
-        ref = attrs.get("idref",None)
-        if ref:
-          ref = self.idrefs[ref]
-        elif attrs.get("ref",None):
-          ref = attrs.get("ref")
-        if not ref:
-          # If neither the ref attribute nor the idref attribute has been set,
-          # then skip this link.
-          return
+        if (not attrs.get("idref", attrs.get("ref", None))) or (not attrs.get("basename", None)):
+           return
+        ref = attrs.get("idref", attrs.get("ref"))
         link_name = attrs.get("basename")
-        if not link_name:
-          return
-        if attrs.get("dirname",None):
-          target_dir = attrs.get("dirname")
-        else:
-          target_dir = self.current_dir
+        if ref == attrs.get("idref", None):
+          ref = self.idrefs[ref]
+        target_dir = attrs.get("dirname",self.current_dir)
         self.links.append({'basename': link_name, 'parent_dir': target_dir, 'ref': ref})
       except:
         pass
