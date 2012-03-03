@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dirtt name="Project Tree" version="0.1.9b1" dirname="{{project_root}}/{{project_path}}/root" username="root" group="root" perms="02755">
-
-    <dir name="d1" dirname="d1/d2/d3" basename="d4" perms="02755" username="root" group="root"/>
-    <dir name="d1" dirname="d1/d2" basename="d4" perms="02755" username="root" group="root"/>
-
-</dirtt>

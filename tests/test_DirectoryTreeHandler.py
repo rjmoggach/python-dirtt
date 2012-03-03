@@ -48,7 +48,6 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         self.default_args = {"project_root":self.tests_dir, "project_path": self.project_path}
         self.http_port = 8080
         
-
         self.data_dir = os.path.join(self.tests_dir,self.project_path)
         shutil.rmtree(os.path.join(self.tests_dir, self.project_path))
         os.mkdir(os.path.join(self.tests_dir, self.project_path))
@@ -279,18 +278,28 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             self.assertEquals(expected_lines[5], lines[5])
         finally:
             _file.close()
-            os.unlink(tmp_file.name)
+            if tmp_file:
+                os.unlink(tmp_file.name)
 
     def test_22_test_create_directories_using_dirname_attribute(self):
         """
         Make sure the dirname attribute is properly used.
         """
-        handler = DirectoryTreeHandler(False, os.path.join(self.templates_dir, "test_dirname_01.xml"), self.default_args)
-        handler.run()
+        try:
+           tmp_file = NamedTemporaryFile(delete = False)
+           tmp_file.write(test_utils.get_test_dirname1_xml())
+           tmp_file.close()
 
-        self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1","d2","d3","d4")))
-        self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1","d2","d4")))
-        self.assertEquals([], handler.path_stack)
+
+           handler = DirectoryTreeHandler(False, tmp_file.name, self.default_args)
+           handler.run()
+
+           self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1","d2","d3","d4")))
+           self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1","d2","d4")))
+           self.assertEquals([], handler.path_stack)
+        finally:
+            if tmp_file:
+                os.unlink(tmp_file.name)
 
     def test_23_test_create_directories_using_dirname_and_no_basename_attribute_in_dirtt_tag(self):
         """
@@ -299,22 +308,49 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             Here we expect the dirname directory to be created.
 
         """
-        current_dir = os.path.abspath(".")
-        handler = DirectoryTreeHandler(False, os.path.join(self.templates_dir, "test_dirname_02.xml"), self.default_args)
-        handler.run()
+        try:
+           current_dir = os.path.abspath(".")
 
-        self.assertEquals(True, os.path.exists(os.path.join(self.data_dir,"root", "d1","d2","d3","d4")))
-        self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "root", "d1","d2","d4")))
-        self.assertEquals([], handler.path_stack)
-        os.chdir(current_dir)
+           tmp_file = NamedTemporaryFile(delete = False)
+           tmp_file.write(test_utils.get_test_dirname2_xml())
+           tmp_file.close()
+
+           handler = DirectoryTreeHandler(False, tmp_file.name, self.default_args)
+           handler.run()
+
+           self.assertEquals(True, os.path.exists(os.path.join(self.data_dir,"root", "d1","d2","d3","d4")))
+           self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "root", "d1","d2","d4")))
+           self.assertEquals([], handler.path_stack)
+           os.chdir(current_dir)
+        finally:
+            if tmp_file:
+                os.unlink(tmp_file.name)
 
     def test_24_test_create_nested_directories(self):
-        handler = DirectoryTreeHandler(False, os.path.join(self.templates_dir, "test_nested_dirs.xml"), self.default_args) 
-        handler.run()
+        try:
+            tmp_file = NamedTemporaryFile(delete = False)
 
-        self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1", "d2", "d3")))
-        self.assertEquals([], handler.path_stack)
+            top_level_dirs = 5
+            nested_dirs = 5
+
+            tmp_file.write(test_utils.get_test_nested_dirs(top_level_dirs = top_level_dirs, nested_dirs = nested_dirs))
+            tmp_file.close()
     
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+            handler.run()
+
+            for i in range(0, top_level_dirs):
+                current_path = os.path.join(self.data_dir,"top_dir%d" % i)
+                self.assertEquals(True, os.path.exists(current_path))
+
+                for j in range(0, nested_dirs):
+                    current_path = os.path.join(current_path,"nested_dir%d" %j)
+                    self.assertEquals(True, os.path.exists(current_path))
+
+            self.assertEquals([], handler.path_stack)
+        finally:
+            if tmp_file:
+                os.unlink(tmp_file.name)
             
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(DirectoryTreeHandlerTestCase)
