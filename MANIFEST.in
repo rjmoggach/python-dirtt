@@ -1,7 +1,7 @@
 include AUTHORS.rst
 include LICENSE.rst
 include README.rst
-recursive-include docs *.rst
+recursive-include docs *.rst *.html *.jpg *.png *.js *.css *.gif
 recursive-exclude docs/_build *
 recursive-include tests *.py
 recursive-include dirtt/data *
