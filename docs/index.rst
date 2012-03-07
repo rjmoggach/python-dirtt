@@ -69,14 +69,14 @@ Currently we need to implement the following:
 -modular exceptions
 -better documentation
 
-Forking through Bitbucket
+Forking through GitHub
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you need to fork from the official repository, which is 
 `https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
 
-Log in to Bitbucket, go to the dirtt repository page, follow the fork link, 
-wait for Bitbucket to copy the repository and then clone your fork, like:
+Log in to GitHub, go to the dirtt repository page, follow the fork link, 
+wait for GitHub to copy the repository and then clone your fork, like:
 
 	``git clone https://github.com/YOUR_USER_NAME/python-dirtt``
 
@@ -120,7 +120,7 @@ Try it out in a python-virtualenv environment to play around and it should make 
 
 If you want to install to a custom location here's how I do it:
 
-  ``pip install --install-option="--install-dir=/dashing/tools/lib/python2.7/site-packages" -e git+git@bitbucket.org:mogga/python-dirtt.git#egg=python-dirtt``
+  ``pip install --install-option="--install-dir=/dashing/tools/lib/python2.7/site-packages" -e git+git@github.com:dshng/python-dirtt.git#egg=python-dirtt``
   
 That will download and do the package build as necessary.
 
@@ -224,5 +224,5 @@ Links
 
 Here's the links:
 
-`Bitbucket <https://github.com/dshng/python-dirtt>`_
+`GitHub <https://github.com/dshng/python-dirtt>`_
 
