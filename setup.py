@@ -127,6 +127,7 @@ setup(
 	keywords='filesystem template utilities',
 	author='Robert Moggach',
 	author_email='rob@dashing.tv',
+  url='http://opensource.dashing.tv/python-dirtt/',
 	maintainer='Dashing Collective Inc.',
 	maintainer_email='rob@dashing.tv',
 	license='MIT'
