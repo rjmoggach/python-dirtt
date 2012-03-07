@@ -1,24 +1,29 @@
-.. include globals.rst
-
+=======================================
 python-dirtt - Directory Tree Templater
 =======================================
 
-* `Bugs <https://github.com/dshng/python-dirtt/issues/>`_
+:Release: |version|
+:Date: |today|
 
-.. contents::
 
-   news
+Contents:
+
+.. toctree::
+   :glob:
+
+   news*
+   authors*
+   license*
 
 .. comment: split here
 .. |copy|   unicode:: U+000A9 .. COPYRIGHT SIGN
-
 
 Status and License
 ------------------
 
 python-dirtt was written by Rob Moggach, for `Dashing Collective Inc. <http://dashing.tv>`_
-and is  maintained by a `group of developers <https://github.com/dshng/python-dirtt/raw/master/AUTHORS.txt>`_.
-It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.txt>`_.
+and is  maintained by a `group of developers <https://github.com/dshng/python-dirtt/raw/master/AUTHORS.rst>`_.
+It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.rst>`_.
 
 You can install it with ``easy_install dirtt``.
 
@@ -65,12 +70,13 @@ All kinds of contributions are welcome - code, tests, documentation, bug reports
 
 Currently we need to implement the following:
 
+-better testing
 -better error checking of values and process
 -modular exceptions
 -better documentation
 
 Forking through GitHub
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you need to fork from the official repository, which is 
 `https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
@@ -84,12 +90,12 @@ Now you can change whatever you want, commit, push to your fork and when
 your contribution is done, follow the pull request link and send us a 
 request explaining what you did and why.
 
-
 Running the tests
 ~~~~~~~~~~~~~~~~~
 
-python-dirtt's test suite is small and not yet at all comprehensive, but we aim
-to grow it. That's not true... It plain doesn't exist yet. Anyone care to contribute?
+python-dirtt's test suite is small and not comprehensive, but it does accomplish what
+we need it to do. Let us know if we're missing something so we can add that to the list
+of fixes and tests.
 
 
 Documentation
@@ -224,5 +230,8 @@ Links
 
 Here's the links:
 
-`GitHub <https://github.com/dshng/python-dirtt>`_
+* GitHub_
+* Bugs_
 
+.. _GitHub: https://github.com/dshng/python-dirtt/
+.. _Bugs: https://github.com/dshng/python-dirtt/issues/

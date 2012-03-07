@@ -6,7 +6,10 @@ python-dirtt - Directory Tree Templater
 * `Bugs <https://github.com/dshng/python-dirtt/issues/>`_
 
 .. contents::
+   :maxdepth: 2
 
+   index
+   news
 .. comment: split here
 .. |copy|   unicode:: U+000A9 .. COPYRIGHT SIGN
 
@@ -85,8 +88,9 @@ request explaining what you did and why.
 Running the tests
 ~~~~~~~~~~~~~~~~~
 
-python-dirtt's test suite is small and not yet at all comprehensive, but we aim
-to grow it. That's not true... It plain doesn't exist yet. Anyone care to contribute?
+python-dirtt's test suite is small and not comprehensive, but it does accomplish what
+we need it to do. Let us know if we're missing something so we can add that to the list
+of fixes and tests.
 
 
 Documentation
