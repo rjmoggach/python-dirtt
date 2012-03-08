@@ -321,10 +321,10 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
            self.assertEquals(True, os.path.exists(os.path.join(self.data_dir,"root", "d1","d2","d3","d4")))
            self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "root", "d1","d2","d4")))
            self.assertEquals([], handler.path_stack)
-           os.chdir(current_dir)
         finally:
             if tmp_file:
                 os.unlink(tmp_file.name)
+            os.chdir(current_dir)
 
     def test_24_test_create_nested_directories(self):
         try:
@@ -353,6 +353,10 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
                 os.unlink(tmp_file.name)
             
     def test_25_test_create_nested_files(self):
+        """
+        Create N files in a nested directory tree structure and make 
+        sure they all exist.
+        """
         try:
             tmp_file = NamedTemporaryFile(delete = False)
 
@@ -388,8 +392,188 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             if tmp_file:
                 os.unlink(tmp_file.name)
 
+    def test_26_test_create_symlinks_referencing_directories_using_ref_attribute(self):
+        """
+        Create a nested directory tree structure and in nested level i, create (i-1) symlinks 
+        to parent directories. All references are done using the ref attribute.
+        """
+        try:
+            tmp_file = NamedTemporaryFile(delete = False)
+
+            nested_dirs = 5
+
+            tmp_file.write(test_utils.get_symlinks_referencing_dirs_xml_using_ref_attribute(nested_dirs = nested_dirs))
+            tmp_file.close()
+
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+            handler.run()
+
+            basename = self.data_dir
+            
+            current_dir = os.path.abspath(".")
+            symlinks_count = 0
+
+            for i in range(0, nested_dirs):
+                 basename = os.path.join(basename,"dir%d" % i) 
+                 self.assertEquals(True, os.path.exists(basename))
+
+                 os.chdir(basename)
+
+                 current_path = ""
+                 path = basename.replace(self.data_dir,"").split(os.path.sep)
+                 path.reverse()
+
+                 j = 0
+                 for path_element in path:
+                    if path_element:
+                        current_path = os.path.join("..", current_path)
+                        self.assertEquals(True, os.path.exists("link_to_dir%d" % j))
+                        self.assertEquals(True, os.path.islink("link_to_dir%d" % j))
+                        j = j + 1
+                        symlinks_count = symlinks_count + 1
+
+            self.assertEquals([], handler.path_stack)
+            self.assertEquals((nested_dirs * (nested_dirs + 1)) /2, symlinks_count)
+        finally:
+            if tmp_file:
+                os.unlink(tmp_file.name)
+            os.chdir(current_dir)
+
+    def test_27_test_create_symlinks_referencing_directories_using_idref_attribute(self):
+        """
+        Create a nested directory tree structure and in nested level i, create (i-1) symlinks 
+        to parent directories. All references are done using the idref attribute.
+        """
+        try:
+            tmp_file = NamedTemporaryFile(delete = False)
+
+            nested_dirs = 5
+
+            tmp_file.write(test_utils.get_symlinks_referencing_dirs_xml_using_idref_attribute(nested_dirs = nested_dirs))
+            tmp_file.close()
+
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+            handler.run()
+
+            basename = self.data_dir
+            
+            current_dir = os.path.abspath(".")
+            symlinks_count = 0
+
+            for i in range(0, nested_dirs):
+                 basename = os.path.join(basename,"dir%d" % i) 
+                 self.assertEquals(True, os.path.exists(basename))
+
+                 os.chdir(basename)
+
+                 current_path = ""
+                 path = basename.replace(self.data_dir,"").split(os.path.sep)
+                 path.reverse()
+
+                 j = 0
+                 for path_element in path:
+                    if path_element:
+                        current_path = os.path.join("..", current_path)
+                        self.assertEquals(True, os.path.exists("link_to_dir%d" % j))
+                        self.assertEquals(True, os.path.islink("link_to_dir%d" % j))
+                        j = j + 1
+                        symlinks_count = symlinks_count + 1
+
+            self.assertEquals([], handler.path_stack)
+            self.assertEquals((nested_dirs * (nested_dirs + 1)) /2, symlinks_count)
+        finally:
+            if tmp_file:
+                os.unlink(tmp_file.name)
+            os.chdir(current_dir)
 
 
+    def test_28_test_create_symlinks_with_no_idref_or_ref_attribute(self):
+        """
+        Make sure no symlinks are created when the neither the idref nor the ref
+        attributes has been set
+        """
+        try:
+            tmp_file = NamedTemporaryFile(delete = False)
+
+            nested_dirs = 5
+
+            tmp_file.write(test_utils.get_symlinks_with_no_idref_and_no_ref_attribute(nested_dirs = nested_dirs))
+            tmp_file.close()
+
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+            handler.run()
+
+            basename = self.data_dir
+            
+            current_dir = os.path.abspath(".")
+
+            for i in range(0, nested_dirs):
+                 basename = os.path.join(basename,"dir%d" % i) 
+                 self.assertEquals(True, os.path.exists(basename))
+
+                 os.chdir(basename)
+
+                 current_path = ""
+                 path = basename.replace(self.data_dir,"").split(os.path.sep)
+                 path.reverse()
+
+                 j = 0
+                 for path_element in path:
+                    if path_element:
+                        current_path = os.path.join("..", current_path)
+                        self.assertEquals(True, os.path.exists(os.path.join(current_path,path_element)))
+                        self.assertEquals(False, os.path.exists("link_to_dir%d" % j))
+                        self.assertEquals(False, os.path.islink("link_to_dir%d" % j))
+
+            self.assertEquals([], handler.path_stack)
+        finally:
+            if tmp_file:
+                os.unlink(tmp_file.name)
+            os.chdir(current_dir)
+
+
+    def test_29_test_create_symlinks_with_no_basename(self):
+        """
+        Make sure no symlinks are created if no basename has been set.
+        """
+        try:
+            tmp_file = NamedTemporaryFile(delete = False)
+
+            nested_dirs = 5
+
+            tmp_file.write(test_utils.get_symlinks_referencing_dirs_xml_with_no_basename(nested_dirs = nested_dirs))
+            tmp_file.close()
+
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+            handler.run()
+
+            basename = self.data_dir
+            
+            current_dir = os.path.abspath(".")
+
+            for i in range(0, nested_dirs):
+                 basename = os.path.join(basename,"dir%d" % i) 
+                 self.assertEquals(True, os.path.exists(basename))
+
+                 os.chdir(basename)
+
+                 current_path = ""
+                 path = basename.replace(self.data_dir,"").split(os.path.sep)
+                 path.reverse()
+
+                 j = 0
+                 for path_element in path:
+                    if path_element:
+                        current_path = os.path.join("..", current_path)
+                        self.assertEquals(True, os.path.exists(os.path.join(current_path,path_element)))
+                        self.assertEquals(False, os.path.exists("link_to_dir%d" % j))
+                        self.assertEquals(False, os.path.islink("link_to_dir%d" % j))
+
+            self.assertEquals([], handler.path_stack)
+        finally:
+            if tmp_file:
+                os.unlink(tmp_file.name)
+            os.chdir(current_dir)
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(DirectoryTreeHandlerTestCase)

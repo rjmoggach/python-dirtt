@@ -196,6 +196,186 @@ def get_test_dirname2_xml():
     top_element.appendChild(dir_element2)
 
     return newdoc.toprettyxml()
+
+def get_symlinks_referencing_dirs_xml_using_ref_attribute(nested_dirs = 5):
+    """
+    """
+    impl = getDOMImplementation()
+    attrs = {"username":"root",\
+                         "group":"root", "perms" : "02755"}
+
+    newdoc = impl.createDocument(None, "dirtt", None)
+    top_element = newdoc.documentElement
+    set_top_element_attrs(top_element)
+
+    element = top_element
+
+    basename = ""
+    for i in range(0,nested_dirs):
+        new_element = newdoc.createElement("dir") 
+
+        attrs["name"] = "%s%d" % ("dir", i)
+        basename =  os.path.join(basename, "%s%d" % ("dir", i))
+        attrs["basename"] = attrs["name"] 
+
+        set_element_attrs(new_element, attrs)
+
+        del attrs["name"]
+        del attrs["basename"]
+
+        current_path = ""
+        reversed_path = basename.split(os.path.sep)
+        reversed_path.reverse()
+        for path_element in reversed_path:
+            if path_element:
+                current_path = os.path.join("..",current_path)
+            
+                link_element = newdoc.createElement("link")
+                link_element.setAttribute("basename", "link_to_%s" % path_element)
+                link_element.setAttribute("ref", os.path.join(current_path, path_element)) 
+
+                new_element.appendChild(link_element)
+            
+        element.appendChild(new_element)
+        element = new_element
+
+    return newdoc.toprettyxml()
+
+
+def get_symlinks_referencing_dirs_xml_using_idref_attribute(nested_dirs = 5):
+    """
+    """
+    impl = getDOMImplementation()
+    attrs = {"username":"root",\
+                         "group":"root", "perms" : "02755"}
+
+    newdoc = impl.createDocument(None, "dirtt", None)
+    top_element = newdoc.documentElement
+    set_top_element_attrs(top_element)
+
+    element = top_element
+
+    basename = ""
+    for i in range(0,nested_dirs):
+        new_element = newdoc.createElement("dir") 
+
+        attrs["name"] = "%s%d" % ("dir", i)
+        basename =  os.path.join(basename, "%s%d" % ("dir", i))
+        attrs["basename"] = attrs["name"] 
+        attrs["id"] = attrs["name"]
+
+        set_element_attrs(new_element, attrs)
+
+        del attrs["name"]
+        del attrs["basename"]
+
+        current_path = ""
+        reversed_path = basename.split(os.path.sep)
+        reversed_path.reverse()
+        j = 0
+        for path_element in reversed_path:
+            if path_element:
+                link_element = newdoc.createElement("link")
+                link_element.setAttribute("basename", "link_to_%s" % path_element)
+                link_element.setAttribute("idref", "dir%d" % j) 
+
+                new_element.appendChild(link_element)
+                j = j+1
+            
+        element.appendChild(new_element)
+        element = new_element
+
+    return newdoc.toprettyxml()
+
+def get_symlinks_with_no_idref_and_no_ref_attribute(nested_dirs = 5):
+    """
+    """
+    impl = getDOMImplementation()
+    attrs = {"username":"root",\
+                         "group":"root", "perms" : "02755"}
+
+    newdoc = impl.createDocument(None, "dirtt", None)
+    top_element = newdoc.documentElement
+    set_top_element_attrs(top_element)
+
+    element = top_element
+
+    basename = ""
+    for i in range(0,nested_dirs):
+        new_element = newdoc.createElement("dir") 
+
+        attrs["name"] = "%s%d" % ("dir", i)
+        basename =  os.path.join(basename, "%s%d" % ("dir", i))
+        attrs["basename"] = attrs["name"] 
+
+        set_element_attrs(new_element, attrs)
+
+        del attrs["name"]
+        del attrs["basename"]
+
+        current_path = ""
+        reversed_path = basename.split(os.path.sep)
+        reversed_path.reverse()
+        j = 0
+        for path_element in reversed_path:
+            if path_element:
+                link_element = newdoc.createElement("link")
+                link_element.setAttribute("basename", "link_to_%s" % path_element)
+
+                new_element.appendChild(link_element)
+                j = j+1
+            
+        element.appendChild(new_element)
+        element = new_element
+
+    return newdoc.toprettyxml()
+
+def get_symlinks_referencing_dirs_xml_with_no_basename(nested_dirs = 5):
+    """
+    """
+    impl = getDOMImplementation()
+    attrs = {"username":"root",\
+                         "group":"root", "perms" : "02755"}
+
+    newdoc = impl.createDocument(None, "dirtt", None)
+    top_element = newdoc.documentElement
+    set_top_element_attrs(top_element)
+
+    element = top_element
+
+    basename = ""
+    for i in range(0,nested_dirs):
+        new_element = newdoc.createElement("dir") 
+
+        attrs["name"] = "%s%d" % ("dir", i)
+        basename =  os.path.join(basename, "%s%d" % ("dir", i))
+        attrs["basename"] = attrs["name"] 
+        attrs["id"] = attrs["name"]
+
+        set_element_attrs(new_element, attrs)
+
+        del attrs["name"]
+        del attrs["basename"]
+
+        current_path = ""
+        reversed_path = basename.split(os.path.sep)
+        reversed_path.reverse()
+        j = 0
+        for path_element in reversed_path:
+            if path_element:
+                link_element = newdoc.createElement("link")
+                link_element.setAttribute("idref", "dir%d" % j) 
+
+                new_element.appendChild(link_element)
+                j = j+1
+            
+        element.appendChild(new_element)
+        element = new_element
+
+    return newdoc.toprettyxml()
+
+
+ 
      
 if __name__ == "__main__":
-    print get_test_nested_files()
+    print get_symlinks_referencing_dirs_xml_using_idref_attribute() 
