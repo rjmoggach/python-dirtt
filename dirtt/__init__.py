@@ -35,6 +35,7 @@ __all__ = ['util']
 
 
 import os,sys
+import errno
 from xml.etree import ElementTree
 #from xml.sax import make_parser
 from xml.sax import parseString
@@ -200,13 +201,31 @@ class DirectoryTreeHandler(ContentHandler):
             else:
               self.logger.debug("Creating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
               if dirname:
+                if name == 'dirtt':
+                    # When dealding with a 'dirtt' tag use self.dirname as the current dirname
+                    # as at this point self.dirname has been properly set (i.e if no basename was
+                    # provided then the value for the basename it's inferred from dirname)
+                    dirname = self.dirname
                 newdir = os.path.join(dirname,basename)
-                create_dir(newdir, perms, uid, gid, self.warn)
               else:
-                create_dir(basename, perms, uid, gid, self.warn)
-                self._push_dir()
-                os.chdir(basename)
-              self.current_dir = os.path.abspath(".")
+                newdir = basename
+
+            try:
+                create_dir(newdir, perms, uid, gid, self.warn)
+            except OSError as oserror:
+                if oserror.errno == errno.EISDIR:
+                    print >> sys.stderr, "A directory exists with that name ('%s'). \
+                     \nAborting directory creation." % basename
+                    sys.exit(-1)
+                elif oserror.errno == errno.EISDIR:
+                    print >> sys.stderr, "A file exists with the name of the desired dir ('%s'). \
+                     \nAborting directory creation." % basename
+                    sys.exit(-2)
+
+            self._push_dir()
+            os.chdir(basename)
+            self.current_dir = os.path.abspath(".")
+
         else:
           self.logger.debug("Creating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
           if dirname:
@@ -216,13 +235,23 @@ class DirectoryTreeHandler(ContentHandler):
                 # provided then the value for the basename it's inferred from dirname)
                 dirname = self.dirname
             newdir = os.path.join(dirname,basename)
-            create_dir(newdir, perms, uid, gid, self.warn)
-            self._push_dir()
-            os.chdir(newdir)
           else:
-            create_dir(basename, perms, uid, gid, self.warn)
-            self._push_dir()
-            os.chdir(basename)
+            newdir = basename
+          
+          try:
+            create_dir(newdir, perms, uid, gid, self.warn)
+          except OSError as oserror:
+            if oserror.errno == errno.EISDIR:
+                print >> sys.stderr, "A directory exists with that name ('%s'). \
+                    \nAborting directory creation." % basename
+                sys.exit(-1)
+            elif oserror.errno == errno.EISDIR:
+                print >> sys.stderr, "A file exists with the name of the desired dir ('%s'). \
+                    \nAborting directory creation." % basename
+                sys.exit(-2)
+                
+          self._push_dir()
+          os.chdir(newdir)
           self.current_dir = os.path.abspath(".")
 
         if attrs.get("id"):

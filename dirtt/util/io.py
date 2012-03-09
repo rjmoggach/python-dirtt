@@ -11,7 +11,7 @@ Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.p
     
 """
 
-import os
+import os, errno
 import sys
 import urllib
 
@@ -38,19 +38,20 @@ def create_dir(basename, perms, uid, gid, warn=False):
     path it creates parent as necessary.
     If it already exists it completes silently.
     """
+    assert basename is not None
     assert perms is not None
     assert uid is not None
     assert gid is not None
     if os.path.isdir(basename):
         if warn:
-            print >> sys.stderr, "A directory exists with that name ('%s'). \
-                \nAborting directory creation." % basename
-            sys.exit(-1)
+            error = OSError()
+            error.errno = errno.EISDIR
+            raise error
     elif os.path.isfile(basename):
         if warn:
-            print >> sys.stderr, "A file exists with the name of the desired dir ('%s'). \
-                \nAborting directory creation." % basename
-            sys.exit(-2)
+            error = OSError()
+            error.errno = errno.EEXIST
+            raise error
     else:
         head, tail = os.path.split(basename)
         if head and not os.path.isdir(head):

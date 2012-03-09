@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 
-import unittest,os, shutil
+import unittest,os, shutil, errno
 from dirtt.util.io import create_dir, create_file, create_symlink, set_perms_uid_gid, read_file, read_url
+from tempfile import NamedTemporaryFile
 
 DEFAULT_PERMS = int("02775", 8)
 DEFAULT_USER = 0
@@ -64,8 +65,47 @@ class IOModuleTestCase(unittest.TestCase):
         """
         self.assertRaises(TypeError, create_dir, self.test_dirname, "02775", DEFAULT_USER, DEFAULT_USER, DEFAULT_GROUP) 
 
+    def test_05_create_dir_with_None_basename_raises_AssertionError(self):
+        """
+        Make sure an AssertionError is raised if basename is None
+        """
+        self.assertRaises(AssertionError, create_dir, None, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP)
 
 
+    def test_06_create_existing_dir_with_warn_True_raises_OSError(self):
+        """
+        Make sure an OSError is raised if the directory already exists and warn is set to True.
+        """
+        os.makedirs(self.test_dirname)
+        exception = None
+
+        try:
+            create_dir(self.test_dirname, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP, True)
+        except Exception as inst:
+            exception = inst
+
+        self.assertTrue(type(exception) == OSError)
+        self.assertEquals(errno.EISDIR, exception.errno)
+
+
+    def test_07_create_dir_with_existing_filename_and_warn_True_raises_OSError(self):
+        """
+        Make sure an OSError is raised if there is already a file with the same and warn
+        is set to True.
+        """
+        tmp_file = NamedTemporaryFile(delete = False)
+        exception = None
+
+        try:
+            create_dir(tmp_file.name, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP, True)
+        except Exception as inst:
+            exception = inst
+        finally:
+            if tmp_file:
+                os.unlink(tmp_file.name)
+
+        self.assertTrue(type(exception) == OSError)
+        self.assertEquals(errno.EEXIST, exception.errno)
  
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(IOModuleTestCase)
