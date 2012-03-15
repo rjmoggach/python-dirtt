@@ -22,6 +22,9 @@ def set_perms_uid_gid(target, perms, uid, gid):
     set the the owner, group and permissions
     for a given path (directory, file, etc.)
     """
+    assert target is not None
+    assert perms is not None
+    assert uid is not None
     os.chmod(target,perms)
     if uid and gid:
         os.chown(target,uid,gid)

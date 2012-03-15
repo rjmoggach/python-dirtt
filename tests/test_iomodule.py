@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 
-import unittest,os, shutil, errno
+import unittest,os, shutil, errno, stat
 from dirtt.util.io import create_dir, create_file, create_symlink, set_perms_uid_gid, read_file, read_url
 from tempfile import NamedTemporaryFile
 
-DEFAULT_PERMS = int("02775", 8)
+DEFAULT_PERMS = 02775 
 DEFAULT_USER = 0
 DEFAULT_GROUP = 0
 
@@ -106,6 +106,80 @@ class IOModuleTestCase(unittest.TestCase):
 
         self.assertTrue(type(exception) == OSError)
         self.assertEquals(errno.EEXIST, exception.errno)
+
+    def test_08_set_perms_uid_gid_with_None_target_raises_AssertionError(self):
+        """
+        Make sure an assertion error is raised if the target is None 
+        """
+        self.assertRaises(AssertionError,set_perms_uid_gid, None, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP)
+
+    def test_09_set_perms_uid_gid_with_None_perms_raises_AssertionError(self):
+        """
+        Make sure an assertion error is raised if perms is None 
+        """
+        os.makedirs(self.test_dirname)
+        self.assertRaises(AssertionError,set_perms_uid_gid, self.test_dirname, None, DEFAULT_USER, DEFAULT_GROUP)
+
+    def test_10_set_perms_uid_gid_with_none_existing_target_raises_OSError(self):
+        """
+        Make sure an OS error is raised if the path does not exist
+        """
+        self.assertRaises(OSError,set_perms_uid_gid, self.test_dirname, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP)
+
+    def test_11_set_perms_uid_gid_on_non_existing_directory_with_default_perms(self):
+        """
+        Make sure permissions are properly set on directories
+        """
+        os.makedirs(self.test_dirname)
+        set_perms_uid_gid(self.test_dirname, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP)
+
+        st_mode = os.stat(self.test_dirname).st_mode
+
+        # Test user permissions
+        self.assertEquals(stat.S_IRUSR, st_mode & stat.S_IRUSR)
+        self.assertEquals(stat.S_IWUSR, st_mode & stat.S_IWUSR)
+        self.assertEquals(stat.S_IXUSR, st_mode & stat.S_IXUSR)
+
+        # Test group permissions
+        self.assertEquals(stat.S_IRGRP, st_mode & stat.S_IRGRP)
+        self.assertEquals(stat.S_IWGRP, st_mode & stat.S_IWGRP)
+        self.assertEquals(stat.S_IXGRP, st_mode & stat.S_IXGRP)
+
+        # Test others permissions
+        self.assertEquals(stat.S_IROTH, st_mode & stat.S_IROTH)
+        self.assertEquals(0, st_mode & stat.S_IWOTH)
+        self.assertEquals(stat.S_IXOTH, st_mode & stat.S_IXOTH)
+
+
+    def test_12_set_perms_uid_gid_on_non_existing_file(self):
+        """
+        Make sure permissions are properly set on files
+        """
+        tmp_file = NamedTemporaryFile(delete = False)
+        exception = None
+
+        try:
+            set_perms_uid_gid(tmp_file.name, 0666, DEFAULT_USER, DEFAULT_GROUP)
+            st_mode = os.stat(tmp_file.name).st_mode
+
+            # Test user permissions
+            self.assertEquals(stat.S_IRUSR, st_mode & stat.S_IRUSR)
+            self.assertEquals(stat.S_IWUSR, st_mode & stat.S_IWUSR)
+            self.assertEquals(0, st_mode & stat.S_IXUSR)
+
+            # Test group permissions
+            self.assertEquals(stat.S_IRGRP, st_mode & stat.S_IRGRP)
+            self.assertEquals(stat.S_IWGRP, st_mode & stat.S_IWGRP)
+            self.assertEquals(0, st_mode & stat.S_IXGRP)
+
+            # Test others permissions
+            self.assertEquals(stat.S_IROTH, st_mode & stat.S_IROTH)
+            self.assertEquals(stat.S_IWOTH, st_mode & stat.S_IWOTH)
+            self.assertEquals(0, st_mode & stat.S_IXOTH)
+        finally:
+            if tmp_file:
+                os.unlink(tmp_file.name)
+
  
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(IOModuleTestCase)
