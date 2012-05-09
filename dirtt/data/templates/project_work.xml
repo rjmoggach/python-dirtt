@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "http://opensource.dashing.tv/dtds/dirtt.dtd">
-<dirtt name="Project Work Tree" version="0.1.9b1" dirname="{{project_root}}/{{project_path}}" basename="work" username="pipeline" group="supervisor" perms="02755">
+<dirtt name="Project Work Tree" version="0.1.9b6" dirname="{{project_root}}/{{project_path}}" basename="work" username="pipeline" group="supervisor" perms="02755">
   <!-- I M A G E S   F O L D E R -->
   <dir basename="images" username="pipeline" group="supervisor" perms="02775">
     <link basename="master" ref="../../master/images"/>
@@ -134,7 +134,7 @@
   <!-- F X   F O L D E R -->
   <dir basename="fx" username="pipeline" group="supervisor" perms="02755">
     <dir basename="scenes" username="pipeline" group="artist" perms="02775">
-      <link basename="master" ref="../../../../master"/>
+      <link basename="master" ref="../../../master"/>
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
@@ -148,7 +148,7 @@
   <!-- L I G H T   F O L D E R -->
   <dir basename="light" username="pipeline" group="supervisor" perms="02755">
     <dir basename="scenes" username="pipeline" group="artist" perms="02775">
-      <link basename="master" ref="../../../../master"/>
+      <link basename="master" ref="../../../master"/>
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
@@ -165,8 +165,6 @@
     <link basename="images" ref="../images"/>
     <link basename="tools" ref="../tools"/>
   </dir>
-  <!-- P A I N T   F O L D E R -->
-  <link basename="paint" ref="./images/paint"/>
   <!-- D E S I G N   F O L D E R -->
   <link basename="design" ref="./images/design"/>
 </dirtt>

@@ -138,7 +138,7 @@ def get_test_logging_xml():
 def get_test_dirname1_xml():
     """
     <?xml version="1.0" encoding="UTF-8"?>
-    <dirtt name="Project Tree" version="0.1.9b1" dirname="{{project_root}}" basename="{{project_path}}" username="root" group="root" perms="02755">
+    <dirtt name="Project Tree" version="0.1.9b6" dirname="{{project_root}}" basename="{{project_path}}" username="root" group="root" perms="02755">
 
         <dir name="d1" dirname="d1/d2/d3/d4" basename="d4" perms="02755" username="root" group="root"/>
         <dir name="d1" dirname="d1/d2" basename="d4" perms="02755" username="root" group="root"/>
@@ -168,7 +168,7 @@ def get_test_dirname1_xml():
 def get_test_dirname2_xml():
     """
      <?xml version="1.0" encoding="UTF-8"?>
-     <dirtt name="Project Tree" version="0.1.9b1" dirname="{{project_root}}/{{project_path}}/root" username="root" group="root" perms="02755">
+     <dirtt name="Project Tree" version="0.1.9b6" dirname="{{project_root}}/{{project_path}}/root" username="root" group="root" perms="02755">
 
          <dir name="d1" dirname="d1/d2/d3" basename="d4" perms="02755" username="root" group="root"/>
          <dir name="d2" dirname="d1/d2" basename="d4" perms="02755" username="root" group="root"/>

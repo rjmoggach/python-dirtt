@@ -1,7 +1,7 @@
 workspace -fr "scene"                 "scenes";
 workspace -fr "mayaAscii"             "scenes";
 workspace -fr "mayaBinary"            "scenes";
-workspace -fr "autoSave"              "scenes/autosave";
+workspace -fr "autoSave"              ".autosave";
 
 workspace -fr "images"                "images/cg";
 

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "http://opensource.dashing.tv/dtds/dirtt.dtd">
-<dirtt name="Master Tree" version="0.1.9b1" dirname="{{project_root}}/{{project_path}}" basename="master" username="pipeline" group="supervisor" perms="02775">
+<dirtt name="Master Tree" version="0.1.9b6" dirname="{{project_root}}/{{project_path}}" basename="master" username="pipeline" group="supervisor" perms="02775">
     <!-- R I G   F O L D E R -->
     <dir basename="rig" username="pipeline" group="supervisor" perms="02755">
+      <dir basename="cam" username="pipeline" group="artist" perms="02775"/>
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
     </dir>
     <!-- S U R V E Y   F O L D E R -->
     <dir basename="survey" username="pipeline" group="supervisor" perms="02755">
+      <dir basename="cam" username="pipeline" group="artist" perms="02775"/>
       <dir basename="char" username="pipeline" group="artist" perms="02775"/>
       <dir basename="env" username="pipeline" group="artist" perms="02775"/>
       <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
@@ -51,13 +53,19 @@
     <dir basename="images" username="pipeline" group="supervisor" perms="02755">
       <dir basename="grain" username="pipeline" group="artist" perms="02775"/>
       <dir basename="textures" username="pipeline" group="supervisor" perms="02775">
+        <dir basename="cam" username="pipeline" group="artist" perms="02775"/>
         <dir basename="char" username="pipeline" group="artist" perms="02775"/>
         <dir basename="env" username="pipeline" group="artist" perms="02775"/>
         <dir basename="prop" username="pipeline" group="artist" perms="02775"/>
       </dir>
       <dir basename="hdri" username="pipeline" group="artist" perms="02775"/>
       <dir basename="design" username="pipeline" group="artist" perms="02775"/>
-      <dir basename="paint" username="pipeline" group="artist" perms="02775"/>
+      <dir basename="paint" username="pipeline" group="artist" perms="02775">
+        <dir basename="ai" username="pipeline" group="artist" perms="02775"/>
+        <dir basename="geo" username="pipeline" group="artist" perms="02775"/>
+        <dir basename="mudbox" username="pipeline" group="artist" perms="02775"/>
+        <dir basename="psd" username="pipeline" group="artist" perms="02775"/>
+      </dir>
     </dir>
     <!-- D A T A   F O L D E R -->
     <dir basename="data" username="pipeline" group="supervisor" perms="02755">
@@ -79,8 +87,8 @@
       <dir basename="maya" username="pipeline" group="supervisor" perms="02755">
         <dir basename="mel" username="pipeline" group="artist" perms="02775"/>
         <dir basename="python" username="pipeline" group="artist" perms="02775"/>
+        <dir basename="presets" username="pipeline" group="artist" perms="02775"/>
         <dir basename="shelves" username="pipeline" group="artist" perms="02775"/>
-        <dir basename="modules" username="pipeline" group="artist" perms="02775"/>
         <dir basename="templates" username="pipeline" group="artist" perms="02775"/>
       </dir>
       <dir basename="nuke" username="pipeline" group="supervisor" perms="02755">

@@ -3,8 +3,8 @@ python-dirtt - Directory Tree Templater
 (c) 2012 Dashing Collective Inc. and contributors
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-dirtt is a standalone tool and library used to generate 
-directory and file structures from xml templates that describe 
+dirtt is a standalone tool and library used to generate
+directory and file structures from xml templates that describe
 repeatedly used filesystem layouts such as project structures
 or elements therein.
 
@@ -13,8 +13,8 @@ with internal methods that read,parse,render,and execute builds of
 user defined XML directory tree templates.
 """
 
-#v0.1.9b2
-VERSION = (0, 1, 9, 'beta', 2)
+#v0.1.9b6
+VERSION = (0, 1, 9, 'beta', 6)
 
 STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidate': 'rc' }
 
@@ -90,20 +90,15 @@ class DirectoryTreeHandler(ContentHandler):
     reference in the builtin functions
     """
     assert tree_template is not None 
-
     self.logger = logging.Logger(__name__)
-
     ch = logging.StreamHandler(sys.stdout)
     ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-
     self.logger.addHandler(ch)
-
     if verbose:
         self.logger.setLevel(logging.DEBUG)
     else:
         self.logger.setLevel(logging.ERROR)
-
-
+    self.verbose = verbose
     self.tree_template = tree_template
     # Location of tree_template
     self.tree_template_loc = os.path.dirname(self.tree_template)
@@ -112,7 +107,7 @@ class DirectoryTreeHandler(ContentHandler):
     self.interactive = interactive
     self.kwargs = kwargs
     self.skip_entity = 0
-    self.warn = warn 
+    self.warn = warn
     self.idrefs = {}
     self.links = []
     #List of templates been processed
@@ -121,9 +116,7 @@ class DirectoryTreeHandler(ContentHandler):
         self.processed_templates.append(self.tree_template)
     else:
         raise Exception("Template %s already in process" % self.tree_template)
-
     self.path_stack = []
-        
   def run(self):
     """
     top level application logic. From here we read, parse and perform any
@@ -155,27 +148,27 @@ class DirectoryTreeHandler(ContentHandler):
 
       self.logger.debug("Creating symlink: %s => %s" % (link, ref))
       create_symlink(ref, link)
-  
-  
+
+
   def startElement(self, name, attrs):
     """
     When an XML element is first read, this function is run
     to process it's attributes and content before moving on
     to it's contents and then endElement
     """
-    
+
     # set the current directory
     self.current_dir = os.path.abspath(".")
-    
+
     # get the basename attribute or None
     basename = attrs.get("basename", None)
-    
+
     # get the permissions and ownership
     perms, uid, gid = self._return_perms_uid_gid(attrs)
-    
+
     # get the directory name attribute or None
     self.dirname = attrs.get("dirname", None)
-    
+
     # if xml elementname is dirtt let's get started
     if name == 'dirtt':
       self.logger.debug("Starting Directory Tree Template Build...")
@@ -189,7 +182,7 @@ class DirectoryTreeHandler(ContentHandler):
 
     if basename:
       if self.skip_entity: self.skip_entity += 1
-      
+
       # if the entity is our main dirtt entity or a directory proceed here
       if name in ('dirtt','dir'):
         dirname = attrs.get("dirname", None)
@@ -297,7 +290,7 @@ class DirectoryTreeHandler(ContentHandler):
       c = DirectoryTreeHandler(self.verbose, template_loc, self.kwargs, self.interactive, self.warn, self.processed_templates)
       c.run()
     return
-      
+
 
   def _return_perms_uid_gid(self,attrs):
     """
@@ -349,7 +342,7 @@ class DirectoryTreeHandler(ContentHandler):
     required method from the original SAX class
     """
     pass
-  
+
 
   def endElement(self, name):
     """

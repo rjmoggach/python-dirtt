@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "http://opensource.dashing.tv/dtds/dirtt.dtd">
-<dirtt name="Shot Tree" version="0.1.9b1" dirname="{{project_root}}/{{project_path}}/sequences/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="supervisor" perms="02775">
+<dirtt name="Shot Tree" version="0.1.9b6" dirname="{{project_root}}/{{project_path}}/sequences/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="supervisor" perms="02775">
 <!-- I M A G E S   F O L D E R -->
 	<dir name="Shot Images Folder" basename="images" username="pipeline" group="supervisor" perms="02755">
 	  <link basename="master" ref="../../../../master/images"/>
-		<dir basename="cg" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="cg" username="pipeline" group="artist" perms="02775">
+		</dir>
 		<dir basename="comp" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="design" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="paint" username="pipeline" group="artist" perms="02775"/>
@@ -14,6 +15,11 @@
 		<dir basename="textures" username="pipeline" group="artist" perms="02775">
 	    <link basename="master" ref="../../../../master/images/textures"/>
   		<dir basename="3dPaintTextures" username="pipeline" group="artist" perms="02775"/>
+		</dir>
+		<dir basename="volumetrics" username="pipeline" group="artist" perms="02755">
+		  <dir basename="bty" username="pipeline" group="artist" perms="02775" />
+		  <dir basename="zt" username="pipeline" group="artist" perms="02775" />
+		  <dir basename="env" username="pipeline" group="artist" perms="02775" />
 		</dir>
 	</dir>
   <!-- M E D I A    F O L D E R -->
@@ -51,6 +57,10 @@
 		<dir basename="mocap" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="moco" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="timewarp" username="pipeline" group="artist" perms="02775"/>
+		<dir basename="volumetrics" username="pipeline" group="artist" perms="02755">
+		  <dir basename="particles" username="pipeline" group="artist" perms="02775" />
+		  <dir basename="cache" username="pipeline" group="artist" perms="02775" />
+		</dir>
 	</dir>
   <!-- T O O L S   F O L D E R -->
   <dir basename="tools" username="pipeline" group="supervisor" perms="02775">
@@ -80,7 +90,15 @@
     <dir basename="tracking" username="pipeline" group="artist" perms="02775"/>
     <dir basename="anim" username="pipeline" group="artist" perms="02775"/>
     <dir basename="light" username="pipeline" group="artist" perms="02775"/>
-    <dir basename="autosave" username="pipeline" group="artist" perms="02777"/>
+  </dir>
+  <dir basename=".autosave" username="pipeline" group="artist" perms="02777"/>
+<!-- V O L U M E T R I C S   F O L D E R -->
+  <dir name="Shot Volumetrics Folder" basename="scenes" username="pipeline" group="artist" perms="02755">
+    <link basename="particles" ref="../data/volumetrics/particles/"/>
+    <link basename="cache" ref="../data/volumetrics/cache/"/>
+    <link basename="render" ref="../images/volumetrics/"/>
+    <dir basename="options" username="pipeline" group="artist" perms="02775"/>
+    <dir basename="scenes" username="pipeline" group="artist" perms="02775"/>
   </dir>
 	<file basename="workspace.mel" username="pipeline" group="supervisor" perms="02775" href="workspace.mel"/>
 <!-- C O M P   F O L D E R -->

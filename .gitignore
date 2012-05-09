@@ -9,6 +9,7 @@ __minitage__*
 bin
 python_dirtt.egg-info
 build
+_build
 develop-eggs
 downloads
 eggs

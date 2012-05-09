@@ -83,16 +83,17 @@ setup(
 	name='python-dirtt',
 	packages=packages,
 	cmdclass = cmdclasses,
-	scripts=['dirtt/scripts/mkdirt.py','dirtt/scripts/mkdirtt.py','dirtt/scripts/mkproj.py'],
+	scripts=['dirtt/scripts/mkproject.py','dirtt/scripts/mktemplate.py','dirtt/scripts/mktree.py'],
 	data_files = data_files,
 #  data_files=[
-#    ('/var/dirtt/dtds/dirtt.dtd', ['dirtt/data/dtds/dirtt.dtd']),
+#    ('/var/dirtt/dirtt.dtd', ['dirtt/data/dirtt.dtd']),
 #    ('/var/dirtt/templates/project.xml', ['dirtt/data/templates/project.xml']),
-#    ('/var/dirtt/templates/sequence.xml', ['dirtt/data/templates/sequence.xml']),
-#    ('/var/dirtt/templates/shot.xml', ['dirtt/data/templates/shot.xml']),
-#    ('/var/dirtt/templates/dshng_project.xml', ['dirtt/data/templates/dshng_project.xml']),
-#    ('/var/dirtt/templates/dshng_sequence.xml', ['dirtt/data/templates/dshng_sequence.xml']),
-#    ('/var/dirtt/templates/dshng_shot.xml', ['dirtt/data/templates/dshng_shot.xml'])
+#    ('/var/dirtt/templates/project_sequence.xml', ['dirtt/data/templates/project_sequence.xml']),
+#    ('/var/dirtt/templates/project_shot.xml', ['dirtt/data/templates/project_shot.xml']),
+#    ('/var/dirtt/templates/project_work.xml', ['dirtt/data/templates/project_work.xml']),
+#    ('/var/dirtt/templates/project_master.xml', ['dirtt/data/templates/project_master.xml']),
+#    ('/var/dirtt/templates/project_production.xml', ['dirtt/data/templates/project_production.xml'])
+#    ('/var/dirtt/templates/workspace.mel', ['dirtt/data/templates/workspace.mel'])
 #  ],
 	version=return_version(),
 	description="Directory Tree Templater",
@@ -112,7 +113,7 @@ setup(
 		
 		""",
 	classifiers=[
-		'Development Status :: 2 - Beta',
+		'Development Status :: 4 - Beta',
 		'Intended Audience :: Developers',
 		'Intended Audience :: System Administrators',
 		'License :: OSI Approved :: MIT License',
@@ -126,6 +127,7 @@ setup(
 	keywords='filesystem template utilities',
 	author='Robert Moggach',
 	author_email='rob@dashing.tv',
+  url='http://opensource.dashing.tv/python-dirtt/',
 	maintainer='Dashing Collective Inc.',
 	maintainer_email='rob@dashing.tv',
 	license='MIT'

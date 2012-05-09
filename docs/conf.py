@@ -42,7 +42,7 @@ copyright = '2012, Robert Moggach, Dashing Collective Inc.'
 #
 # The short X.Y version.
 
-release = "0.1.4"
+release = "0.1.9b6"
 version = ".".join(release.split(".")[:2])
 
 # There are two options for replacing |today|: either, you set today to some
@@ -91,7 +91,7 @@ html_last_updated_fmt = '%b %d, %Y'
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
-#html_use_smartypants = True
+html_use_smartypants = True
 
 # Content template for the index page.
 #html_index = ''
