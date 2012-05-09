@@ -34,11 +34,13 @@ __version__ = get_version()
 __all__ = ['util']
 
 
-import os
+import os,sys
+import errno
 from xml.etree import ElementTree
 #from xml.sax import make_parser
 from xml.sax import parseString
 from xml.sax.handler import ContentHandler
+import logging
 
 from dirtt.util import get_uid_for_name, get_gid_for_name
 from dirtt.util.io import create_dir, create_file, create_symlink, set_perms_uid_gid, read_file, read_url
@@ -88,7 +90,20 @@ class DirectoryTreeHandler(ContentHandler):
     reference in the builtin functions
     """
     assert tree_template is not None 
-    self.verbose = verbose
+
+    self.logger = logging.Logger(__name__)
+
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+
+    self.logger.addHandler(ch)
+
+    if verbose:
+        self.logger.setLevel(logging.DEBUG)
+    else:
+        self.logger.setLevel(logging.ERROR)
+
+
     self.tree_template = tree_template
     # Location of tree_template
     self.tree_template_loc = os.path.dirname(self.tree_template)
@@ -106,7 +121,9 @@ class DirectoryTreeHandler(ContentHandler):
         self.processed_templates.append(self.tree_template)
     else:
         raise Exception("Template %s already in process" % self.tree_template)
-    
+
+    self.path_stack = []
+        
   def run(self):
     """
     top level application logic. From here we read, parse and perform any
@@ -136,7 +153,7 @@ class DirectoryTreeHandler(ContentHandler):
       ref = link_info['ref']
       link = os.path.join(parent_dir, link_name)
 
-      if self.verbose: print "\tCreating symlink: %s = > %s" % (link, ref)
+      self.logger.debug("Creating symlink: %s => %s" % (link, ref))
       create_symlink(ref, link)
   
   
@@ -161,9 +178,11 @@ class DirectoryTreeHandler(ContentHandler):
     
     # if xml elementname is dirtt let's get started
     if name == 'dirtt':
-      if self.verbose: print "Starting Directory Tree Template Build..."
-      if self.verbose: print "\tChanging current directory to: %s" % self.dirname
+      self.logger.debug("Starting Directory Tree Template Build...")
+      self.logger.debug("Changing current directory to: %s" % self.dirname)
       # change to our starting directory
+      if not basename:
+        self.dirname, basename = os.path.split(self.dirname)
       os.chdir(self.dirname)
       self.current_dir = os.path.abspath(".")
       self.idrefs[attrs.get("id", "root-dir")] = self.current_dir
@@ -178,32 +197,70 @@ class DirectoryTreeHandler(ContentHandler):
           if not self.skip_entity:
             if not raw_input("Create Directory %s (yes/no)?" % os.path.join(self.current_dir,basename)) in ("yes","Yes","YES","Y","y"):
               self.skip_entity += 1
-              if self.verbose: print "\tSkipping dir: %s" % os.path.join(self.current_dir,basename)
+              self.logger.debug("Skipping dir: %s" % os.path.join(self.current_dir,basename))
             else:
-              if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
+              self.logger.debug("Creating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
               if dirname:
+                if name == 'dirtt':
+                    # When dealding with a 'dirtt' tag use self.dirname as the current dirname
+                    # as at this point self.dirname has been properly set (i.e if no basename was
+                    # provided then the value for the basename it's inferred from dirname)
+                    dirname = self.dirname
                 newdir = os.path.join(dirname,basename)
-                create_dir(newdir, perms, uid, gid, self.warn)
               else:
-                create_dir(basename, perms, uid, gid, self.warn)
-                os.chdir(basename)
-              self.current_dir = os.path.abspath(".")
-        else:
-          if self.verbose: print "\tCreating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
-          if dirname:
-            newdir = os.path.join(dirname,basename)
-            create_dir(newdir, perms, uid, gid, self.warn)
-            os.chdir(newdir)
-          else:
-            create_dir(basename, perms, uid, gid, self.warn)
+                newdir = basename
+
+            try:
+                create_dir(newdir, perms, uid, gid, self.warn)
+            except OSError as oserror:
+                if oserror.errno == errno.EISDIR:
+                    print >> sys.stderr, "A directory exists with that name ('%s'). \
+                     \nAborting directory creation." % basename
+                    sys.exit(-1)
+                elif oserror.errno == errno.EISDIR:
+                    print >> sys.stderr, "A file exists with the name of the desired dir ('%s'). \
+                     \nAborting directory creation." % basename
+                    sys.exit(-2)
+
+            self._push_dir()
             os.chdir(basename)
+            self.current_dir = os.path.abspath(".")
+
+        else:
+          self.logger.debug("Creating dir: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
+          if dirname:
+            if name == 'dirtt':
+                # When dealding with a 'dirtt' tag use self.dirname as the current dirname
+                # as at this point self.dirname has been properly set (i.e if no basename was
+                # provided then the value for the basename it's inferred from dirname)
+                dirname = self.dirname
+            newdir = os.path.join(dirname,basename)
+          else:
+            newdir = basename
+          
+          try:
+            create_dir(newdir, perms, uid, gid, self.warn)
+          except OSError as oserror:
+            if oserror.errno == errno.EISDIR:
+                print >> sys.stderr, "A directory exists with that name ('%s'). \
+                    \nAborting directory creation." % basename
+                sys.exit(-1)
+            elif oserror.errno == errno.EISDIR:
+                print >> sys.stderr, "A file exists with the name of the desired dir ('%s'). \
+                    \nAborting directory creation." % basename
+                sys.exit(-2)
+                
+          self._push_dir()
+          os.chdir(newdir)
           self.current_dir = os.path.abspath(".")
+
         if attrs.get("id"):
           self.idrefs[attrs.get("id")] = self.current_dir
 
       if name == 'file':
-        if self.verbose: print "\tCreating file: %s/%s (%s/%i:%i)" % (self.current_dir, basename, oct(perms), uid, gid)
+        self.logger.debug("Creating file: %s/%s (perms:%s uid:%i gid:%i)" % (self.current_dir, basename, oct(perms), uid, gid))
         href = attrs.get("href",None)
+        content = ""
         if not href is None:
           template_file = os.path.join(TEMPLATES_DIR,href)
           template_str = self._read_template(template_file)
@@ -217,22 +274,13 @@ class DirectoryTreeHandler(ContentHandler):
 
     if name == 'link':
       try:
-        ref = attrs.get("idref",None)
-        if ref:
-          ref = self.idrefs[ref]
-        elif attrs.get("ref",None):
-          ref = attrs.get("ref")
-        if not ref:
-          # If neither the ref attribute nor the idref attribute has been set,
-          # then skip this link.
-          return
+        if (not attrs.get("idref", attrs.get("ref", None))) or (not attrs.get("basename", None)):
+           return
+        ref = attrs.get("idref", attrs.get("ref"))
         link_name = attrs.get("basename")
-        if not link_name:
-          return
-        if attrs.get("dirname",None):
-          target_dir = attrs.get("dirname")
-        else:
-          target_dir = self.current_dir
+        if ref == attrs.get("idref", None):
+          ref = self.idrefs[ref]
+        target_dir = attrs.get("dirname",self.current_dir)
         self.links.append({'basename': link_name, 'parent_dir': target_dir, 'ref': ref})
       except:
         pass
@@ -311,9 +359,15 @@ class DirectoryTreeHandler(ContentHandler):
     """
     if not self.skip_entity:
       if name in ('dir','dirtt'):
-        if self.dirname: print self.dirname
-        os.chdir("..")
+        self._pop_dir()
         self.current_dir = os.path.abspath(".")
     if self.skip_entity: self.skip_entity -= 1
     pass
 
+  def _push_dir(self):
+    dir = os.path.abspath(".")
+    self.path_stack.append(dir)
+
+  def _pop_dir(self):
+    dir = self.path_stack.pop()
+    os.chdir(dir)
