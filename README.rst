@@ -121,8 +121,8 @@ Try it out in a python-virtualenv environment to play around and it should make 
 
 If you want to install to a custom location here's how I do it:
 
-  ``pip install --install-option="--install-dir=/dashing/tools/lib/python2.7/site-packages" \
--e git+git@github.com:dshng/python-dirtt.git#egg=python-dirtt``
+  ``pip install --install-option="--install-dir=/dashing/tools/lib/python2.7/site-packages" \``
+``-e git+git@github.com:dshng/python-dirtt.git#egg=python-dirtt``
   
 That will download and do the package build as necessary.
 
