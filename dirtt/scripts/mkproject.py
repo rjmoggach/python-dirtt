@@ -6,7 +6,7 @@
   Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
 	mkproject.py
-
+	
 	This is a generic command line tool that prompts for template
 	variables in a given template and renders the tree.
 
@@ -61,7 +61,7 @@ def main():
 	else: interactive = False
 	if options.warn:  warn = True
 	else: warn = False
-
+	
 	template_variables = {}
 	template_variables["project_root"] = PROJECT_ROOT
 	print "Enter the project_path:\n\tEg. hyundai/etne"
@@ -85,7 +85,7 @@ def main():
 		print "Created Sequence Tree."
 	else:
 		print "Sequence Exists."
-
+	
 	print "Enter a shot_name or comma-separated list(NO SPACES):\n\tEg. vst010"
 	shot_name_raw=raw_input("\tshot_name >  ")
 	shot_list=shot_name_raw.split(",")
@@ -98,6 +98,11 @@ def main():
 			print "Created Shot Tree."
 		else:
 			print "Shot Exists."
+		maya_scenes_path=os.path.join(project_path,"sequences",sequence_name,shot_name,"work/maya/scenes")
+		if not os.path.isdir(maya_scenes_path):
+			c = DirectoryTreeHandler(verbose,MAYA_TEMPLATE,template_variables,interactive,warn)
+			c.run()
+			print "Created Shot Maya Work Dir."
 
 	print "Created Tree."
 	sys.exit(0)
