@@ -99,7 +99,7 @@ setup(
 	description="Directory Tree Templater",
 	long_description="""
 		python-dirtt - Directory Tree Templater
-		(c) 2012 Dashing Collective Inc. and contributors
+		(c) 2012 Robert Moggach
 		Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 		
 		dirtt is a standalone tool and library used to generate 
@@ -126,10 +126,9 @@ setup(
 	],
 	keywords='filesystem template utilities',
 	author='Robert Moggach',
-	author_email='rob@dashing.tv',
-  url='http://opensource.dashing.tv/python-dirtt/',
-	maintainer='Dashing Collective Inc.',
-	maintainer_email='rob@dashing.tv',
+	author_email='rob@moggach.com',
+	maintainer='Robert Moggach',
+	maintainer_email='rob@moggach.com',
 	license='MIT'
 )
 

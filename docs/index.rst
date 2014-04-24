@@ -21,13 +21,13 @@ Contents:
 Status and License
 ------------------
 
-python-dirtt was written by Rob Moggach, for `Dashing Collective Inc. <http://dashing.tv>`_
-and is  maintained by a `group of developers <https://github.com/dshng/python-dirtt/raw/master/AUTHORS.rst>`_.
-It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.rst>`_.
+python-dirtt was written by Rob Moggach, for `Rob Moggach <http://moggach.com>`_
+and is  maintained by a `group of developers <https://github.com/mogga/python-dirtt/raw/master/AUTHORS.rst>`_.
+It is licensed under an `MIT-style permissive license <https://github.com/mogga/python-dirtt/raw/master/LICENSE.rst>`_.
 
 You can install it with ``easy_install dirtt``.
 
-|copy| 2012 Dashing Collective Inc. and contributors.
+|copy| 2012 Robert Moggach and contributors.
 
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
@@ -38,8 +38,6 @@ What It Does
 ``python-dirtt`` is a standalone tool and library used to generate 
 directory and file structures from xml templates that describe 
 repeatedly used filesystem layouts such as complex project structures.
-
-Take a look at the `screencast <http://opensource.dashing.tv/python-dirtt/dirtt-screencast.mov>`_.
 
 The general problem being tackled is one of inconsistent directory structures 
 for visual effects projects, from a lack of industry standards, resulting in 
@@ -79,7 +77,7 @@ Forking through GitHub
 ~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you need to fork from the official repository, which is 
-`https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
+`https://github.com/mogga/python-dirtt <https://github.com/mogga/python-dirtt>`_.
 
 Log in to GitHub, go to the dirtt repository page, follow the fork link, 
 wait for GitHub to copy the repository and then clone your fork, like:
@@ -126,7 +124,7 @@ Try it out in a python-virtualenv environment to play around and it should make 
 
 If you want to install to a custom location here's how I do it:
 
-  ``pip install --install-option="--install-dir=/dashing/tools/lib/python2.7/site-packages" -e git+git@github.com:dshng/python-dirtt.git#egg=python-dirtt``
+  ``pip install --install-option="--install-dir=/dashing/tools/lib/python2.7/site-packages" -e git+git@github.com:mogga/python-dirtt.git#egg=python-dirtt``
   
 That will download and do the package build as necessary.
 
@@ -233,5 +231,5 @@ Here's the links:
 * GitHub_
 * Bugs_
 
-.. _GitHub: https://github.com/dshng/python-dirtt/
-.. _Bugs: https://github.com/dshng/python-dirtt/issues/
+.. _GitHub: https://github.com/mogga/python-dirtt/
+.. _Bugs: https://github.com/mogga/python-dirtt/issues/

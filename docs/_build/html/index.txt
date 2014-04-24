@@ -3,7 +3,7 @@
 python-dirtt - Directory Tree Templater
 =======================================
 
-* `Bugs <https://github.com/dshng/python-dirtt/issues/>`_
+* `Bugs <https://github.com/mogga/python-dirtt/issues/>`_
 
 .. contents::
 
@@ -16,12 +16,12 @@ Status and License
 ------------------
 
 python-dirtt was written by Rob Moggach, for `Dashing Collective Inc. <http://dashing.tv>`_
-and is  maintained by a `group of developers <https://github.com/dshng/python-dirtt/raw/master/AUTHORS.txt>`_.
-It is licensed under an `MIT-style permissive license <https://github.com/dshng/python-dirtt/raw/master/LICENSE.txt>`_.
+and is  maintained by a `group of developers <https://github.com/mogga/python-dirtt/raw/master/AUTHORS.txt>`_.
+It is licensed under an `MIT-style permissive license <https://github.com/mogga/python-dirtt/raw/master/LICENSE.txt>`_.
 
 You can install it with ``easy_install dirtt``.
 
-(c) 2012 Dashing Collective Inc. and contributors.
+(c) 2012 Robert Moggach and contributors.
 
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
@@ -70,7 +70,7 @@ Forking through Github
 ~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you need to fork from the official repository, which is 
-`https://github.com/dshng/python-dirtt <https://github.com/dshng/python-dirtt>`_.
+`https://github.com/mogga/python-dirtt <https://github.com/mogga/python-dirtt>`_.
 
 Log in to Github, go to the dirtt repository page, follow the fork link, 
 wait for Github to copy the repository and then clone your fork, like:
@@ -213,6 +213,6 @@ Links
 
 Here's the links:
 
-`Github <https://github.com/dshng/python-dirtt>`_
+`Github <https://github.com/mogga/python-dirtt>`_
 
 `Dashing Opensource <http://opensource.dashing.tv/python-dirtt>`_

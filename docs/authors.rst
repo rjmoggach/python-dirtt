@@ -6,7 +6,7 @@ Robert Moggach
 Maintainers
 ~~~~~~~~~~~
 
-Dashing Collective Inc.
+Robert Moggach
 
 Contributors
 ~~~~~~~~~~~~

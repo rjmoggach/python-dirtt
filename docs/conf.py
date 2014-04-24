@@ -35,7 +35,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'python-dirtt'
-copyright = '2012, Robert Moggach, Dashing Collective Inc.'
+copyright = '2012, Robert Moggach'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
