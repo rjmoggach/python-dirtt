@@ -3,6 +3,7 @@ LICENSE.md
 README.md
 setup.cfg
 setup.py
+setup_commands.py
 dirtt/__init__.py
 dirtt/data/dirtt.dtd
 dirtt/data/templates/project.xml
@@ -25,3 +26,5 @@ tests/__init__.py
 tests/run_all.py
 tests/test0.py
 tests/test_DirectoryTreeHandler.py
+tests/test_iomodule.py
+tests/test_utils.py
