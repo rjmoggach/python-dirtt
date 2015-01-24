@@ -4,15 +4,15 @@
 
 ## Status and License
 
-python-dirtt was written by (Rob Moggach)[http://github.com/robmoggach]
-and is  maintained by a (group of developers)[https://github.com/robmoggach/python-dirtt/AUTHORS.md].
-It is licensed under an (MIT-style permissive license)[https://github.com/robmoggach/python-dirtt/LICENSE.md].
+python-dirtt was written by [Rob Moggach](http://github.com/robmoggach)
+and is  maintained by a [group of developers](https://github.com/robmoggach/python-dirtt/AUTHORS.md).
+It is licensed under an [MIT-style permissive license](https://github.com/robmoggach/python-dirtt/LICENSE.md).
 
 You can install it with ``easy_install dirtt``.
 
-|copy| 2015 Robert Moggach and contributors.
+(c) 2015 Robert Moggach and contributors.
 
-Licensed under the (MIT license)[http://www.opensource.org/licenses/mit-license.php]
+Licensed under the [MIT license](http://www.opensource.org/licenses/mit-license.php).
 
 
 ## What It Does
@@ -44,7 +44,7 @@ Currently we need to implement the following:
 
 ## Forking through GitHub
 
-First of all, you need to fork from the official repository, which is (https://github.com/robmoggach/python-dirtt)[https://github.com/robmoggach/python-dirtt].
+First of all, you need to fork from the official repository, which is [https://github.com/robmoggach/python-dirtt](https://github.com/robmoggach/python-dirtt).
 
 Log in to GitHub, go to the python-dirtt repository page, follow the fork link,
 wait for GitHub to copy the repository and then clone your fork, like:
@@ -159,6 +159,6 @@ This command will parse the template file which needs to be defined using a urll
 
 Here's the links:
 
-* (GitHub)[https://github.com/robmoggach/python-dirtt]
-* Report (Issues)[https://github.com/robmoggach/python-dirtt/issues]
+* [GitHub](https://github.com/robmoggach/python-dirtt)
+* Report [Issues](https://github.com/robmoggach/python-dirtt/issues)
 
