@@ -4,11 +4,11 @@ python-dirtt - Directory Tree Templater
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
     io.py
-    
+
     These are helper functions for dealing with filesystem IO.
     Creating directories, files, symlinks, and reading files, urls
     are handled here.
-    
+
 """
 
 import os, errno
@@ -97,7 +97,7 @@ def create_symlink(ref, target):
         print >> sys.stderr, "A file or directory exists with the same name ('%s'). \
             \nAborting link creation." % target
         sys.exit(-2)
-        
+
 
 
 def read_file(path):
@@ -128,4 +128,4 @@ def read_url(href):
 
 
 
-    
+
