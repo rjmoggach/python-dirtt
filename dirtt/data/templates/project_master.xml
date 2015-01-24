@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "http://opensource.dashing.tv/dtds/dirtt.dtd">
-<dirtt name="Master Tree" version="0.1.9b6" dirname="{{project_root}}/{{project_path}}" basename="master" username="pipeline" group="supervisor" perms="02775">
+<!DOCTYPE dirtt PUBLIC "-//STUDIO//DTD dirtt 0.2.0rc1//EN" "http://robmoggach.github.io/python-dirtt/dtds/dirtt.dtd">
+<dirtt name="Master Tree" version="0.2.0rc1" dirname="{{project_root}}/{{project_path}}" basename="master" username="pipeline" group="supervisor" perms="02775">
     <!-- R I G   F O L D E R -->
     <dir basename="rig" username="pipeline" group="supervisor" perms="02755">
       <dir basename="cam" username="pipeline" group="artist" perms="02775"/>

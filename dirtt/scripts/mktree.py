@@ -2,11 +2,11 @@
 
 """
   python-dirtt - Directory Tree Templater
-  (c) 2012 Robert Moggach and contributors
+  (c) 2015 Robert Moggach and contributors
   Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
 	mktree.py
-	
+
 	This is a generic command line tool that prompts for template
 	variables in a given template and renders the tree.
 
@@ -55,7 +55,7 @@ def main():
 	else: interactive = False
 
 	if options.warn:  warn = True
-	else: warn = False	
+	else: warn = False
 
 	template_file = open(template_loc,'r')
 	template_str = template_file.read()

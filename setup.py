@@ -23,10 +23,10 @@ class osx_install_data(install_data):
     self.set_undefined_options('install', ('install_lib', 'install_dir'))
     install_data.finalize_options(self)
 
-if sys.platform == "darwin": 
-  cmdclasses = {'install_data': osx_install_data} 
-else: 
-  cmdclasses = {'install_data': install_data} 
+if sys.platform == "darwin":
+  cmdclasses = {'install_data': osx_install_data}
+else:
+  cmdclasses = {'install_data': install_data}
 
 cmdclasses['test'] = TestCommand
 cmdclasses['clean'] = CleanCommand
@@ -101,16 +101,16 @@ setup(
 		python-dirtt - Directory Tree Templater
 		(c) 2012 Robert Moggach
 		Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
-		
-		dirtt is a standalone tool and library used to generate 
-		directory and file structures from xml templates that describe 
+
+		dirtt is a standalone tool and library used to generate
+		directory and file structures from xml templates that describe
 		repeatedly used filesystem layouts such as project structures
 		or elements therein.
-		
+
 		It provides a subclassed implementation of xml.sax.handler ContentHandler
 		with internal methods that read,parse,render,and execute builds of
 		user defined XML directory tree templates.
-		
+
 		""",
 	classifiers=[
 		'Development Status :: 4 - Beta',

@@ -2,11 +2,11 @@
 
 """
   python-dirtt - Directory Tree Templater
-  (c) 2012 Robert Moggach and contributors
+  (c) 2015 Robert Moggach and contributors
   Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-	mktemplate.py	
-	
+	mktemplate.py
+
 	This is a generic command line tool to create a tree template from an
 	existing source path
 

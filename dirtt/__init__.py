@@ -1,6 +1,6 @@
 """
 python-dirtt - Directory Tree Templater
-(c) 2012 Robert Moggach and contributors
+(c) 2015 Robert Moggach and contributors
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
 dirtt is a standalone tool and library used to generate
@@ -14,7 +14,7 @@ user defined XML directory tree templates.
 """
 
 #v0.1.9b6
-VERSION = (0, 1, 9, 'beta', 6)
+VERSION = (0, 2, 0, 'releasecandidate', 1)
 
 STATUSES = {'alpha': 'a', 'beta': 'b', 'releasecandidate': 'rc' }
 
@@ -89,7 +89,7 @@ class DirectoryTreeHandler(ContentHandler):
     defined as part of the self context to allow for local
     reference in the builtin functions
     """
-    assert tree_template is not None 
+    assert tree_template is not None
     self.logger = logging.Logger(__name__)
     ch = logging.StreamHandler(sys.stdout)
     ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
@@ -230,7 +230,7 @@ class DirectoryTreeHandler(ContentHandler):
             newdir = os.path.join(dirname,basename)
           else:
             newdir = basename
-          
+
           try:
             create_dir(newdir, perms, uid, gid, self.warn)
           except OSError as oserror:
@@ -242,7 +242,7 @@ class DirectoryTreeHandler(ContentHandler):
                 print >> sys.stderr, "A file exists with the name of the desired dir ('%s'). \
                     \nAborting directory creation." % basename
                 sys.exit(-2)
-                
+
           self._push_dir()
           os.chdir(newdir)
           self.current_dir = os.path.abspath(".")

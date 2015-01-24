@@ -2,11 +2,11 @@
 
 """
   python-dirtt - Directory Tree Templater
-  (c) 2012 Robert Moggach and contributors
+  (c) 2015 Robert Moggach and contributors
   Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
 	mkproject.py
-	
+
 	This is a generic command line tool that prompts for template
 	variables in a given template and renders the tree.
 
@@ -21,8 +21,8 @@ from dirtt.util.template import return_placeholders
 
 ENABLED_USERS = [0,1111]
 
-TEMPLATE_DIR="/dashing/tools/var/dirtt/templates"
-PROJECT_ROOT="/dashing/jobs"
+TEMPLATE_DIR="/studio/tools/var/dirtt/templates"
+PROJECT_ROOT="/studio/jobs"
 PROJECT_PATHS=["master", "production", "work"]
 PROJECT_TEMPLATE=os.path.join(TEMPLATE_DIR,"project.xml")
 PRODUCTION_TEMPLATE=os.path.join(TEMPLATE_DIR,"project_production.xml")
@@ -61,7 +61,7 @@ def main():
 	else: interactive = False
 	if options.warn:  warn = True
 	else: warn = False
-	
+
 	template_variables = {}
 	template_variables["project_root"] = PROJECT_ROOT
 	print "Enter the project_path:\n\tEg. hyundai/etne"
@@ -85,7 +85,7 @@ def main():
 		print "Created Sequence Tree."
 	else:
 		print "Sequence Exists."
-	
+
 	print "Enter a shot_name or comma-separated list(NO SPACES):\n\tEg. vst010"
 	shot_name_raw=raw_input("\tshot_name >  ")
 	shot_list=shot_name_raw.split(",")

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//DSHNG//DTD dirtt 0.1.4//EN" "http://opensource.dashing.tv/dtds/dirtt.dtd">
-<dirtt name="Production Tree" version="0.1.9b6" dirname="{{project_root}}/{{project_path}}" basename="production" username="pipeline" group="production" perms="02775">
+<!DOCTYPE dirtt PUBLIC "-//STUDIO//DTD dirtt 0.2.0rc1//EN" "http://robmoggach.github.io/python-dirtt/dtds/dirtt.dtd">
+<dirtt name="Production Tree" version="0.2.0rc1" dirname="{{project_root}}/{{project_path}}" basename="production" username="pipeline" group="production" perms="02775">
   <!-- E D I T S   F O L D E R -->
   <dir basename="edits" username="pipeline" group="production" perms="02777">
     <dir basename="_yyyy_mm_dd_template" username="pipeline" group="artist" perms="02777">
