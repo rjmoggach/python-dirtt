@@ -99,10 +99,10 @@ setup(
 	description="Directory Tree Templater",
 	long_description="""
 		python-dirtt - Directory Tree Templater
-		(c) 2012 Robert Moggach
+		(c) 2015 Robert Moggach
 		Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-		dirtt is a standalone tool and library used to generate
+		Dirtt is a standalone tool and library used to generate
 		directory and file structures from xml templates that describe
 		repeatedly used filesystem layouts such as project structures
 		or elements therein.
@@ -125,6 +125,8 @@ setup(
 		'Topic :: Text Processing :: Markup :: XML'
 	],
 	keywords='filesystem template utilities',
+	url='http://robmoggach.github.io/python-dirtt/',
+	download_url = 'https://github.com/robmoggach/python-dirtt/tarball/0.2.0rc1',
 	author='Robert Moggach',
 	author_email='rob@moggach.com',
 	maintainer='Robert Moggach',
