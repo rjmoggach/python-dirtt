@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//STUDIO//DTD dirtt 0.2.0rc3//EN" "http://robmoggach.github.io/python-dirtt/dtds/dirtt.dtd">
-<dirtt name="Project Tree" version="0.2.0rc3" dirname="{{project_root}}" basename="{{project_path}}" username="pipeline" group="artist" perms="02755" xmlns:xi="http://www.w3.org/2001/XInclude">
+<!DOCTYPE dirtt PUBLIC "-//STUDIO//DTD dirtt 0.2.0//EN" "http://robmoggach.github.io/python-dirtt/dtds/dirtt.dtd">
+<dirtt name="Project Tree" version="0.2.0" dirname="{{project_root}}" basename="{{project_path}}" username="pipeline" group="artist" perms="02755" xmlns:xi="http://www.w3.org/2001/XInclude">
 <!-- M A S T E R   F O L D E R -->
   <dir name="Project Master Directory" basename="master" username="pipeline" group="supervisor" perms="02755" xmlns:xi="http://www.w3.org/2001/XInclude">
   <xi:include href="project_master.xml" parse="xml"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//STUDIO//DTD dirtt 0.2.0rc3//EN" "http://robmoggach.github.io/python-dirtt/dtds/dirtt.dtd">
-<dirtt name="Project Work Tree" version="0.2.0rc3" dirname="{{project_root}}/{{project_path}}" basename="work" username="pipeline" group="supervisor" perms="02755">
+<!DOCTYPE dirtt PUBLIC "-//STUDIO//DTD dirtt 0.2.0//EN" "http://robmoggach.github.io/python-dirtt/dtds/dirtt.dtd">
+<dirtt name="Project Work Tree" version="0.2.0" dirname="{{project_root}}/{{project_path}}" basename="work" username="pipeline" group="supervisor" perms="02755">
   <!-- I M A G E S   F O L D E R -->
   <dir basename="images" username="pipeline" group="supervisor" perms="02775">
     <link basename="master" ref="../../master/images"/>

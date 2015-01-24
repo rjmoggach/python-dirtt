@@ -10,7 +10,7 @@
 * working... directories can be interactive
 
 
-## 0.2.0rc3
+## 0.2.0
 
 * cleaning out the dashing code
 * docs to markdown... lost antiquated docs build system

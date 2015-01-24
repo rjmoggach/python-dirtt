@@ -3,7 +3,6 @@ LICENSE.md
 README.md
 setup.cfg
 setup.py
-setup_commands.py
 dirtt/__init__.py
 dirtt/data/dirtt.dtd
 dirtt/data/templates/project.xml
