@@ -126,7 +126,7 @@ setup(
     ],
     keywords='filesystem template utilities',
     url='http://robmoggach.github.io/python-dirtt/',
-    download_url = 'https://github.com/robmoggach/python-dirtt/tarball/v0.2.0rc1',
+    download_url = 'https://github.com/robmoggach/python-dirtt/tarball/v0.2.0rc3',
     author='Robert Moggach',
     author_email='rob@moggach.com',
     maintainer='Robert Moggach',

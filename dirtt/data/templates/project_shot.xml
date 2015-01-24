@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//STUDIO//DTD dirtt 0.2.0rc14//EN" "http://robmoggach.github.io/python-dirtt/dtds/dirtt.dtd">
-<dirtt name="Shot Tree" version="0.2.0rc1" dirname="{{project_root}}/{{project_path}}/sequences/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="supervisor" perms="02775">
+<!DOCTYPE dirtt PUBLIC "-//STUDIO//DTD dirtt 0.2.0rc34//EN" "http://robmoggach.github.io/python-dirtt/dtds/dirtt.dtd">
+<dirtt name="Shot Tree" version="0.2.0rc3" dirname="{{project_root}}/{{project_path}}/sequences/{{sequence_name}}" basename="{{shot_name}}" username="pipeline" group="supervisor" perms="02775">
 <!-- I M A G E S   F O L D E R -->
 	<dir name="Shot Images Folder" basename="images" username="pipeline" group="supervisor" perms="02755">
 	  <link basename="master" ref="../../../../master/images"/>
