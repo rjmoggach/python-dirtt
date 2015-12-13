@@ -25,13 +25,13 @@ def main():
     parser = OptionParser(usage=usage, version=version, description=description)
     parser.add_option("-p", "--path", dest="source_path", help="Absolute path to source tree.")
     (options, args) = parser.parse_args()
-    if options.project_path:
-        project_path = options.project_path
+    if options.source_path:
+        source_path = options.source_path
     else:
-        project_path = None
+        source_path = None
         print "\n  You must specify a source path to introspect\n  with -p or --path to run this script."
         sys.exit(-6)
-        introspected_tree = TreeIntrospector(project_path)
+        introspected_tree = TreeIntrospector(source_path)
         introspected_tree.build_template()
     sys.exit(0)
 
