@@ -1,22 +1,25 @@
 #!/usr/bin/env python
-
-
-import unittest,os, shutil, errno, stat
-from dirtt.util.io import create_dir, create_file, create_symlink, set_perms_uid_gid, read_file, read_url
+import unittest
+import os
+import shutil
+import errno
+import stat
+import dirtt
 from tempfile import NamedTemporaryFile
 
-DEFAULT_PERMS = 02775 
-DEFAULT_USER = 0
-DEFAULT_GROUP = 0
 
 class IOModuleTestCase(unittest.TestCase):
-    def setUp(self):
-        self.tests_dir = os.path.abspath(os.path.dirname(__file__))
-        self.test_dirname = os.path.join(self.tests_dir, "dirname")
+    @classmethod
+    def setup_class(cls):
+        """setup any state specific to the execution of the given class"""
+        cls.tests_dir = os.path.abspath(os.path.dirname(__file__))
+        cls.testing_dirname = "_test"
+        cls.testing_dirpath = os.path.join(cls.tests_dir, cls.testing_dirname)
 
-    def tearDown(self):
-        if os.path.exists(self.test_dirname):
-            shutil.rmtree(self.test_dirname)
+    @classmethod
+    def teardown_class(cls):
+        if os.path.exists(cls.testing_dirpath):
+            shutil.rmtree(cls.testing_dirpath)
 
 
 
@@ -25,15 +28,15 @@ class IOModuleTestCase(unittest.TestCase):
         Test creating a directory where all components in path don't exist.
         """
         n_path_components = 5
-    
-        basedir = self.test_dirname
+
+        basedir = self.testing_dirpath
 
         for i in range(0,n_path_components):
             basedir = os.path.join(basedir, "dir%d" % i)
 
-        create_dir(basedir, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP)
+        dirtt.util.create_dir(basedir, dirtt.const('DIRTT_DEFAULT_PERMS'), dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'))
 
-        self.assertEquals(True, os.path.exists(basedir)) 
+        self.assertEquals(True, os.path.exists(basedir))
 
 
     def test_02_create_existing_dir(self):
@@ -42,45 +45,45 @@ class IOModuleTestCase(unittest.TestCase):
         """
         n_path_components = 5
 
-        basedir = self.test_dirname
+        basedir = self.testing_dirpath
 
         for i in range(0,n_path_components):
             basedir = os.path.join(basedir, "dir%d" % i)
 
         os.makedirs(basedir)
 
-        create_dir(basedir, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP)
+        dirtt.util.create_dir(basedir, dirtt.const('DIRTT_DEFAULT_PERMS'), dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'))
 
-        self.assertEquals(True, os.path.exists(basedir)) 
+        self.assertEquals(True, os.path.exists(basedir))
 
     def test_03_create_dir_with_None_perms_raises_AssertionError(self):
         """
         Make sure an AssertionError is raised if permission are set to None
         """
-        self.assertRaises(AssertionError, create_dir, self.test_dirname, None, DEFAULT_USER, DEFAULT_USER, DEFAULT_GROUP) 
+        self.assertRaises(AssertionError, dirtt.util.create_dir, self.testing_dirpath, None, dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'))
 
     def test_04_create_dir_with_string_perms_raises_TypeError(self):
         """
         Make sure an AssertionError is raised if permission parameter is not int
         """
-        self.assertRaises(TypeError, create_dir, self.test_dirname, "02775", DEFAULT_USER, DEFAULT_USER, DEFAULT_GROUP) 
+        self.assertRaises(TypeError, dirtt.util.create_dir, self.testing_dirpath, "02775", dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'))
 
     def test_05_create_dir_with_None_basename_raises_AssertionError(self):
         """
         Make sure an AssertionError is raised if basename is None
         """
-        self.assertRaises(AssertionError, create_dir, None, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP)
+        self.assertRaises(AssertionError, dirtt.util.create_dir, None, dirtt.const('DIRTT_DEFAULT_PERMS'), dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'))
 
 
     def test_06_create_existing_dir_with_warn_True_raises_OSError(self):
         """
         Make sure an OSError is raised if the directory already exists and warn is set to True.
         """
-        os.makedirs(self.test_dirname)
+        os.makedirs(self.testing_dirpath)
         exception = None
 
         try:
-            create_dir(self.test_dirname, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP, True)
+            dirtt.util.create_dir(self.testing_dirpath, dirtt.const('DIRTT_DEFAULT_PERMS'), dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'), True)
         except Exception as inst:
             exception = inst
 
@@ -97,7 +100,7 @@ class IOModuleTestCase(unittest.TestCase):
         exception = None
 
         try:
-            create_dir(tmp_file.name, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP, True)
+            dirtt.util.create_dir(tmp_file.name, dirtt.const('DIRTT_DEFAULT_PERMS'), dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'), True)
         except Exception as inst:
             exception = inst
         finally:
@@ -109,31 +112,31 @@ class IOModuleTestCase(unittest.TestCase):
 
     def test_08_set_perms_uid_gid_with_None_target_raises_AssertionError(self):
         """
-        Make sure an assertion error is raised if the target is None 
+        Make sure an assertion error is raised if the target is None
         """
-        self.assertRaises(AssertionError,set_perms_uid_gid, None, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP)
+        self.assertRaises(AssertionError,dirtt.posix.set_perms, None, dirtt.const('DIRTT_DEFAULT_PERMS'), dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'))
 
     def test_09_set_perms_uid_gid_with_None_perms_raises_AssertionError(self):
         """
-        Make sure an assertion error is raised if perms is None 
+        Make sure an assertion error is raised if perms is None
         """
-        os.makedirs(self.test_dirname)
-        self.assertRaises(AssertionError,set_perms_uid_gid, self.test_dirname, None, DEFAULT_USER, DEFAULT_GROUP)
+        os.makedirs(self.testing_dirpath)
+        self.assertRaises(AssertionError,dirtt.posix.set_perms, self.testing_dirpath, None, dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'))
 
     def test_10_set_perms_uid_gid_with_none_existing_target_raises_OSError(self):
         """
         Make sure an OS error is raised if the path does not exist
         """
-        self.assertRaises(OSError,set_perms_uid_gid, self.test_dirname, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP)
+        self.assertRaises(OSError,dirtt.posix.set_perms, self.testing_dirpath, dirtt.const('DIRTT_DEFAULT_PERMS'), dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'))
 
-    def test_11_set_perms_uid_gid_on_non_existing_directory_with_default_perms(self):
+    def test_11_set_perms_uid_gid_on_non_existing_directory_with_DIRTT_DEFAULT_PERMS(self):
         """
         Make sure permissions are properly set on directories
         """
-        os.makedirs(self.test_dirname)
-        set_perms_uid_gid(self.test_dirname, DEFAULT_PERMS, DEFAULT_USER, DEFAULT_GROUP)
+        os.makedirs(self.testing_dirpath)
+        dirtt.posix.set_perms(self.testing_dirpath, dirtt.const('DIRTT_DEFAULT_PERMS'), dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'))
 
-        st_mode = os.stat(self.test_dirname).st_mode
+        st_mode = os.stat(self.testing_dirpath).st_mode
 
         # Test user permissions
         self.assertEquals(stat.S_IRUSR, st_mode & stat.S_IRUSR)
@@ -159,7 +162,7 @@ class IOModuleTestCase(unittest.TestCase):
         exception = None
 
         try:
-            set_perms_uid_gid(tmp_file.name, 0666, DEFAULT_USER, DEFAULT_GROUP)
+            dirtt.posix.set_perms(tmp_file.name, 0666, dirtt.const('DIRTT_DEFAULT_USER'), dirtt.const('DIRTT_DEFAULT_GROUP'))
             st_mode = os.stat(tmp_file.name).st_mode
 
             # Test user permissions
@@ -180,7 +183,7 @@ class IOModuleTestCase(unittest.TestCase):
             if tmp_file:
                 os.unlink(tmp_file.name)
 
- 
+
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(IOModuleTestCase)
     unittest.TextTestRunner(verbosity=2).run(suite)

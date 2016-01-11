@@ -1,0 +1,12 @@
+language: python
+env:
+  - TOXENV=py26
+  - TOXENV=py27
+install:
+  - pip install tox
+script:
+  - tox
+matrix:
+  allow_failures:
+    - env: TOXENV=lint
+sudo: false

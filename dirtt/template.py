@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
     template.py
     A small templating language

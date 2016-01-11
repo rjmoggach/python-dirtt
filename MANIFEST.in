@@ -1,5 +1,4 @@
-include AUTHORS.md
-include LICENSE.md
 include README.md
-recursive-include tests *.py
-recursive-include dirtt/data *
+include dirtt/data/dirtt.dtd
+include tests/templates/*.xml
+global-exclude *.pyc *.pyo *.pyd .DS_Store ._*

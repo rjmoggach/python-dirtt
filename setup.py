@@ -1,175 +1,82 @@
-from distutils.core import setup
-from distutils.command.install_data import install_data
-from distutils.command.install import INSTALL_SCHEMES
+# -*- coding: utf-8 -*-
+"""dirtt/setup.py
+=======================================
+
+provides dirtt installation routines via setuptools
+"""
 import os
 import sys
+from setuptools import setup, find_packages
 
+# make sure we're in the setup.py dir
+ROOT_DIR = os.path.dirname(__file__)
+if ROOT_DIR != '': os.chdir(ROOT_DIR)
 
-# Add a test command to setup.py
-# Code borrowed from: http://da44en.wordpress.com/2002/11/22/using-distutils/
-from distutils.core import Command
-from unittest import TextTestRunner, TestLoader
-from glob import glob
-from os.path import splitext, basename, join as pjoin, walk
-import os
+# get version string from package
+sys.path.insert(0, os.path.abspath('.'))
+from dirtt import __version__
 
+VERSION = __version__
+MODULE_DIR = 'dirtt'
+README=os.path.join(ROOT_DIR,'README.md')
+DESCRIPTION = "Python Directory Tree Templater v{version}".format(version=VERSION)
+LONG_DESCRIPTION = """\
+Python Directory Tree Templater v{version}
+===========================================
 
-class TestCommand(Command):
-    user_options = [ ]
+``python-dirtt`` is a standalone tool and library used to generate
+directory and file structures from xml templates that describe
+repeatedly used filesystem layouts such as project structures
+or elements therein.
 
-    def initialize_options(self):
-        self._dir = os.getcwd()
+It provides a subclassed implementation of ``xml.sax.handler`` ``ContentHandler``
+with internal methods that read,parse,render,and execute builds of
+user defined XML directory tree templates.
 
-    def finalize_options(self):
-        pass
+License: **MIT License**.""".format(version=VERSION)
 
-    def run(self):
-        '''
-        Finds all the tests modules in tests/, and runs them.
-        '''
-        testfiles = [ ]
-        for t in glob(pjoin(self._dir, 'tests', '*.py')):
-            if not t.endswith('__init__.py'):
-                testfiles.append('.'.join(
-                    ['tests', splitext(basename(t))[0]])
-                )
-
-        tests = TestLoader().loadTestsFromNames(testfiles)
-        t = TextTestRunner(verbosity = 2)
-        t.run(tests)
-
-
-class CleanCommand(Command):
-    user_options = [ ]
-
-    def initialize_options(self):
-        self._clean_me = [ ]
-        for root, dirs, files in os.walk('.'):
-            for f in files:
-                if f.endswith('.pyc'):
-                    self._clean_me.append(pjoin(root, f))
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        for clean_me in self._clean_me:
-            try:
-                os.unlink(clean_me)
-            except:
-                pass
-
-
-
-
-def return_version():
-    return __import__('dirtt').get_version()
-
-
-class osx_install_data(install_data):
-    # On MacOS, the platform-specific lib dir is /System/Library/Framework/Python/.../
-    # which is wrong. Python 2.5 supplied with MacOS 10.5 has an Apple-specific fix
-    # for this in distutils.command.install_data#306. It fixes install_lib but not
-    # install_data, which is why we roll our own install_data class.
-
-    def finalize_options(self):
-        # By the time finalize_options is called, install.install_lib is set to the
-        # fixed directory, so we set the installdir to install_lib. The
-        # install_data class uses ('install_data', 'install_dir') instead.
-        self.set_undefined_options('install', ('install_lib', 'install_dir'))
-        install_data.finalize_options(self)
-
-if sys.platform == "darwin":
-    cmdclasses = {'install_data': osx_install_data}
-else:
-    cmdclasses = {'install_data': install_data}
-
-cmdclasses['test'] = TestCommand
-cmdclasses['clean'] = CleanCommand
-
-
-def fullsplit(path, result=None):
-    """
-    Split a pathname into components (the opposite of os.path.join) in a
-    platform-neutral way.
-    """
-    if result is None:
-        result = []
-    head, tail = os.path.split(path)
-    if head == '':
-        return [tail] + result
-    if head == path:
-        return result
-    return fullsplit(head, [tail] + result)
-
-
-# Tell distutils to put the data_files in platform-specific installation
-# locations. See here for an explanation:
-# http://groups.google.com/group/comp.lang.python/browse_thread/thread/35ec7b2fed36eaec/2105ee4d9e8042cb
-for scheme in INSTALL_SCHEMES.values():
-    scheme['data'] = scheme['purelib']
-
-
-# Compile the list of packages available, because distutils doesn't have
-# an easy way to do this.
-packages, data_files = [], []
-root_dir = os.path.dirname(__file__)
-if root_dir != '':
-    os.chdir(root_dir)
-
-dirtt_dir = 'dirtt'
-
-for dirpath, dirnames, filenames in os.walk(dirtt_dir):
-    # Ignore dirnames that start with '.'
-    for i, dirname in enumerate(dirnames):
-        if dirname.startswith('.'): del dirnames[i]
-    if '__init__.py' in filenames:
-        packages.append('.'.join(fullsplit(dirpath)))
-    elif filenames:
-        data_files.append([dirpath, [os.path.join(dirpath, f) for f in filenames]])
-
-# Small hack for working with bdist_wininst.
-# See http://mail.python.org/pipermail/distutils-sig/2004-August/004134.html
-if len(sys.argv) > 1 and sys.argv[1] == 'bdist_wininst':
-    for file_info in data_files:
-        file_info[0] = '\\PURELIB\\%s' % file_info[0]
-
+try:
+    from pypandoc import convert
+    read_markdown = lambda f: convert(f, 'rst', 'md')
+except ImportError:
+    print("warning: pypandoc module not found, could not convert Markdown to RST")
+    read_markdown = lambda f: eval('LONG_DESCRIPTION')
 
 setup(
-    name='python-dirtt',
-    packages=packages,
-    cmdclass = cmdclasses,
-    scripts=['dirtt/scripts/mkproject.py','dirtt/scripts/mktemplate.py','dirtt/scripts/mktree.py'],
-    data_files = data_files,
-#    data_files=[
-#        ('/var/dirtt/dirtt.dtd', ['dirtt/data/dirtt.dtd']),
-#        ('/var/dirtt/templates/project.xml', ['dirtt/data/templates/project.xml']),
-#        ('/var/dirtt/templates/project_sequence.xml', ['dirtt/data/templates/project_sequence.xml']),
-#        ('/var/dirtt/templates/project_shot.xml', ['dirtt/data/templates/project_shot.xml']),
-#        ('/var/dirtt/templates/project_work.xml', ['dirtt/data/templates/project_work.xml']),
-#        ('/var/dirtt/templates/project_master.xml', ['dirtt/data/templates/project_master.xml']),
-#        ('/var/dirtt/templates/project_production.xml', ['dirtt/data/templates/project_production.xml'])
-#        ('/var/dirtt/templates/workspace.mel', ['dirtt/data/templates/workspace.mel'])
-#    ],
-    version=return_version(),
-    description="Directory Tree Templater",
-    long_description="""
-        python-dirtt - Directory Tree Templater
-        (c) 2015 Robert Moggach
-        Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
-
-        Dirtt is a standalone tool and library used to generate
-        directory and file structures from xml templates that describe
-        repeatedly used filesystem layouts such as project structures
-        or elements therein.
-
-        It provides a subclassed implementation of xml.sax.handler ContentHandler
-        with internal methods that read,parse,render,and execute builds of
-        user defined XML directory tree templates.
-
-        """,
+    name = "python-dirtt",
+    version = VERSION,
+    description = DESCRIPTION,
+    long_description = read_markdown(README),
+    scripts=[
+        'scripts/mkproject.py',
+        'scripts/mktemplate.py',
+        'scripts/mktree.py'
+    ],
+    packages = find_packages(),
+    install_requires = [
+        'colorlog',
+        'lxml'
+    ],
+    package_data = {
+        'dirtt': [
+            'data/dirtt.dtd',
+            'data/templates/*.xml',
+            'data/templates/*.mel'
+        ],
+        'tests': [
+            'templates/*.xml'
+        ]
+    },
+    include_package_data = True,
+    # metadata for upload to PyPI
     classifiers=[
+        # 'Development Status :: 1 - Planning',
+        # 'Development Status :: 2 - Pre-Alpha',
+        # 'Development Status :: 3 - Alpha',
         'Development Status :: 4 - Beta',
+        # 'Development Status :: 5 - Production/Stable',
+        # 'Development Status :: 6 - Mature',
+        # 'Development Status :: 7 - Inactive',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',
@@ -182,11 +89,10 @@ setup(
     ],
     keywords='filesystem template utilities',
     url='http://robmoggach.github.io/python-dirtt/',
-    download_url = 'https://github.com/robmoggach/python-dirtt/tarball/v0.2.0',
+    download_url = 'https://github.com/robmoggach/python-dirtt/tarball/v{version}'.format(version=VERSION),
     author='Robert Moggach',
     author_email='rob@moggach.com',
     maintainer='Robert Moggach',
     maintainer_email='rob@moggach.com',
-    license='MIT'
+    license='MIT License'
 )
-

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
     looper.py
     Helper for looping over sequences, particular in templates.

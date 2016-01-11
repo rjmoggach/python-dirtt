@@ -1,37 +1,39 @@
-"""
-python-dirtt - Directory Tree Templater
-  (c) 2012 Robert Moggach and contributors
-Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
-
-    io.py
-
-    These are helper functions for dealing with filesystem IO.
-    Creating directories, files, symlinks, and reading files, urls
-    are handled here.
-
-"""
-
-import os, errno
+# -*- coding: utf-8 -*-
+import os
+import errno
+import re
+import pwd
+import grp
 import sys
 import urllib
+import dirtt.posix
+
+def list_available_templates():
+    print "\n    These are the available templates. Reference using the full path provided."
+    template_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'templates')
+    print "Template Path: %s" % template_dir
+    template_list = []
+    for filename in os.listdir(template_dir):
+        print "    %s" % os.path.join(template_dir,filename)
 
 
-def set_perms_uid_gid(target, perms, uid, gid):
+def print_array(array,tab=0):
     """
-    given a provided permission, uid & gid
-    set the the owner, group and permissions
-    for a given path (directory, file, etc.)
+    function to iterate through an array
     """
-    assert target is not None
-    assert perms is not None
-    assert uid is not None
-    os.chmod(target,perms)
-    if uid and gid:
-        os.chown(target,uid,gid)
-    elif uid:
-        os.chown(target,uid,0)
-    else:
-        return
+    # are there any keys?
+    indexes = array.keys()
+    indexes.sort()
+    for i in indexes:
+        # check if the value is another array?
+        if type(array[i]) is dict:
+            # value is an array
+            print "%s * %s =>" % ('\t'*tab,i)
+            # print the key, and spawn print_array again to print the next level of the array
+            print_array(array[i],tab=tab+1)
+        else:
+            # value is not an array - print the key and the value
+            print "%s + %s => %s" % ('\t'*tab,i,array[i])
 
 
 def create_dir(basename, perms, uid, gid, warn=False):
@@ -42,9 +44,9 @@ def create_dir(basename, perms, uid, gid, warn=False):
     If it already exists it completes silently.
     """
     assert basename is not None
-    assert perms is not None
-    assert uid is not None
-    assert gid is not None
+    assert perms is not None and isinstance(perms,int)
+    assert uid is not None and isinstance(uid,int)
+    assert gid is not None and isinstance(gid,int)
     if os.path.isdir(basename):
         if warn:
             error = OSError()
@@ -61,7 +63,7 @@ def create_dir(basename, perms, uid, gid, warn=False):
             create_dir(head, perms, uid, gid)
         if tail:
             os.mkdir(basename)
-            set_perms_uid_gid(basename,perms,uid,gid)
+            dirtt.posix.set_perms(basename,perms,uid,gid)
     return basename
 
 
@@ -97,7 +99,6 @@ def create_symlink(ref, target):
         print >> sys.stderr, "A file or directory exists with the same name ('%s'). \
             \nAborting link creation." % target
         sys.exit(-2)
-
 
 
 def read_file(path):

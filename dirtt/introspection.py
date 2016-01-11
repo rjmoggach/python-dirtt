@@ -1,19 +1,15 @@
+# -*- coding: utf-8 -*-
+"""This module builds a project template from an existing source tree.
 """
-python-dirtt - Directory Tree Templater
-  (c) 2012 Robert Moggach and contributors
-Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
-
-dirtt is a standalone tool and library used to generate
-directory and file structures from xml templates that describe
-repeatedly used filesystem layouts such as project structures
-or elements therein.
-
-This module builds a project template from an existing source tree.
-"""
-
-import os,pwd,grp
+import os
+import pwd
+import grp
+import stat
 from xml.dom.minidom import Document
-from stat import *
+
+
+__all__ = [ 'TreeIntrospector' ]
+
 
 class TreeIntrospector:
 
@@ -24,9 +20,7 @@ class TreeIntrospector:
         self.idref_count = 1
 
     def build_template(self):
-        """
-        List base dir and walk down child folders building a project template
-        """
+        """List base dir and walk down child folders building a project template"""
 
         top_element = self._get_dirtt_element()
         self._update_element(top_element,self.base)
@@ -124,17 +118,14 @@ class TreeIntrospector:
     def _get_link_element(self):
         return self.doc.createElement("link")
 
-
-
     def _get_dir_element(self):
         return self.doc.createElement("dir")
-
 
     def _update_element(self, element, dir):
         abs_path = os.path.abspath(dir)
         name = os.path.basename(abs_path)
         stat_info = os.stat(abs_path)
-        perms = oct(S_IMODE(stat_info.st_mode))
+        perms = oct(stat.S_IMODE(stat_info.st_mode))
         owner = pwd.getpwuid(stat_info.st_uid).pw_name
         group = grp.getgrgid(stat_info.st_gid).gr_name
 

@@ -1,16 +1,21 @@
 #!/usr/bin/env python
-
-import unittest,os,shutil
+import os
+import glob
+import shutil
+import unittest
 import threading
 import SimpleHTTPServer
 import SocketServer
 import logging
+from contextlib import contextmanager
+
+import dirtt
 from dirtt import DirectoryTreeHandler
 import test_utils
 from tempfile import NamedTemporaryFile
 
+
 class HttpServerThread(threading.Thread):
-    
     def __init__(self, start_dir, port = 8080):
         threading.Thread.__init__(self)
         self.start_dir = start_dir
@@ -37,26 +42,52 @@ class HttpServerThread(threading.Thread):
             self.running = False
 
 
-
+@contextmanager
+def pushd(push_dir):
+    cwd = os.getcwd()
+    try:
+        os.chdir(push_dir)
+    finally:
+        os.chdir(cwd)
 
 class DirectoryTreeHandlerTestCase(unittest.TestCase):
-    def setUp(self):
-        self.tests_dir = os.path.abspath(os.path.dirname(__file__))
-        self.templates_dir = os.path.join(self.tests_dir, "templates")
-        self.project_path = "data"
-        self.default_project_location = os.path.join(self.templates_dir, "default_test_project.xml")
-        self.default_args = {"project_root":self.tests_dir, "project_path": self.project_path}
-        self.http_port = 8080
-        
-        self.data_dir = os.path.join(self.tests_dir,self.project_path)
-        shutil.rmtree(os.path.join(self.tests_dir, self.project_path))
-        os.mkdir(os.path.join(self.tests_dir, self.project_path))
+
+    @classmethod
+    def setup_class(cls):
+        """setup any state specific to the execution of the given class"""
+        cls.tests_dir = os.path.abspath(os.path.dirname(__file__))
+        cls.DIRTT_TEMPLATES_DIR = os.path.join(cls.tests_dir, "templates")
+        cls.default_project_location = os.path.join(cls.DIRTT_TEMPLATES_DIR, "default_test_project.xml")
+        cls.http_port = 8080
+
+        cls.testing_dirname = "_test"
+        cls.testing_dirpath = os.path.join(cls.tests_dir, cls.testing_dirname)
+        if os.path.isdir(cls.testing_dirpath):
+            shutil.rmtree(cls.testing_dirpath)
+        os.mkdir(cls.testing_dirpath)
+
+        cls.project_path = os.path.join(cls.tests_dir, '_test_project')
+        cls.default_args = {
+            "project_root" : cls.tests_dir,
+            "project_path" : cls.project_path
+        }
+
+    @classmethod
+    def teardown_class(cls):
+        with pushd(cls.tests_dir):
+            for logfile in glob.glob("*.log"):
+                os.remove(hgx)
+            if os.path.exists(cls.project_path):
+                shutil.rmtree(cls.project_path)
+            if os.path.exists(cls.testing_dirpath):
+                shutil.rmtree(cls.testing_dirpath)
+
 
     def test_01_new_DirectoryTreeHandler_with_None_tree_template_raises_AssertError(self):
         """
         Create a DirectoryTreeHandler with a None tree template path
         """
-        self.assertRaises(AssertionError, DirectoryTreeHandler,True,None,{})
+        self.assertRaises(AssertionError, DirectoryTreeHandler, True, None,{})
 
 #    def test_02_get_logger_level_after_create_DirectoryTreeHandler_with_verbose_True_returns_DEBUG(self):
 #        """
@@ -85,9 +116,8 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         Create a DirectoryTreeHandler with a tree template path pointing to a directory. We expect
         an OSError exception to be raised.
         """
-        test_dir_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),"test_dir")
-        if os.path.exists(test_dir_name):
-            os.rmdir(test_dir_name)
+        test_dir_name = os.path.join( self.testing_dirpath, "test_dir" )
+        if os.path.exists(test_dir_name): os.rmdir(test_dir_name)
         os.mkdir(test_dir_name)
 
         handler = DirectoryTreeHandler(False,test_dir_name, {})
@@ -166,7 +196,7 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         """
         handler = DirectoryTreeHandler(True, self.default_project_location, {})
         self.assertTrue(self.default_project_location in handler.processed_templates)
-    
+
     def test_16_get_processed_templates_after_create_DirectoryTreeHandler_with_list_X_returns_list_containing_all_elements_from_list_X(self):
         """
         Create a DirectoryTreeHandler with a list of already processed templates. Make sure all elements from the given list
@@ -189,7 +219,7 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
 #        """
 #        Create a DirectoryTreeHandler with a tree template location pointing to an HTTP resource.
 #        """
-#        http_server_thread = HttpServerThread(self.templates_dir)
+#        http_server_thread = HttpServerThread(self.DIRTT_TEMPLATES_DIR)
 #        http_server_thread.start()
 #
 #
@@ -197,13 +227,13 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
 #        while not http_server_thread.running:
 #            pass
 #
-#        handler = DirectoryTreeHandler(False, "http://localhost:%s/%s" % (self.http_port, "default_test_project.xml"), self.default_args) 
+#        handler = DirectoryTreeHandler(False, "http://localhost:%s/%s" % (self.http_port, "default_test_project.xml"), self.default_args)
 #        handler.run()
-#        
+#
 #        # Wait for the server to stop
 #        while http_server_thread.running:
 #            http_server_thread.stop()
- 
+
     def test_19_run_with_tree_template_location_from_file_resource(self):
         """
         Create a DirectoryTreeHandler with a tree template location pointing to a file resource (url is of the form
@@ -217,7 +247,7 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         """
         Make sure variables gets substituted
         """
-        handler = DirectoryTreeHandler(False, self.default_project_location, self.default_args)  
+        handler = DirectoryTreeHandler(False, self.default_project_location, self.default_args)
         tree_template_str = handler._read_template(handler.tree_template)
         tree_template_str = handler._parse_template(tree_template_str, handler.tree_template)
         self.assertFalse("project_root" in tree_template_str)
@@ -239,19 +269,17 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         Creating symlink: /Volumes/Data/Dashing.TV/python-dirtt/tests/data/images => dir1
 
         """
-        log_file = os.path.join(self.tests_dir, "test_21.log")
-
-        if os.path.exists(log_file):
-            os.unlink(log_file)
+        log_file = os.path.join(self.tests_dir, "log_test_21.log")
+        if os.path.exists(log_file): os.unlink(log_file)
 
         tmp_file = NamedTemporaryFile(delete = False)
         tmp_file.write(test_utils.get_test_logging_xml())
         tmp_file.close()
 
         handler = DirectoryTreeHandler(True, tmp_file.name, self.default_args)
-        # Small hack to make sure log messages won't be sent out to sys.stdout 
-        handler.logger.handlers = []
-        handler.logger.addHandler(logging.FileHandler(log_file))
+        # Small hack to make sure log messages won't be sent out to sys.stdout
+        # dirtt.LOG.handlers = []
+        dirtt.LOG.addHandler(logging.FileHandler(log_file))
         handler.run()
 
         _file = open(log_file)
@@ -262,10 +290,10 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             expected_lines = []
             expected_lines.append("Starting Directory Tree Template Build...")
             expected_lines.append("Changing current directory to: %s" % self.tests_dir)
-            expected_lines.append("Creating dir: %s (perms:02755 uid:0 gid:0)" % os.path.join(self.data_dir))
-            expected_lines.append("Creating dir: %s (perms:02775 uid:0 gid:0)" % os.path.join(self.data_dir,"dir1"))
-            expected_lines.append("Creating file: %s (perms:02775 uid:0 gid:0)" % os.path.join(self.data_dir,"file.txt"))
-            expected_lines.append("Creating symlink: %s => %s" % ((os.path.join(self.data_dir,"images"), "dir1")))
+            expected_lines.append("Creating dir: %s (perms:02755 uid:0 gid:0)" % os.path.join(self.testing_dirpath))
+            expected_lines.append("Creating dir: %s (perms:02775 uid:0 gid:0)" % os.path.join(self.testing_dirpath,"dir1"))
+            expected_lines.append("Creating file: %s (perms:02775 uid:0 gid:0)" % os.path.join(self.testing_dirpath,"file.txt"))
+            expected_lines.append("Creating symlink: %s => %s" % ((os.path.join(self.testing_dirpath,"images"), "dir1")))
             expected_lines = [line.lower() for line in expected_lines]
 
             self.assertEquals(6, len(lines))
@@ -294,8 +322,8 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
            handler = DirectoryTreeHandler(False, tmp_file.name, self.default_args)
            handler.run()
 
-           self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1","d2","d3","d4")))
-           self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "d1","d2","d4")))
+           self.assertEquals(True, os.path.exists(os.path.join(self.testing_dirpath, "d1","d2","d3","d4")))
+           self.assertEquals(True, os.path.exists(os.path.join(self.testing_dirpath, "d1","d2","d4")))
            self.assertEquals([], handler.path_stack)
         finally:
             if tmp_file:
@@ -318,8 +346,8 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
            handler = DirectoryTreeHandler(False, tmp_file.name, self.default_args)
            handler.run()
 
-           self.assertEquals(True, os.path.exists(os.path.join(self.data_dir,"root", "d1","d2","d3","d4")))
-           self.assertEquals(True, os.path.exists(os.path.join(self.data_dir, "root", "d1","d2","d4")))
+           self.assertEquals(True, os.path.exists(os.path.join(self.testing_dirpath,"root", "d1","d2","d3","d4")))
+           self.assertEquals(True, os.path.exists(os.path.join(self.testing_dirpath, "root", "d1","d2","d4")))
            self.assertEquals([], handler.path_stack)
         finally:
             if tmp_file:
@@ -335,12 +363,12 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
 
             tmp_file.write(test_utils.get_test_nested_dirs(top_level_dirs = top_level_dirs, nested_dirs = nested_dirs))
             tmp_file.close()
-    
-            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args)
             handler.run()
 
             for i in range(0, top_level_dirs):
-                current_path = os.path.join(self.data_dir,"top_dir%d" % i)
+                current_path = os.path.join(self.testing_dirpath,"top_dir%d" % i)
                 self.assertEquals(True, os.path.exists(current_path))
 
                 for j in range(0, nested_dirs):
@@ -351,10 +379,10 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
         finally:
             if tmp_file:
                 os.unlink(tmp_file.name)
-            
+
     def test_25_test_create_nested_files(self):
         """
-        Create N files in a nested directory tree structure and make 
+        Create N files in a nested directory tree structure and make
         sure they all exist.
         """
         try:
@@ -367,8 +395,8 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             tmp_file.write(test_utils.get_test_nested_files(top_level_dirs = top_level_dirs, nested_dirs = nested_dirs,\
                            files = files))
             tmp_file.close()
-    
-            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args)
             handler.run()
 
             for i in range (0, files):
@@ -376,7 +404,7 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
                 self.assertEquals(True, os.path.exists(current_path))
 
             for i in range(0, top_level_dirs):
-                current_path = os.path.join(self.data_dir,"top_dir%d" % i)
+                current_path = os.path.join(self.testing_dirpath,"top_dir%d" % i)
                 self.assertEquals(True, os.path.exists(current_path))
 
                 for j in range(0, top_level_dirs):
@@ -394,7 +422,7 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
 
     def test_26_test_create_symlinks_referencing_directories_using_ref_attribute(self):
         """
-        Create a nested directory tree structure and in nested level i, create (i-1) symlinks 
+        Create a nested directory tree structure and in nested level i, create (i-1) symlinks
         to parent directories. All references are done using the ref attribute.
         """
         try:
@@ -405,22 +433,22 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             tmp_file.write(test_utils.get_symlinks_referencing_dirs_xml_using_ref_attribute(nested_dirs = nested_dirs))
             tmp_file.close()
 
-            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args)
             handler.run()
 
-            basename = self.data_dir
-            
+            basename = self.testing_dirpath
+
             current_dir = os.path.abspath(".")
             symlinks_count = 0
 
             for i in range(0, nested_dirs):
-                 basename = os.path.join(basename,"dir%d" % i) 
+                 basename = os.path.join(basename,"dir%d" % i)
                  self.assertEquals(True, os.path.exists(basename))
 
                  os.chdir(basename)
 
                  current_path = ""
-                 path = basename.replace(self.data_dir,"").split(os.path.sep)
+                 path = basename.replace(self.testing_dirpath,"").split(os.path.sep)
                  path.reverse()
 
                  j = 0
@@ -441,7 +469,7 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
 
     def test_27_test_create_symlinks_referencing_directories_using_idref_attribute(self):
         """
-        Create a nested directory tree structure and in nested level i, create (i-1) symlinks 
+        Create a nested directory tree structure and in nested level i, create (i-1) symlinks
         to parent directories. All references are done using the idref attribute.
         """
         try:
@@ -452,22 +480,22 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             tmp_file.write(test_utils.get_symlinks_referencing_dirs_xml_using_idref_attribute(nested_dirs = nested_dirs))
             tmp_file.close()
 
-            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args)
             handler.run()
 
-            basename = self.data_dir
-            
+            basename = self.testing_dirpath
+
             current_dir = os.path.abspath(".")
             symlinks_count = 0
 
             for i in range(0, nested_dirs):
-                 basename = os.path.join(basename,"dir%d" % i) 
+                 basename = os.path.join(basename,"dir%d" % i)
                  self.assertEquals(True, os.path.exists(basename))
 
                  os.chdir(basename)
 
                  current_path = ""
-                 path = basename.replace(self.data_dir,"").split(os.path.sep)
+                 path = basename.replace(self.testing_dirpath,"").split(os.path.sep)
                  path.reverse()
 
                  j = 0
@@ -500,21 +528,21 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             tmp_file.write(test_utils.get_symlinks_with_no_idref_and_no_ref_attribute(nested_dirs = nested_dirs))
             tmp_file.close()
 
-            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args)
             handler.run()
 
-            basename = self.data_dir
-            
+            basename = self.testing_dirpath
+
             current_dir = os.path.abspath(".")
 
             for i in range(0, nested_dirs):
-                 basename = os.path.join(basename,"dir%d" % i) 
+                 basename = os.path.join(basename,"dir%d" % i)
                  self.assertEquals(True, os.path.exists(basename))
 
                  os.chdir(basename)
 
                  current_path = ""
-                 path = basename.replace(self.data_dir,"").split(os.path.sep)
+                 path = basename.replace(self.testing_dirpath,"").split(os.path.sep)
                  path.reverse()
 
                  j = 0
@@ -544,21 +572,21 @@ class DirectoryTreeHandlerTestCase(unittest.TestCase):
             tmp_file.write(test_utils.get_symlinks_referencing_dirs_xml_with_no_basename(nested_dirs = nested_dirs))
             tmp_file.close()
 
-            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args) 
+            handler = DirectoryTreeHandler(False, tmp_file.name , self.default_args)
             handler.run()
 
-            basename = self.data_dir
-            
+            basename = self.testing_dirpath
+
             current_dir = os.path.abspath(".")
 
             for i in range(0, nested_dirs):
-                 basename = os.path.join(basename,"dir%d" % i) 
+                 basename = os.path.join(basename,"dir%d" % i)
                  self.assertEquals(True, os.path.exists(basename))
 
                  os.chdir(basename)
 
                  current_path = ""
-                 path = basename.replace(self.data_dir,"").split(os.path.sep)
+                 path = basename.replace(self.testing_dirpath,"").split(os.path.sep)
                  path.reverse()
 
                  j = 0
