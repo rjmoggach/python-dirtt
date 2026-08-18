@@ -27,3 +27,9 @@ include
 .mr.developer.cfg
 src
 ._*
+
+# modern tooling
+.venv
+uv.lock
+__pycache__/
+*.egg-info/

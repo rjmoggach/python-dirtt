@@ -1,13 +1,26 @@
 # Changes And News
 
-## Next release (0.2.1) schedule
+## 1.0.0 (2026-08-18)
 
-* not sure... lots of ideas... submit ideas please
+Full modernization for Python 3.10+ — same simple idea, new engine.
 
-
-## MASTER
-
-* working... directories can be interactive
+* **Breaking:** Python 3.10+ required; Python 2 support removed.
+* New three-stage core: templates parse into an immutable dataclass tree
+  (`Dir`/`File`/`Link`), the tree plans into an ordered list of `Action`
+  records with absolute `pathlib` paths, and the plan executes — no more
+  `os.chdir`, no more SAX handler with side effects.
+* New `dirtt` CLI (`create`, `list`, `placeholders`, `introspect`)
+  replaces `mktree.py`, `mkproject.py`, and `mktemplate.py`. The
+  hardcoded uid allow-list is gone.
+* `--dry-run` prints the full plan without touching the filesystem.
+* JSON templates supported alongside XML; XML dialect unchanged.
+* The embedded Paste template engine (`eval`/`exec`-based) is replaced
+  with safe `{{name}}` substitution.
+* Library errors raise `DirttError`/`TemplateError`/`BuildError` instead
+  of printing and calling `sys.exit()`.
+* `chown` only runs as root; otherwise skipped with a log message.
+* Packaging: `pyproject.toml` (PEP 621) replaces `distutils`; zero
+  runtime dependencies; test suite rewritten with pytest.
 
 
 ## 0.2.0
