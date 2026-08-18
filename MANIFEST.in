@@ -1,5 +1,0 @@
-include AUTHORS.md
-include LICENSE.md
-include README.md
-recursive-include tests *.py
-recursive-include dirtt/data *

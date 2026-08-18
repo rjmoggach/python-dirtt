@@ -12,7 +12,7 @@
   <dir name="Project Sequences Directory" basename="sequences" username="pipeline" group="supervisor" perms="02755">
   </dir>
 <!-- I N C O M I N G   F O L D E R -->
-  <dir name="Project Incoming Directory" basename="sequences" username="pipeline" group="artist" perms="02777">
+  <dir name="Project Incoming Directory" basename="incoming" username="pipeline" group="artist" perms="02777">
   </dir>
 <!-- P R O D U C T I O N   F O L D E R -->
   <dir name="Project Production Directory" basename="production" username="pipeline" group="supervisor" perms="02775">

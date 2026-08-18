@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-dirtt"
+dynamic = ["version"]
+description = "Directory Tree Templater — generate directory and file structures from XML or JSON templates"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE.md"]
+requires-python = ">=3.10"
+authors = [{ name = "Robert Moggach", email = "rob@moggach.com" }]
+maintainers = [{ name = "Robert Moggach", email = "rob@moggach.com" }]
+keywords = ["filesystem", "template", "scaffold", "directory-tree", "utilities"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Text Processing :: Markup :: XML",
+]
+
+[project.urls]
+Homepage = "https://github.com/rjmoggach/python-dirtt"
+Repository = "https://github.com/rjmoggach/python-dirtt"
+Changelog = "https://github.com/rjmoggach/python-dirtt/blob/master/NEWS.md"
+
+[project.scripts]
+dirtt = "dirtt.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.setuptools]
+packages = ["dirtt"]
+
+[tool.setuptools.dynamic]
+version = { attr = "dirtt.__version__" }
+
+[tool.setuptools.package-data]
+dirtt = ["data/*.dtd", "data/templates/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
