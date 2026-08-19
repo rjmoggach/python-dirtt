@@ -1,5 +1,17 @@
 # Changes And News
 
+## 1.0.2 (2026-08-18)
+
+* The `DOCTYPE` in every packaged template, and in `dirtt.dtd` itself,
+  pointed at `robmoggach.github.io`, an account name that no longer
+  exists, so the DTD URL had been returning 404. All of them now point
+  at `https://rjmoggach.github.io/python-dirtt/dtds/dirtt.dtd`, which
+  resolves. dirtt itself ignores the `DOCTYPE`, so this only affected
+  editors and tools that validate the templates.
+* The project site was rebuilt for 1.x; it had been unchanged since
+  January 2015.
+
+
 ## 1.0.1 (2026-08-18)
 
 First release published to PyPI from the 1.x line.
