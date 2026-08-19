@@ -21,6 +21,11 @@ Full modernization for Python 3.10+ — same simple idea, new engine.
 * `chown` only runs as root; otherwise skipped with a log message.
 * Packaging: `pyproject.toml` (PEP 621) replaces `distutils`; zero
   runtime dependencies; test suite rewritten with pytest.
+* Fixed the packaged `project_shot.xml`: the volumetrics folder used
+  `basename="scenes"`, colliding with the scenes folder so no
+  `volumetrics/` directory was ever created; and the
+  `images/textures/master` symlink was one level short and dangled.
+* Releases publish to PyPI from GitHub Actions.
 
 
 ## 0.2.0

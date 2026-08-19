@@ -13,7 +13,7 @@
 		<dir basename="plates" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="reference" username="pipeline" group="artist" perms="02775"/>
 		<dir basename="textures" username="pipeline" group="artist" perms="02775">
-	    <link basename="master" ref="../../../../master/images/textures"/>
+	    <link basename="master" ref="../../../../../master/images/textures"/>
   		<dir basename="3dPaintTextures" username="pipeline" group="artist" perms="02775"/>
 		</dir>
 		<dir basename="volumetrics" username="pipeline" group="artist" perms="02755">
@@ -93,7 +93,7 @@
   </dir>
   <dir basename=".autosave" username="pipeline" group="artist" perms="02777"/>
 <!-- V O L U M E T R I C S   F O L D E R -->
-  <dir name="Shot Volumetrics Folder" basename="scenes" username="pipeline" group="artist" perms="02755">
+  <dir name="Shot Volumetrics Folder" basename="volumetrics" username="pipeline" group="artist" perms="02755">
     <link basename="particles" ref="../data/volumetrics/particles/"/>
     <link basename="cache" ref="../data/volumetrics/cache/"/>
     <link basename="render" ref="../images/volumetrics/"/>
