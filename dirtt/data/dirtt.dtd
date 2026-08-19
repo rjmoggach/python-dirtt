@@ -2,35 +2,52 @@
 
   XML Document Type Definition for python-dirtt - Directory Tree Templater.
 
-  Copyright (C) 2015 Robert Moggach
+  Copyright (C) 2011-2026 Robert Moggach
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
-  This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
-  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  Licensed under the MIT license: https://opensource.org/licenses/MIT
 
 -->
 
 <!--
   dirtt is an XML language - Typical usage:
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dirtt PUBLIC "-//STUDIO//DTD dirtt 0.2.0//EN"
-      "https://rjmoggach.github.io/python-dirtt/dtds/dirtt.dtd">
-<dirtt>
+<!DOCTYPE dirtt PUBLIC "-//STUDIO//DTD dirtt 1.0//EN"
+      "http://rjmoggach.github.io/python-dirtt/dtds/dirtt.dtd">
+<dirtt name="Project Tree" version="1.0"
+       dirname="/jobs" basename="myproject">
 </dirtt>
+
+  Note the http:// system identifier. libxml2 (xmllint, lxml, and most
+  XML editors) is built without TLS support and cannot fetch an https://
+  DTD, so an https system identifier silently disables validation.
 -->
 
-<!-- 'root' of directory tree template, our starting point -->
-<!ELEMENT   dirtt       (dir | file | link )*>
+<!-- XInclude, used to compose one template out of several -->
+<!ELEMENT   xi:include  EMPTY>
+<!ATTLIST   xi:include
+            href        CDATA        #REQUIRED
+            parse       CDATA        #IMPLIED
+            xmlns:xi    CDATA        #IMPLIED>
+
+<!-- 'root' of directory tree template, our starting point.
+     At least one of dirname/basename is required; when basename is
+     omitted it is split off the end of dirname. That "one or the
+     other" rule cannot be expressed in a DTD, so both are #IMPLIED
+     here and the constraint is enforced by the parser. -->
+<!ELEMENT   dirtt       (dir | file | link | xi:include)*>
 <!ATTLIST   dirtt
-            basename    CDATA        #REQUIRED
-            name        CDATA        #REQUIRED
-            version     CDATA        #REQUIRED
-            dirname     CDATA        #REQUIRED>
+            basename    CDATA        #IMPLIED
+            dirname     CDATA        #IMPLIED
+            name        CDATA        #IMPLIED
+            version     CDATA        #IMPLIED
+            id          ID           #IMPLIED
+            username    CDATA        #IMPLIED
+            group       CDATA        #IMPLIED
+            perms       CDATA        #IMPLIED
+            xmlns:xi    CDATA        #IMPLIED>
 
 <!-- Folder/Directory -->
-<!ELEMENT   dir         (dir | file | link )*>
+<!ELEMENT   dir         (dir | file | link | xi:include)*>
 <!ATTLIST   dir
             basename    CDATA        #REQUIRED
             id          ID           #IMPLIED
@@ -38,7 +55,8 @@
             username    CDATA        #IMPLIED
             group       CDATA        #IMPLIED
             perms       CDATA        #IMPLIED
-            dirname     CDATA        #IMPLIED>
+            dirname     CDATA        #IMPLIED
+            xmlns:xi    CDATA        #IMPLIED>
 
 <!-- File -->
 <!ELEMENT   file        EMPTY>

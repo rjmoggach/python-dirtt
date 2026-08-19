@@ -1,5 +1,27 @@
 # Changes And News
 
+## 1.0.3 (2026-08-19)
+
+* **The DTD now matches the format dirtt actually accepts.** Its
+  `<dirtt>` ATTLIST declared only `basename`/`name`/`version`/`dirname`,
+  all `#REQUIRED`, but every real template sets `username`, `group` and
+  `perms` on the root, `project.xml` also sets `id` and `xmlns:xi`, and
+  templates compose with `xi:include` — which the DTD never declared at
+  all. Validating any actual template failed. The root attributes are
+  now declared, `xi:include` is declared and allowed in the `dirtt` and
+  `dir` content models, and `name`/`version`/`basename`/`dirname` are
+  `#IMPLIED` to match the parser. All six packaged templates now pass
+  `xmllint --valid`.
+* **DTD URLs use `http://`, not `https://`.** libxml2 (xmllint, lxml,
+  and most XML editors) is built without TLS and cannot fetch an
+  `https://` DTD; it fails with `failed to load external entity` and
+  silently skips validation. 1.0.2 introduced that regression while
+  fixing the dead hostname. The system identifier is now
+  `http://rjmoggach.github.io/python-dirtt/dtds/dirtt.dtd`, which
+  GitHub Pages serves directly with no redirect.
+* Templates declare `-//STUDIO//DTD dirtt 1.0//EN`.
+
+
 ## 1.0.2 (2026-08-18)
 
 * The `DOCTYPE` in every packaged template, and in `dirtt.dtd` itself,
