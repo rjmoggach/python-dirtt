@@ -1,5 +1,18 @@
 # Changes And News
 
+## 1.0.1 (2026-08-18)
+
+First release published to PyPI from the 1.x line.
+
+* Fixed the packaged `project_shot.xml`: the volumetrics folder used
+  `basename="scenes"`, colliding with the scenes folder so no
+  `volumetrics/` directory was ever created and its five children landed
+  in `scenes/`; and the `images/textures/master` symlink was one level
+  short and always dangled. Building all five packaged templates
+  together now yields 331 paths with all 54 symlinks resolving.
+* Releases publish to PyPI from GitHub Actions.
+
+
 ## 1.0.0 (2026-08-18)
 
 Full modernization for Python 3.10+ — same simple idea, new engine.
@@ -21,11 +34,6 @@ Full modernization for Python 3.10+ — same simple idea, new engine.
 * `chown` only runs as root; otherwise skipped with a log message.
 * Packaging: `pyproject.toml` (PEP 621) replaces `distutils`; zero
   runtime dependencies; test suite rewritten with pytest.
-* Fixed the packaged `project_shot.xml`: the volumetrics folder used
-  `basename="scenes"`, colliding with the scenes folder so no
-  `volumetrics/` directory was ever created; and the
-  `images/textures/master` symlink was one level short and dangled.
-* Releases publish to PyPI from GitHub Actions.
 
 
 ## 0.2.0
