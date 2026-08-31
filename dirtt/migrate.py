@@ -404,8 +404,8 @@ def plan_migration(
 # -- copy planning ---------------------------------------------------------
 
 
-def _denest(root: Path, pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
-    """Split any copy that would swallow another copy's ground.
+def _denest(root: Path, pairs: list[tuple[str, str]], orphans: list[str]) -> list[tuple[str, str]]:
+    """Split any copy that would swallow ground it does not own.
 
     A rule that copies a whole subtree cannot also honour a second rule
     for something inside that subtree, or for something inside its
@@ -413,13 +413,22 @@ def _denest(root: Path, pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
     outer path first and rebasing the rest (:func:`_schedule`), which a
     copy cannot do. Splitting the outer copy one level at a time lets
     the inner rule win and keeps the plan flat.
+
+    An orphan inside the subtree is swallowed the same way. A move
+    lets it ride along with its parent and says so; a copy must leave
+    it in the source it was promised to, so its branch is skipped. Only
+    a subtree that really holds one is split, so a clean mapped
+    directory stays a single copy.
     """
     sources = {source for source, _ in pairs}
     dests = {dest for _, dest in pairs}
+    kept = set(orphans)
 
     def _swallows(source: str, dest: str) -> bool:
-        return any(_is_ancestor(source, other) for other in sources) or any(
-            _is_ancestor(dest, other) for other in dests
+        return (
+            any(_is_ancestor(source, other) for other in sources)
+            or any(_is_ancestor(dest, other) for other in dests)
+            or any(_is_ancestor(source, orphan) for orphan in kept)
         )
 
     def _split(source: str, dest: str) -> list[tuple[str, str]]:
@@ -431,6 +440,8 @@ def _denest(root: Path, pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
             pair = (f"{source}/{child.name}", f"{dest}/{child.name}")
             if pair[0] in sources:
                 continue  # it has a rule of its own
+            if pair[0] in kept:
+                continue  # an orphan: it stays in the source
             split.extend(_split(*pair) if _swallows(*pair) else [pair])
         return split
 
@@ -493,7 +504,7 @@ def plan_copy_migration(
 
     scanned, orphans = _scan(source_root, entries, prefixes, targets, include_identical=True)
     merge_dests = {value for value, count in Counter(entries.values()).items() if count > 1}
-    copies = _denest(source_root, _expand(source_root, scanned, merge_dests))
+    copies = _denest(source_root, _expand(source_root, scanned, merge_dests), orphans)
     _validate_copy(dest_root, copies)
     copies.sort(key=lambda pair: (pair[1].count("/"), pair[1]))  # a parent destination before its children
 

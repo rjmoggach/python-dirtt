@@ -298,13 +298,73 @@ def test_copy_carries_a_path_that_is_already_in_the_new_layout(tmp_path: Path) -
 
 def test_copy_nested_renames_compose_without_copying_twice(tmp_path: Path) -> None:
     source, dest = roots(tmp_path)
-    make_tree(source, files=(("library/assets/char/hero.txt", "rig"), ("library/tex/wood.txt", "map")))
-    mapping = schema({"library": "assets", "library/assets/char": "assets/char"})
-    actions, _ = migrate.plan_copy_migration(source, dest, mapping)
+    make_tree(source, files=(("library/assets/char/hero.txt", "rig"), ("library/assets/prop/box.txt", "box")))
+    mapping = schema(
+        {"library": "assets", "library/assets/char": "assets/char", "library/assets/prop": "assets/prop"}
+    )
+    actions, report = migrate.plan_copy_migration(source, dest, mapping)
     assert copies(actions, source, dest) == [
         ("library/assets/char", "assets/char"),
-        ("library/tex", "assets/tex"),
+        ("library/assets/prop", "assets/prop"),
     ]
+    assert report == []
+    assert all("assets/assets" not in (action.target or "") for action in actions)
+
+
+def test_copy_leaves_an_orphan_nested_under_a_mapped_ancestor_behind(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(
+        source,
+        files=(
+            ("library/assets/char/hero.txt", "rig"),
+            ("library/assets/cam/keepme.txt", "keep"),
+            ("library/library.txt", "stray"),
+        ),
+    )
+    mapping = schema({"library": "assets", "library/assets/char": "assets/char"})
+    actions, report = migrate.plan_copy_migration(source, dest, mapping)
+    assert copies(actions, source, dest) == [("library/assets/char", "assets/char")]
+    assert report == [
+        "orphan: library/assets/cam (not copied; left in the source)",
+        "orphan: library/library.txt (not copied; left in the source)",
+    ]
+
+    execute(actions)
+    assert (dest / "assets" / "char" / "hero.txt").read_text() == "rig"
+    assert not (dest / "assets" / "assets").exists()  # the old taxonomy never leaks into the new one
+    assert list(dest.rglob("keepme.txt")) == []
+    assert list(dest.rglob("library.txt")) == []
+    # every orphan is still in the source, ready to be re-homed by hand
+    assert (source / "library" / "assets" / "cam" / "keepme.txt").read_text() == "keep"
+    assert (source / "library" / "library.txt").read_text() == "stray"
+
+
+def test_copy_keeps_a_clean_mapped_directory_as_one_action(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(
+        source,
+        files=(
+            ("library/assets/char/hero/rig.txt", "rig"),
+            ("library/assets/char/hero/model.txt", "model"),
+            ("library/assets/char/villain/rig.txt", "rig"),
+            ("stray/keepme.txt", "keep"),
+        ),
+    )
+    mapping = schema({"library": "assets", "library/assets/char": "assets/char"})
+    actions, report = migrate.plan_copy_migration(source, dest, mapping)
+    # a subtree holding no orphan stays one recursive copy, never one action per file
+    assert copies(actions, source, dest) == [("library/assets/char", "assets/char")]
+    assert len(actions) == 1
+    assert report == ["orphan: stray (not copied; left in the source)"]
+
+
+def test_move_orphans_still_travel_with_their_parent(tmp_path: Path) -> None:
+    """The copy fix must not change the in-place migration's semantics."""
+    make_tree(tmp_path, files=(("library/assets/char/hero.txt", "rig"), ("library/library.txt", "stray")))
+    mapping = schema({"library": "assets", "library/assets/char": "assets/char"})
+    actions, report = migrate.plan_migration(tmp_path, mapping)
+    assert moves(actions, tmp_path) == [("library", "assets"), ("assets/assets/char", "assets/char")]
+    assert report == ["orphan: library/library.txt (kept; travels to assets/library.txt with its parent)"]
 
 
 def test_copy_explicit_map_wins_over_a_prefix_rule(tmp_path: Path) -> None:
@@ -472,3 +532,45 @@ def test_real_2015_to_2026_map_plans_a_full_tree(tmp_path: Path) -> None:
 
     # nothing is deleted and nothing was written while planning
     assert (tmp_path / "legacy_backup" / "old.txt").read_text() == "keep me"
+
+
+@pytest.mark.skipif(REAL_MAP is None, reason="python-dirtt-templates corpus not checked out")
+def test_real_2015_to_2026_map_copies_no_orphan_bytes(tmp_path: Path) -> None:
+    assert REAL_MAP is not None
+    document = json.loads(REAL_MAP.read_text(encoding="utf-8"))
+    mapping = migrate.load_map(REAL_MAP)
+
+    source, dest = roots(tmp_path)
+    for key in document["map"]:
+        directory = source / key
+        directory.mkdir(parents=True, exist_ok=True)
+        (directory / f"{directory.name}.txt").write_text("mapped", encoding="utf-8")
+    make_tree(
+        source,
+        files=(
+            ("library/assets/cam/keepme.txt", "keep"),
+            ("library/library.txt", "stray"),
+            ("some_random_dir/keepme.txt", "keep"),
+        ),
+    )
+
+    actions, report = migrate.plan_copy_migration(source, dest, mapping)
+    assert all(action.op == "copy" for action in actions)
+    assert report == [
+        "orphan: library/assets/cam (not copied; left in the source)",
+        "orphan: library/library.txt (not copied; left in the source)",
+        "orphan: some_random_dir (not copied; left in the source)",
+    ]
+    assert len(actions) < 100, "de-nesting must not explode into one action per file"
+
+    execute(actions)
+    assert (dest / "assets" / "char" / "char.txt").read_text() == "mapped"
+    assert (dest / "work" / "shoot" / "hdri" / "hdri.txt").read_text() == "mapped"
+    assert not (dest / "assets" / "assets").exists()
+    assert not (dest / "some_random_dir").exists()
+    assert list(dest.rglob("keepme.txt")) == []
+    assert list(dest.rglob("library.txt")) == []
+    # the source keeps every orphan and every byte it started with
+    assert (source / "library" / "assets" / "cam" / "keepme.txt").read_text() == "keep"
+    assert (source / "library" / "library.txt").read_text() == "stray"
+    assert (source / "some_random_dir" / "keepme.txt").read_text() == "keep"
