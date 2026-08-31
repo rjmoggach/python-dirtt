@@ -1,5 +1,45 @@
 # Changes And News
 
+## 1.1.0 (2026-08-30)
+
+Additive and backward compatible: every existing template and script
+keeps working unchanged.
+
+* **`dirtt migrate`** moves an existing tree from one template's layout
+  onto another's, driven by a mapping file. Matching is explicit entry,
+  then prefix rule, then identical path. A dry run is the default and
+  `--apply` is required to move anything. Unmapped paths are orphans:
+  reported and kept, never deleted; only `--prune` removes anything, and
+  only an already-empty orphan directory. Case-only renames stage
+  through a temporary name, because macOS, SMB and Dropbox are
+  case-insensitive and a direct rename there can lose data. Re-running
+  after a migration plans nothing.
+* **`create --skip-existing-files`** makes re-scaffolding idempotent.
+  Re-running a template skipped existing directories but refused to
+  overwrite any `<file>`, so a second run failed outright.
+* **`dirtt placeholders` now reports every variable the build needs.**
+  It only scanned the top-level template's own text, so it missed
+  variables used inside `xi:include`d templates and `href`'d content
+  files. On a real template set it named two of seven, and `create`
+  prompted for those two then failed partway with an undefined
+  placeholder. Both commands now use the full union.
+* **`<file substitute="false"/>`** copies an `href` source byte for
+  byte, so a template set copied into a project as a record keeps its
+  own placeholders. A seed file containing a literal `}}` previously
+  failed outright. The default is unchanged.
+* **A duplicate `id` is now an error** naming the id and both declaring
+  templates, tracked across `xi:include`. It previously won last,
+  silently pointing an `idref` link at the wrong directory.
+* **Scaffold log.** A successful `create` appends one JSON line to
+  `lib/dirtt/scaffold.log.jsonl` under the created root recording
+  template, run, vars, date and actor. `--actor`, `--template-id` and
+  `--run` set the fields; `--no-log` turns it off. A log that cannot be
+  written warns and never fails the scaffold.
+* `execute()` gained the `move` and `rmdir` actions behind migrate. A
+  cross-filesystem move raises rather than silently copying, and an
+  `rmdir` only ever removes an already-empty directory.
+
+
 ## 1.0.3 (2026-08-19)
 
 * **The DTD now matches the format dirtt actually accepts.** Its
