@@ -18,6 +18,8 @@ import grp
 import logging
 import os
 import pwd
+import shutil
+import subprocess
 from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 
@@ -115,6 +117,50 @@ def _apply_ownership(path: Path, action: Action) -> None:
     os.chown(path, uid, gid)
 
 
+_RSYNC_BINARY = "rsync"
+"""Name of the rsync executable; patchable so tests can force the fallback."""
+
+_RSYNC_STDERR_CHARS = 500
+
+
+def _find_rsync() -> str | None:
+    """Return the path to rsync, or None when it is not installed."""
+    return shutil.which(_RSYNC_BINARY)
+
+
+def _copy_tree(source: Path, destination: Path) -> None:
+    """Copy a directory tree, preferring rsync purely as an optimization.
+
+    ``rsync -a SRC/ DST/`` copies the *contents* of SRC into DST, which is
+    exactly what :func:`shutil.copytree` does; without the trailing slash
+    rsync would nest the tree as a child of DST instead. Both paths
+    preserve symlinks, permissions, and timestamps, so the result is the
+    same whichever one runs.
+    """
+    rsync = _find_rsync()
+    if rsync is None:
+        logger.warning("rsync not found, using shutil.copytree for %s -> %s", source, destination)
+    else:
+        reason = ""
+        try:
+            result = subprocess.run(
+                [rsync, "-a", "--", f"{source}{os.sep}", f"{destination}{os.sep}"],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+        except OSError as exc:
+            reason = str(exc)
+        else:
+            if result.returncode == 0:
+                return
+            reason = f"exit status {result.returncode}: {result.stderr.strip()[:_RSYNC_STDERR_CHARS]}"
+        logger.warning("rsync failed for %s -> %s, using shutil.copytree: %s", source, destination, reason)
+        if destination.exists() or destination.is_symlink():
+            shutil.rmtree(destination, ignore_errors=True)
+    shutil.copytree(source, destination, symlinks=True)
+
+
 def execute(
     actions: Sequence[Action],
     *,
@@ -198,6 +244,22 @@ def execute(
                         "(dirtt does not copy across filesystems)"
                     ) from exc
                 raise
+        elif action.op == "copy":
+            if not action.path.exists() and not action.path.is_symlink():
+                logger.warning("copy source does not exist, skipping: %s", action.path)
+                continue
+            if action.target is None:
+                raise BuildError(f"copy {action.path} has no target")
+            destination = Path(action.target)
+            if destination.exists() or destination.is_symlink():
+                raise BuildError(f"refusing to overwrite existing path: {destination}")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            if action.path.is_symlink():
+                os.symlink(os.readlink(action.path), destination)
+            elif action.path.is_dir():
+                _copy_tree(action.path, destination)
+            else:
+                shutil.copy2(action.path, destination)
         elif action.op == "rmdir":
             if not action.path.exists():
                 logger.debug("rmdir target does not exist, skipping: %s", action.path)
