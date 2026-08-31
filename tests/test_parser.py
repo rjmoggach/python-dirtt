@@ -1,4 +1,5 @@
 import json
+import logging
 from pathlib import Path
 
 import pytest
@@ -127,3 +128,141 @@ def test_nonexistent_template_raises():
 def test_template_placeholders():
     names = template_placeholders(TEMPLATES / "default_test_project.xml")
     assert names == ["project_root", "project_path"]
+
+
+def test_file_substitute_opt_out_xml(tmp_path):
+    template = tmp_path / "t.xml"
+    template.write_text(
+        '<dirtt dirname="/tmp" basename="proj">'
+        '<file basename="seed.txt" href="seed.txt" substitute="false"/>'
+        '<file basename="rendered.txt" href="seed.txt" substitute="TRUE"/>'
+        '<file basename="plain.txt" href="seed.txt"/>'
+        "</dirtt>"
+    )
+    opted_out, explicit, default = load_template(template).root.children
+    assert isinstance(opted_out, File) and opted_out.substitute is False
+    assert explicit.substitute is True
+    assert default.substitute is True
+
+
+def test_file_substitute_opt_out_json(tmp_path):
+    template = tmp_path / "t.json"
+    template.write_text(
+        json.dumps(
+            {
+                "dirname": "/tmp",
+                "basename": "proj",
+                "children": [
+                    {"type": "file", "basename": "seed.txt", "href": "seed.txt", "substitute": False},
+                    {"type": "file", "basename": "other.txt", "href": "seed.txt", "substitute": "false"},
+                    {"type": "file", "basename": "plain.txt", "href": "seed.txt"},
+                ],
+            }
+        )
+    )
+    literal, string_false, default = load_template(template).root.children
+    assert literal.substitute is False
+    assert string_false.substitute is False
+    assert default.substitute is True
+
+
+def test_invalid_substitute_raises(tmp_path):
+    template = tmp_path / "t.xml"
+    template.write_text('<dirtt dirname="/tmp" basename="proj"><file basename="seed.txt" substitute="maybe"/></dirtt>')
+    with pytest.raises(TemplateError, match="invalid substitute 'maybe' on file 'seed.txt'"):
+        load_template(template)
+
+
+def test_placeholders_span_includes(tmp_path):
+    (tmp_path / "child.xml").write_text(
+        '<dirtt dirname="/ignored" basename="ignored"><dir basename="{{child_var}}"/></dirtt>'
+    )
+    template = tmp_path / "parent.xml"
+    template.write_text(
+        '<dirtt dirname="{{root}}" basename="proj"><include href="child.xml"/></dirtt>'
+    )
+    assert template_placeholders(template) == ["root", "child_var"]
+
+
+def test_placeholders_span_href_files(tmp_path):
+    (tmp_path / "seed.txt").write_text("owner: {{created_by}}\njob: {{job_number}}\n")
+    template = tmp_path / "t.xml"
+    template.write_text(
+        '<dirtt dirname="{{root}}" basename="proj"><file basename="seed.txt" href="seed.txt"/></dirtt>'
+    )
+    assert template_placeholders(template) == ["root", "created_by", "job_number"]
+
+
+def test_placeholders_skip_unsubstituted_files(tmp_path):
+    (tmp_path / "seed.txt").write_text("literal {{not_a_variable}}\n")
+    template = tmp_path / "t.xml"
+    template.write_text(
+        '<dirtt dirname="{{root}}" basename="proj">'
+        '<file basename="seed.txt" href="seed.txt" substitute="false"/>'
+        "</dirtt>"
+    )
+    assert template_placeholders(template) == ["root"]
+
+
+def test_placeholders_missing_href_warns(tmp_path, caplog):
+    template = tmp_path / "t.xml"
+    template.write_text(
+        '<dirtt dirname="{{root}}" basename="proj">'
+        '<file basename="a.txt" href="gone.txt"/>'
+        '<file basename="b.txt" href="{{unknown_dir}}/b.txt"/>'
+        "</dirtt>"
+    )
+    with caplog.at_level(logging.WARNING, logger="dirtt"):
+        assert template_placeholders(template) == ["root", "unknown_dir"]
+    assert "gone.txt" in caplog.text
+    assert "unresolved placeholder" in caplog.text
+
+
+def test_duplicate_id_across_include_raises(tmp_path):
+    (tmp_path / "child.xml").write_text(
+        '<dirtt dirname="/ignored" basename="ignored"><dir basename="c" id="dup"/></dirtt>'
+    )
+    template = tmp_path / "parent.xml"
+    template.write_text(
+        '<dirtt dirname="/tmp" basename="proj">'
+        '<dir basename="p" id="dup"/>'
+        '<include href="child.xml"/>'
+        "</dirtt>"
+    )
+    with pytest.raises(TemplateError) as excinfo:
+        load_template(template)
+    message = str(excinfo.value)
+    assert "duplicate id 'dup'" in message
+    assert str(template) in message
+    assert str(tmp_path / "child.xml") in message
+
+
+def test_duplicate_id_in_json_raises(tmp_path):
+    template = tmp_path / "t.json"
+    template.write_text(
+        json.dumps(
+            {
+                "dirname": "/tmp",
+                "basename": "proj",
+                "children": [
+                    {"type": "dir", "basename": "a", "id": "dup"},
+                    {"type": "dir", "basename": "b", "id": "dup"},
+                ],
+            }
+        )
+    )
+    with pytest.raises(TemplateError, match="duplicate id 'dup'"):
+        load_template(template)
+
+
+def test_default_root_id_does_not_collide(tmp_path):
+    (tmp_path / "child.xml").write_text(
+        '<dirtt dirname="/ignored" basename="ignored"><dir basename="c" id="child-dir"/></dirtt>'
+    )
+    template = tmp_path / "parent.xml"
+    template.write_text(
+        '<dirtt dirname="/tmp" basename="proj"><include href="child.xml"/></dirtt>'
+    )
+    tree = load_template(template)
+    assert tree.root.id == "root-dir"
+    assert [c.basename for c in tree.root.children] == ["c"]

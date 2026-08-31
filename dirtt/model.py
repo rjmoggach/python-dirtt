@@ -18,7 +18,12 @@ __all__ = ["Dir", "File", "Link", "Node", "Tree", "Action"]
 
 @dataclass(frozen=True, slots=True)
 class File:
-    """A file to create, optionally rendered from a content template (``href``)."""
+    """A file to create, optionally rendered from a content template (``href``).
+
+    With ``substitute`` false the ``href`` source is copied verbatim, so a
+    file that is itself a template (or merely contains ``{{`` or ``}}``)
+    survives intact.
+    """
 
     basename: str
     href: str | None = None
@@ -26,6 +31,7 @@ class File:
     perms: int | None = None
     username: str | None = None
     group: str | None = None
+    substitute: bool = True
 
 
 @dataclass(frozen=True, slots=True)
@@ -81,9 +87,9 @@ class Tree:
 class Action:
     """One planned filesystem operation."""
 
-    op: Literal["mkdir", "write", "symlink"]
+    op: Literal["mkdir", "write", "symlink", "move", "rmdir"]
     path: Path
-    target: str | None = None  # symlink: what the link points at
+    target: str | None = None  # symlink: what the link points at; move: destination
     content: str | None = None  # write: file body
     mode: int | None = None
     username: str | None = None
@@ -94,5 +100,9 @@ class Action:
         owner = f" owner={self.username}:{self.group}" if self.username or self.group else ""
         if self.op == "symlink":
             return f"symlink {self.path} -> {self.target}"
+        if self.op == "move":
+            return f"move {self.path} -> {self.target}"
+        if self.op == "rmdir":
+            return f"rmdir {self.path}"
         size = f" ({len(self.content or '')} bytes)" if self.op == "write" else ""
         return f"{self.op} {self.path}{mode}{owner}{size}"

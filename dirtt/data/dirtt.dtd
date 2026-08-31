@@ -68,6 +68,7 @@
             group       CDATA        #IMPLIED
             perms       CDATA        #IMPLIED
             href        CDATA        #IMPLIED
+            substitute  (true|false) #IMPLIED
             dirname     CDATA        #IMPLIED>
 
 <!-- Symbolic Link -->
