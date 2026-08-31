@@ -31,9 +31,11 @@ pip install python-dirtt
 
 ```console
 dirtt create -t TEMPLATE [--var KEY=VALUE ...] [--dest DIR] [--dry-run] [-i] [-w] [-v]
+                         [--skip-existing-files] [--actor WHO] [--no-log]
 dirtt list                     # show the packaged example templates
 dirtt placeholders -t TEMPLATE # show the variables a template requires
 dirtt introspect PATH [-o FILE]# generate a template from a real tree
+dirtt migrate PATH --map MAP.json [--apply] [--prune]
 ```
 
 `create` prompts interactively for any `{{placeholder}}` you don't pass
@@ -41,6 +43,26 @@ with `--var`. `--dry-run` prints each planned action (`mkdir`, `write`,
 `symlink`) instead of performing it. `-i/--interactive` confirms each
 directory; answering no skips that directory and everything inside it.
 `-w/--warn` fails instead of continuing when a directory already exists.
+`--skip-existing-files` leaves existing files and symlinks alone instead
+of failing, which makes re-running a template over a tree that already
+exists a clean no-op.
+
+`placeholders` reports every variable the build needs, including those
+used only inside `xi:include`d templates and `href`'d content files, and
+`create` prompts for that same full set.
+
+After a successful `create`, dirtt appends one JSON line to
+`lib/dirtt/scaffold.log.jsonl` under the created root recording what was
+built, with what variables, when and by whom:
+
+```json
+{"actor":"rm","date":"20260830","run":"project","template":"studio_project@2026.01","vars":{"project_code":"ABC"}}
+```
+
+The template id and run name are derived from the template's path and
+can be pinned with `--template-id` and `--run`; `--actor` defaults to
+`$USER`, and `--no-log` turns the log off. A log that cannot be written
+warns and never fails the scaffold.
 
 ## Library
 
@@ -101,6 +123,11 @@ The dialect is unchanged from dirtt 0.x:
   `href` may be relative, absolute, or an `http(s)://` URL.
 - `perms` is octal text (`"02775"`); `username`/`group` are applied
   with `chown` only when running as root, and skipped otherwise.
+- `substitute="false"` on a `file` copies its `href` source byte for
+  byte, leaving any `{{placeholders}}` in it intact. Use it when the
+  file being copied is itself a template.
+- An `id` must be unique across a template and everything it includes;
+  a duplicate is an error rather than a silently mis-pointed `idref`.
 
 ## JSON templates
 
@@ -139,6 +166,32 @@ Files may carry inline `"content"` (JSON only) or an `"href"` like XML.
 Your existing XML templates work as-is. The old template engine's
 `{{if}}`/`{{for}}`/`{{py:}}` constructs were never used by tree
 templates and are no longer supported.
+
+## Migrating a tree between template versions
+
+When a layout changes, `dirtt migrate` moves an existing tree onto the
+new one rather than leaving you to `mv` by hand:
+
+```console
+dirtt migrate /jobs/myproject --map migrations/2015_to_2026.json   # dry run
+dirtt migrate /jobs/myproject --map migrations/2015_to_2026.json --apply
+```
+
+A mapping file pairs old paths with new ones, and may add `prefix_rules`
+for whole subtrees. Matching is: explicit entry, then prefix rule, then
+an identical path (unchanged paths need no mapping).
+
+It is deliberately cautious, because it moves real data:
+
+- **Dry run is the default.** `--apply` is required to move anything.
+- **Nothing is ever deleted.** A path the mapping does not account for
+  is an orphan: reported and left where it is. Only `--prune` removes
+  anything, and only an orphaned directory that is already empty.
+- **Case-only renames are staged** through a temporary name, because
+  macOS, SMB and Dropbox are case-insensitive and a direct rename there
+  can lose the directory.
+- **It is idempotent.** Re-running after a successful migration plans
+  nothing, because every path now matches itself.
 
 ## Development
 
