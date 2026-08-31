@@ -177,6 +177,20 @@ dirtt migrate /jobs/myproject --map migrations/2015_to_2026.json   # dry run
 dirtt migrate /jobs/myproject --map migrations/2015_to_2026.json --apply
 ```
 
+Or copy into a new root instead of moving in place, which leaves the
+original project working and lets a bad map cost a directory rather than
+a production:
+
+```console
+dirtt migrate /jobs/myproject --map MAP.json --copy --dest /volumes/new/myproject --apply
+```
+
+`--copy` also migrates across filesystems, which a move cannot do at all
+(a rename between volumes fails with `EXDEV`). The same mapping file
+drives both: the map describes the taxonomy translation, the flag
+decides what happens to the bytes. With `--copy` the source is read-only
+and orphans are left in it rather than carried into the new tree.
+
 A mapping file pairs old paths with new ones, and may add `prefix_rules`
 for whole subtrees. Matching is: explicit entry, then prefix rule, then
 an identical path (unchanged paths need no mapping).
@@ -192,6 +206,8 @@ It is deliberately cautious, because it moves real data:
   can lose the directory.
 - **It is idempotent.** Re-running after a successful migration plans
   nothing, because every path now matches itself.
+- **`--copy` never writes to the source**, and `--prune` is rejected
+  with it, since nothing in the source is emptied.
 
 ## Development
 

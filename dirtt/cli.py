@@ -26,7 +26,7 @@ import dirtt
 from dirtt.builder import build, execute
 from dirtt.exceptions import DirttError
 from dirtt.introspect import introspect
-from dirtt.migrate import load_map, plan_migration
+from dirtt.migrate import load_map, plan_copy_migration, plan_migration
 from dirtt.model import Action
 from dirtt.parser import TEMPLATES_DIR, template_placeholders
 
@@ -139,22 +139,33 @@ def _cmd_placeholders(args: argparse.Namespace) -> int:
 
 
 def _cmd_migrate(args: argparse.Namespace) -> int:
-    """Move an existing tree from one template's layout to another's."""
+    """Move, or copy, an existing tree from one template's layout to another's."""
+    if args.copy and not args.dest:
+        raise SystemExit("error: --copy requires --dest TARGET to copy into")
+    if args.dest and not args.copy:
+        raise SystemExit("error: --dest is only meaningful with --copy")
+    if args.copy and args.prune:
+        raise SystemExit("error: --prune is meaningless with --copy; the source is never emptied")
+
     mapping = load_map(args.map)
-    actions, orphans = plan_migration(args.path, mapping, prune=args.prune)
+    if args.copy:
+        actions, orphans = plan_copy_migration(args.path, args.dest, mapping)
+    else:
+        actions, orphans = plan_migration(args.path, mapping, prune=args.prune)
 
     for action in actions:
         print(action.describe())
     for line in orphans:
         print(line)
 
+    verb = "copied" if args.copy else "moved"
     if not args.apply:
-        print(f"dry run: {len(actions)} actions, {len(orphans)} orphans, nothing moved")
+        print(f"dry run: {len(actions)} actions, {len(orphans)} orphans, nothing {verb}")
         print("re-run with --apply to perform the migration")
         return 0
 
     performed = execute(actions)
-    print(f"migrated: {len(performed)} actions, {len(orphans)} orphans left in place")
+    print(f"migrated: {len(performed)} actions, {len(orphans)} orphans left in the source")
     return 0
 
 
@@ -204,6 +215,12 @@ def main(argv: list[str] | None = None) -> int:
     p_mig.add_argument("--map", required=True, metavar="MAP.json", help="migration mapping file")
     p_mig.add_argument("--apply", action="store_true", help="perform the migration (default is a dry run)")
     p_mig.add_argument("--prune", action="store_true", help="also remove orphaned directories that are empty")
+    p_mig.add_argument(
+        "--copy",
+        action="store_true",
+        help="copy into --dest instead of moving in place, leaving the source untouched",
+    )
+    p_mig.add_argument("--dest", metavar="TARGET", help="destination root for --copy (required with it)")
     p_mig.add_argument("-v", "--verbose", action="store_true")
     p_mig.set_defaults(func=_cmd_migrate)
 

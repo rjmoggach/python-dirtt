@@ -132,3 +132,53 @@ def test_scaffold_log_overrides(tmp_path):
     entry = json.loads(log.read_text().splitlines()[0])
     assert entry["template"] == "custom@9"
     assert entry["run"] == "myrun"
+
+
+def test_migrate_copy_requires_dest(tmp_path):
+    (tmp_path / "src").mkdir()
+    m = tmp_path / "m.json"
+    m.write_text('{"migration_schema": 1, "map": {"a": "b"}}')
+    with pytest.raises(SystemExit, match="--copy requires --dest"):
+        main(["migrate", str(tmp_path / "src"), "--map", str(m), "--copy"])
+
+
+def test_migrate_dest_requires_copy(tmp_path):
+    (tmp_path / "src").mkdir()
+    m = tmp_path / "m.json"
+    m.write_text('{"migration_schema": 1, "map": {"a": "b"}}')
+    with pytest.raises(SystemExit, match="only meaningful with --copy"):
+        main(["migrate", str(tmp_path / "src"), "--map", str(m), "--dest", str(tmp_path / "out")])
+
+
+def test_migrate_copy_rejects_prune(tmp_path):
+    (tmp_path / "src").mkdir()
+    m = tmp_path / "m.json"
+    m.write_text('{"migration_schema": 1, "map": {"a": "b"}}')
+    with pytest.raises(SystemExit, match="meaningless with --copy"):
+        main([
+            "migrate", str(tmp_path / "src"), "--map", str(m),
+            "--copy", "--dest", str(tmp_path / "out"), "--prune",
+        ])
+
+
+def test_migrate_copy_dry_run_then_apply(tmp_path, capsys):
+    src = tmp_path / "src"
+    (src / "library").mkdir(parents=True)
+    (src / "library" / "asset.txt").write_text("precious")
+    (src / "unmapped").mkdir()
+    (src / "unmapped" / "keep.txt").write_text("orphan data")
+    m = tmp_path / "m.json"
+    m.write_text('{"migration_schema": 1, "map": {"library": "assets"}}')
+    dest = tmp_path / "out"
+
+    args = ["migrate", str(src), "--map", str(m), "--copy", "--dest", str(dest)]
+    assert main(args) == 0
+    assert "nothing copied" in capsys.readouterr().out
+    assert not dest.exists()
+
+    assert main([*args, "--apply"]) == 0
+    assert (dest / "assets" / "asset.txt").read_text() == "precious"
+    # the source is untouched and the orphan stayed put
+    assert (src / "library" / "asset.txt").read_text() == "precious"
+    assert (src / "unmapped" / "keep.txt").read_text() == "orphan data"
+    assert not (dest / "unmapped").exists()
