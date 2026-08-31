@@ -237,6 +237,150 @@ def test_replanning_after_apply_is_a_zero_move_no_op(tmp_path: Path) -> None:
     assert report == []
 
 
+# -- copy planning ---------------------------------------------------------
+
+
+def roots(tmp_path: Path) -> tuple[Path, Path]:
+    """An existing source tree and a destination root beside it."""
+    source = tmp_path / "old"
+    source.mkdir()
+    return source, tmp_path / "new"
+
+
+def copies(actions: list[Action], source: Path, dest: Path) -> list[tuple[str, str]]:
+    """The ``copy`` actions as ``(source, destination)`` relative pairs."""
+    origin, landing = source.resolve(), dest.resolve()
+    return [
+        (str(action.path.relative_to(origin)), str(Path(action.target or "").relative_to(landing)))
+        for action in actions
+        if action.op == "copy"
+    ]
+
+
+def test_copy_plan_is_flat_and_never_stages_a_case_only_rename(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, files=(("production/Creative/board.txt", "art"),))
+    actions, report = migrate.plan_copy_migration(source, dest, schema({"production/Creative": "production/creative"}))
+    assert copies(actions, source, dest) == [("production/Creative", "production/creative")]
+    assert [action.op for action in actions] == ["copy"]
+    assert report == []
+    printed = " ".join(action.describe() for action in actions)
+    assert migrate.TEMP_SUFFIX not in printed
+    assert ".__dirtt_tmp_" not in printed
+
+
+def test_copy_planning_writes_to_neither_tree(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, dirs=("library/assets/char", "empty_orphan"), files=(("work/_DAILIES/d.txt", "x"),))
+    before = snapshot(source)
+    migrate.plan_copy_migration(source, dest, schema({"library": "assets", "work/_DAILIES": "media/dailies"}))
+    assert snapshot(source) == before
+    assert not dest.exists()
+
+
+def test_copy_orphans_are_reported_and_left_in_the_source(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, files=(("library/hero.txt", "rig"), ("dashboard/notes.txt", "precious")))
+    actions, report = migrate.plan_copy_migration(source, dest, schema({"library": "assets"}))
+    assert copies(actions, source, dest) == [("library", "assets")]
+    assert report == ["orphan: dashboard (not copied; left in the source)"]
+    assert all("dashboard" not in origin for origin, _ in copies(actions, source, dest))
+    assert (source / "dashboard" / "notes.txt").read_text() == "precious"
+
+
+def test_copy_carries_a_path_that_is_already_in_the_new_layout(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, dirs=("library",), files=(("shots/seq010/plate.txt", "exr"),))
+    mapping = schema({"library": "assets", "shots": "shots"})
+    actions, _ = migrate.plan_copy_migration(source, dest, mapping)
+    assert copies(actions, source, dest) == [("library", "assets"), ("shots", "shots")]
+
+
+def test_copy_nested_renames_compose_without_copying_twice(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, files=(("library/assets/char/hero.txt", "rig"), ("library/tex/wood.txt", "map")))
+    mapping = schema({"library": "assets", "library/assets/char": "assets/char"})
+    actions, _ = migrate.plan_copy_migration(source, dest, mapping)
+    assert copies(actions, source, dest) == [
+        ("library/assets/char", "assets/char"),
+        ("library/tex", "assets/tex"),
+    ]
+
+
+def test_copy_explicit_map_wins_over_a_prefix_rule(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, dirs=("library/shoot/scans",))
+    mapping = schema({"library/shoot/scans": "media/scans"}, prefix_rules={"library/shoot/": "work/shoot/"})
+    actions, _ = migrate.plan_copy_migration(source, dest, mapping)
+    assert copies(actions, source, dest) == [("library/shoot/scans", "media/scans")]
+
+
+def test_copy_declared_merge_copies_children_into_the_shared_destination(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, dirs=("production/_Client_IN/20150202-Job",), files=(("dropbox/note.txt", "hi"),))
+    mapping = schema({"dropbox": "media/io/in", "production/_Client_IN": "media/io/in"})
+    actions, _ = migrate.plan_copy_migration(source, dest, mapping)
+    assert copies(actions, source, dest) == [
+        ("production/_Client_IN/20150202-Job", "media/io/in/20150202-Job"),
+        ("dropbox/note.txt", "media/io/in/note.txt"),
+    ]
+
+
+def test_copy_merge_sources_with_colliding_children_raise(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, dirs=("a/shared", "b/shared"))
+    with pytest.raises(BuildError) as excinfo:
+        migrate.plan_copy_migration(source, dest, schema({"a": "c", "b": "c"}))
+    message = str(excinfo.value)
+    assert "c/shared" in message and "a/shared" in message and "b/shared" in message
+
+
+def test_copy_two_undeclared_sources_onto_one_destination_raise(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, dirs=("a", "b/x"))
+    mapping = schema({"a": "c/x"}, prefix_rules={"b/": "c/"})
+    with pytest.raises(BuildError) as excinfo:
+        migrate.plan_copy_migration(source, dest, mapping)
+    message = str(excinfo.value)
+    assert "c/x" in message and "'a'" in message and "'b/x'" in message
+
+
+def test_copy_never_overwrites_an_existing_destination(tmp_path: Path) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, dirs=("library",))
+    make_tree(dest, dirs=("assets", "unrelated"))
+    with pytest.raises(BuildError, match="already exists"):
+        migrate.plan_copy_migration(source, dest, schema({"library": "assets"}))
+
+    # an unrelated occupant of the destination root is not a collision
+    actions, _ = migrate.plan_copy_migration(source, dest, schema({"library": "renders"}))
+    assert copies(actions, source, dest) == [("library", "renders")]
+
+
+def test_copy_roots_may_not_contain_one_another(tmp_path: Path) -> None:
+    source, _ = roots(tmp_path)
+    make_tree(source, dirs=("library",))
+    mapping = schema({"library": "assets"})
+    for bad in (source / "inside", tmp_path, source):
+        with pytest.raises(BuildError, match="neither may contain the other") as excinfo:
+            migrate.plan_copy_migration(source, bad, mapping)
+        assert str(source.resolve()) in str(excinfo.value)
+
+
+def test_copy_missing_source_warns_and_is_skipped(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
+    source, dest = roots(tmp_path)
+    make_tree(source, dirs=("library",))
+    with caplog.at_level(logging.WARNING, logger="dirtt"):
+        actions, _ = migrate.plan_copy_migration(source, dest, schema({"library": "assets", "gone": "also_gone"}))
+    assert copies(actions, source, dest) == [("library", "assets")]
+    assert "migration source does not exist, skipping: gone" in caplog.text
+
+
+def test_copy_missing_source_root_raises(tmp_path: Path) -> None:
+    with pytest.raises(BuildError, match="does not exist or is not a directory"):
+        migrate.plan_copy_migration(tmp_path / "nope", tmp_path / "new", schema({"a": "b"}))
+
+
 # -- mapping files ---------------------------------------------------------
 
 

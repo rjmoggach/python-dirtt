@@ -4,6 +4,8 @@ A migration is described by a JSON *mapping file*: explicit ``map``
 entries, optional ``prefix_rules``, and metadata. :func:`load_map` reads
 and validates one; :func:`plan_migration` reads the tree on disk and
 returns an ordered ``list[Action]`` plus a human-readable orphan report.
+:func:`plan_copy_migration` plans the same mapping as a copy into a
+separate destination root, leaving the source tree untouched.
 
 Planning is pure: it only *reads* the tree, never writes. The caller
 decides whether to hand the actions to :func:`dirtt.builder.execute`,
@@ -32,7 +34,7 @@ from pathlib import Path
 from dirtt.exceptions import BuildError, TemplateError
 from dirtt.model import Action
 
-__all__ = ["load_map", "plan_migration", "SCHEMA_VERSION", "TEMP_SUFFIX"]
+__all__ = ["load_map", "plan_migration", "plan_copy_migration", "SCHEMA_VERSION", "TEMP_SUFFIX"]
 
 logger = logging.getLogger("dirtt")
 
@@ -187,9 +189,20 @@ def _classify(rel: str, entries: Mapping[str, str], prefixes: Mapping[str, str],
 
 
 def _scan(
-    root: Path, entries: Mapping[str, str], prefixes: Mapping[str, str], targets: set[str]
+    root: Path,
+    entries: Mapping[str, str],
+    prefixes: Mapping[str, str],
+    targets: set[str],
+    *,
+    include_identical: bool = False,
 ) -> tuple[list[tuple[str, str]], list[str]]:
-    """Walk the tree and return ``(moves, orphans)`` as root-relative paths."""
+    """Walk the tree and return ``(moves, orphans)`` as root-relative paths.
+
+    A path that is already part of the new layout needs no move, so it is
+    left out. A *copy* into an empty destination still has to carry it
+    across, so ``include_identical`` reports it as a ``(path, path)``
+    pair instead of dropping it.
+    """
     moves: list[tuple[str, str]] = []
     orphans: list[str] = []
 
@@ -208,11 +221,13 @@ def _scan(
             is_dir = child.is_dir() and not child.is_symlink()
             kind, target = _classify(rel, entries, prefixes, targets)
             if kind in ("map", "prefix"):
-                if target != rel:
+                if target != rel or include_identical:
                     moves.append((rel, target))
                 if is_dir and _keys_under(rel):
                     _walk(child, rel)
             elif kind == "identical":
+                if include_identical:
+                    moves.append((rel, rel))
                 if is_dir and _keys_under(rel):
                     _walk(child, rel)
             elif is_dir and _keys_under(rel):
@@ -383,4 +398,105 @@ def plan_migration(
             report.append(f"orphan: {original} (kept in place)")
         else:
             report.append(f"orphan: {original} (kept; travels to {now} with its parent)")
+    return actions, report
+
+
+# -- copy planning ---------------------------------------------------------
+
+
+def _denest(root: Path, pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
+    """Split any copy that would swallow another copy's ground.
+
+    A rule that copies a whole subtree cannot also honour a second rule
+    for something inside that subtree, or for something inside its
+    destination. An in-place migration composes those by moving the
+    outer path first and rebasing the rest (:func:`_schedule`), which a
+    copy cannot do. Splitting the outer copy one level at a time lets
+    the inner rule win and keeps the plan flat.
+    """
+    sources = {source for source, _ in pairs}
+    dests = {dest for _, dest in pairs}
+
+    def _swallows(source: str, dest: str) -> bool:
+        return any(_is_ancestor(source, other) for other in sources) or any(
+            _is_ancestor(dest, other) for other in dests
+        )
+
+    def _split(source: str, dest: str) -> list[tuple[str, str]]:
+        base = root / source
+        if base.is_symlink() or not base.is_dir():
+            return [(source, dest)]
+        split: list[tuple[str, str]] = []
+        for child in sorted(base.iterdir(), key=lambda path: path.name):
+            pair = (f"{source}/{child.name}", f"{dest}/{child.name}")
+            if pair[0] in sources:
+                continue  # it has a rule of its own
+            split.extend(_split(*pair) if _swallows(*pair) else [pair])
+        return split
+
+    denested: list[tuple[str, str]] = []
+    for source, dest in pairs:
+        denested.extend(_split(source, dest) if _swallows(source, dest) else [(source, dest)])
+    return denested
+
+
+def _validate_copy(dest_root: Path, copies: list[tuple[str, str]]) -> None:
+    """Reject collisions before a single byte is copied."""
+    claimed: dict[str, str] = {}
+    for source, dest in copies:
+        if dest in claimed:
+            raise BuildError(f"migration maps two sources onto {dest}: {claimed[dest]!r} and {source!r}")
+        claimed[dest] = source
+    for source, dest in copies:
+        target = dest_root / dest
+        if target.exists() or target.is_symlink():
+            raise BuildError(f"cannot copy {source} to {dest}: {dest} already exists under {dest_root}")
+
+
+def plan_copy_migration(
+    source: str | Path,
+    dest: str | Path,
+    mapping: Mapping[str, object],
+) -> tuple[list[Action], list[str]]:
+    """Plan ``mapping`` as a copy of the tree at ``source`` into ``dest``.
+
+    Returns ``(actions, orphan_report)`` exactly like
+    :func:`plan_migration`, except that every action is a ``copy`` and
+    the source tree is read only: a copy migration never creates,
+    renames or removes anything inside ``source``.
+
+    The destination holds none of the plan's targets to begin with, so
+    none of the staging an in-place migration needs applies - the plan
+    is a flat list and a case-only rename is a plain copy to the new
+    name. ``dest`` need not exist yet, and may already hold unrelated
+    content, but a planned destination that is already there is a
+    collision, never an overwrite.
+
+    Orphans are reported and left where they are; nothing is written
+    here, and a source declared by the mapping but absent on disk is
+    warned about and skipped.
+    """
+    source_root = Path(source).expanduser().resolve()
+    if not source_root.is_dir():
+        raise BuildError(f"migration source {source_root} does not exist or is not a directory")
+    dest_root = Path(dest).expanduser().resolve()
+    if dest_root.is_relative_to(source_root) or source_root.is_relative_to(dest_root):
+        raise BuildError(
+            f"copy destination {dest_root} and source {source_root} overlap; neither may contain the other"
+        )
+
+    entries, prefixes, targets = _rules(mapping)
+    for key in sorted(entries):
+        path = source_root / key
+        if not (path.exists() or path.is_symlink()):
+            logger.warning("migration source does not exist, skipping: %s", key)
+
+    scanned, orphans = _scan(source_root, entries, prefixes, targets, include_identical=True)
+    merge_dests = {value for value, count in Counter(entries.values()).items() if count > 1}
+    copies = _denest(source_root, _expand(source_root, scanned, merge_dests))
+    _validate_copy(dest_root, copies)
+    copies.sort(key=lambda pair: (pair[1].count("/"), pair[1]))  # a parent destination before its children
+
+    actions = [Action("copy", source_root / origin, target=str(dest_root / landing)) for origin, landing in copies]
+    report = [f"orphan: {orphan} (not copied; left in the source)" for orphan in orphans]
     return actions, report

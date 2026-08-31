@@ -87,9 +87,9 @@ class Tree:
 class Action:
     """One planned filesystem operation."""
 
-    op: Literal["mkdir", "write", "symlink", "move", "rmdir"]
+    op: Literal["mkdir", "write", "symlink", "move", "copy", "rmdir"]
     path: Path
-    target: str | None = None  # symlink: what the link points at; move: destination
+    target: str | None = None  # symlink: what the link points at; move/copy: destination
     content: str | None = None  # write: file body
     mode: int | None = None
     username: str | None = None
@@ -102,6 +102,8 @@ class Action:
             return f"symlink {self.path} -> {self.target}"
         if self.op == "move":
             return f"move {self.path} -> {self.target}"
+        if self.op == "copy":
+            return f"copy {self.path} -> {self.target}"
         if self.op == "rmdir":
             return f"rmdir {self.path}"
         size = f" ({len(self.content or '')} bytes)" if self.op == "write" else ""
