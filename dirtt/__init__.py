@@ -23,6 +23,7 @@ __version__ = "1.0.3"
 from dirtt.builder import build, execute, plan
 from dirtt.exceptions import BuildError, DirttError, TemplateError
 from dirtt.introspect import introspect
+from dirtt.migrate import load_map, plan_migration
 from dirtt.model import Action, Dir, File, Link, Tree
 from dirtt.parser import TEMPLATES_DIR, load_template
 from dirtt.template import placeholders, substitute
@@ -34,6 +35,8 @@ __all__ = [
     "execute",
     "load_template",
     "introspect",
+    "load_map",
+    "plan_migration",
     "substitute",
     "placeholders",
     "Action",

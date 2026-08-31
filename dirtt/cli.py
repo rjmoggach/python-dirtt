@@ -13,19 +13,62 @@ Replaces the 0.x ``mktree.py``/``mkproject.py``/``mktemplate.py`` scripts.
 from __future__ import annotations
 
 import argparse
+import getpass
+import json
 import logging
+import os
+import re
 import sys
+from datetime import date
 from pathlib import Path
 
 import dirtt
-from dirtt.builder import build
+from dirtt.builder import build, execute
 from dirtt.exceptions import DirttError
 from dirtt.introspect import introspect
+from dirtt.migrate import load_map, plan_migration
 from dirtt.model import Action
-from dirtt.parser import TEMPLATES_DIR, read_source
-from dirtt.template import placeholders
+from dirtt.parser import TEMPLATES_DIR, template_placeholders
 
 logger = logging.getLogger("dirtt")
+
+SCAFFOLD_LOG = Path("lib") / "dirtt" / "scaffold.log.jsonl"
+_VERSIONED_SET_RE = re.compile(r"^(?P<name>.+)_(?P<version>\d[\w.]*)$")
+
+
+def _template_identity(template: str) -> tuple[str, str]:
+    """Derive ``(template_id, run)`` from a template's path.
+
+    A template set directory named ``studio_project_2026.01`` holding
+    ``project.xml`` yields ``("studio_project@2026.01", "project")``.
+    An unversioned directory is used as-is. Both halves can be
+    overridden on the command line.
+    """
+    path = Path(template)
+    run = path.stem
+    parent = path.parent.name
+    match = _VERSIONED_SET_RE.match(parent)
+    if match:
+        return f"{match['name']}@{match['version']}", run
+    return parent or run, run
+
+
+def _write_scaffold_log(root: Path, template: str, context: dict[str, str], actor: str, template_id: str, run: str) -> None:
+    """Append one JSON line recording this scaffold. Never fatal."""
+    entry = {
+        "template": template_id,
+        "run": run,
+        "vars": context,
+        "date": date.today().strftime("%Y%m%d"),
+        "actor": actor,
+    }
+    try:
+        log_path = root / SCAFFOLD_LOG
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        with log_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(entry, sort_keys=True) + "\n")
+    except OSError as exc:
+        logger.warning("could not write scaffold log under %s: %s", root, exc)
 
 
 def _parse_vars(pairs: list[str]) -> dict[str, str]:
@@ -40,7 +83,7 @@ def _parse_vars(pairs: list[str]) -> dict[str, str]:
 
 def _cmd_create(args: argparse.Namespace) -> int:
     context = _parse_vars(args.var)
-    needed = [name for name in placeholders(read_source(args.template)) if name not in context]
+    needed = [name for name in template_placeholders(args.template) if name not in context]
     for name in needed:
         if not sys.stdin.isatty() and not args.dry_run:
             raise SystemExit(f"error: missing template variable {name!r} (pass --var {name}=...)")
@@ -58,13 +101,27 @@ def _cmd_create(args: argparse.Namespace) -> int:
         dry_run=args.dry_run,
         warn=args.warn,
         on_confirm=on_confirm,
+        skip_existing_files=args.skip_existing_files,
     )
     if args.dry_run:
         for action in actions:
             print(action.describe())
         print(f"dry run: {len(actions)} actions, nothing created")
-    else:
-        print(f"created tree: {len(actions)} actions")
+        return 0
+
+    print(f"created tree: {len(actions)} actions")
+    if not args.no_log:
+        roots = [a.path for a in actions if a.op == "mkdir"]
+        if roots:
+            default_id, default_run = _template_identity(args.template)
+            _write_scaffold_log(
+                roots[0],
+                args.template,
+                context,
+                actor=args.actor or os.environ.get("USER") or getpass.getuser(),
+                template_id=args.template_id or default_id,
+                run=args.run or default_run,
+            )
     return 0
 
 
@@ -76,8 +133,28 @@ def _cmd_list(_args: argparse.Namespace) -> int:
 
 
 def _cmd_placeholders(args: argparse.Namespace) -> int:
-    for name in placeholders(read_source(args.template)):
+    for name in template_placeholders(args.template):
         print(name)
+    return 0
+
+
+def _cmd_migrate(args: argparse.Namespace) -> int:
+    """Move an existing tree from one template's layout to another's."""
+    mapping = load_map(args.map)
+    actions, orphans = plan_migration(args.path, mapping, prune=args.prune)
+
+    for action in actions:
+        print(action.describe())
+    for line in orphans:
+        print(line)
+
+    if not args.apply:
+        print(f"dry run: {len(actions)} actions, {len(orphans)} orphans, nothing moved")
+        print("re-run with --apply to perform the migration")
+        return 0
+
+    performed = execute(actions)
+    print(f"migrated: {len(performed)} actions, {len(orphans)} orphans left in place")
     return 0
 
 
@@ -104,6 +181,15 @@ def main(argv: list[str] | None = None) -> int:
     p_create.add_argument("-i", "--interactive", action="store_true", help="confirm each directory")
     p_create.add_argument("-w", "--warn", action="store_true", help="fail if a directory already exists")
     p_create.add_argument("-v", "--verbose", action="store_true")
+    p_create.add_argument(
+        "--skip-existing-files",
+        action="store_true",
+        help="leave existing files and symlinks alone instead of failing (idempotent re-scaffold)",
+    )
+    p_create.add_argument("--actor", help="who ran this scaffold (default: $USER)")
+    p_create.add_argument("--template-id", help="template set id recorded in the scaffold log (default: derived from the path)")
+    p_create.add_argument("--run", help="run name recorded in the scaffold log (default: the template filename)")
+    p_create.add_argument("--no-log", action="store_true", help="do not append to lib/dirtt/scaffold.log.jsonl")
     p_create.set_defaults(func=_cmd_create)
 
     p_list = sub.add_parser("list", help="list packaged example templates")
@@ -112,6 +198,14 @@ def main(argv: list[str] | None = None) -> int:
     p_ph = sub.add_parser("placeholders", help="show the variables a template requires")
     p_ph.add_argument("-t", "--template", required=True)
     p_ph.set_defaults(func=_cmd_placeholders)
+
+    p_mig = sub.add_parser("migrate", help="move an existing tree onto a new template layout")
+    p_mig.add_argument("path", help="the existing tree root on disk")
+    p_mig.add_argument("--map", required=True, metavar="MAP.json", help="migration mapping file")
+    p_mig.add_argument("--apply", action="store_true", help="perform the migration (default is a dry run)")
+    p_mig.add_argument("--prune", action="store_true", help="also remove orphaned directories that are empty")
+    p_mig.add_argument("-v", "--verbose", action="store_true")
+    p_mig.set_defaults(func=_cmd_migrate)
 
     p_intro = sub.add_parser("introspect", help="generate a template from an existing tree")
     p_intro.add_argument("path")
