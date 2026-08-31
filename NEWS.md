@@ -1,5 +1,37 @@
 # Changes And News
 
+## 1.2.0 (2026-08-31)
+
+Additive and backward compatible: `dirtt migrate` without the new flag
+behaves exactly as it did in 1.1.0.
+
+* **`dirtt migrate --copy --dest TARGET`** performs the same taxonomy
+  translation as a move, but as a copy into a separate root. The
+  mapping file is unchanged: the map describes the translation, the
+  flag decides what happens to the bytes.
+
+  Two things needed it. A move puts a live project at risk, because the
+  source is gone the moment the map turns out to be wrong; a copy makes
+  a bad map cost a directory instead of a production. And a move cannot
+  cross a filesystem at all — a rename between volumes raises `EXDEV` —
+  which is exactly the real case, an internal drive to an external one.
+
+  With `--copy` the source is read-only, an existing destination is
+  still refused, and orphans are left in the source rather than carried
+  into the new tree, so the new taxonomy does not inherit the old one's
+  stray paths. The orphan report names everything left behind. `--dest`
+  is required with `--copy` and rejected without it; `--prune` is
+  rejected with it, since nothing in the source is ever emptied.
+
+  A directory copy uses `rsync -a` when it is on PATH because it is
+  markedly faster on large media trees, and falls back to
+  `shutil.copytree` otherwise. Both paths preserve symlinks and
+  metadata and are asserted to produce identical trees; rsync is an
+  optimisation, never a behaviour change.
+* Library: `plan_copy_migration(source, dest, mapping)` alongside
+  `plan_migration`, and a `copy` action in `execute()`.
+
+
 ## 1.1.0 (2026-08-30)
 
 Additive and backward compatible: every existing template and script
