@@ -5,6 +5,7 @@ import pytest
 
 from dirtt.builder import build, execute, plan
 from dirtt.exceptions import BuildError
+from dirtt.model import Action, Dir, File, Tree
 from dirtt.parser import load_template
 
 TEMPLATES = Path(__file__).parent / "templates"
@@ -110,3 +111,91 @@ def test_nested_dirs_fixture_builds(tmp_path):
     )
     assert (tmp_path / "data" / "d1" / "d2" / "d3").is_dir()
     assert len(actions) == 4
+
+
+def test_substitute_false_copies_verbatim(tmp_path):
+    seed = tmp_path / "seed.txt"
+    raw = "keep this literal }} and this {{project_code}} unresolved"
+    seed.write_text(raw)
+    tree = Tree(
+        root=Dir(basename="proj", children=(File(basename="out.txt", href=str(seed), substitute=False),)),
+        dirname=str(tmp_path),
+    )
+    actions = plan(tree)
+    execute(actions)
+    assert (tmp_path / "proj" / "out.txt").read_text() == raw
+
+
+def test_skip_existing_files_is_clean_noop(tmp_path):
+    template = _write(tmp_path, FULL_TEMPLATE)
+    first = build(template, {"root": str(tmp_path)}, skip_existing_files=True)
+    assert len(first) == 5
+    second = build(template, {"root": str(tmp_path)}, skip_existing_files=True)
+    assert not any(a.op in ("write", "symlink") for a in second)
+
+
+def test_skip_existing_files_leaves_content_untouched(tmp_path):
+    template = _write(tmp_path, FULL_TEMPLATE)
+    build(template, {"root": str(tmp_path)}, skip_existing_files=True)
+    target = tmp_path / "proj" / "a" / "hello.txt"
+    target.write_text("do not touch me")
+    performed = build(template, {"root": str(tmp_path)}, skip_existing_files=True)
+    assert target.read_text() == "do not touch me"
+    assert not any(a.op == "write" for a in performed)
+
+
+def test_skip_existing_files_default_false_still_raises(tmp_path):
+    template = _write(tmp_path, FULL_TEMPLATE)
+    build(template, {"root": str(tmp_path)})
+    with pytest.raises(BuildError, match="refusing to overwrite"):
+        build(template, {"root": str(tmp_path)})
+
+
+def test_move_renames_and_creates_missing_destination_parent(tmp_path):
+    src = tmp_path / "src.txt"
+    src.write_text("content")
+    dest = tmp_path / "newdir" / "dest.txt"
+    action = Action("move", src, target=str(dest))
+    performed = execute([action])
+    assert dest.read_text() == "content"
+    assert not src.exists()
+    assert performed == [action]
+
+
+def test_move_missing_source_skips_without_raising(tmp_path):
+    src = tmp_path / "missing.txt"
+    dest = tmp_path / "dest.txt"
+    action = Action("move", src, target=str(dest))
+    performed = execute([action])
+    assert performed == []
+    assert not dest.exists()
+
+
+def test_move_onto_existing_destination_raises(tmp_path):
+    src = tmp_path / "src.txt"
+    src.write_text("a")
+    dest = tmp_path / "dest.txt"
+    dest.write_text("b")
+    action = Action("move", src, target=str(dest))
+    with pytest.raises(BuildError, match="refusing to overwrite"):
+        execute([action])
+
+
+def test_rmdir_removes_empty_dir(tmp_path):
+    empty = tmp_path / "empty"
+    empty.mkdir()
+    action = Action("rmdir", empty)
+    performed = execute([action])
+    assert not empty.exists()
+    assert performed == [action]
+
+
+def test_rmdir_nonempty_dir_skips_without_raising(tmp_path):
+    full = tmp_path / "full"
+    full.mkdir()
+    (full / "file.txt").write_text("keep")
+    action = Action("rmdir", full)
+    performed = execute([action])
+    assert full.exists()
+    assert (full / "file.txt").read_text() == "keep"
+    assert performed == []

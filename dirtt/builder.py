@@ -13,6 +13,7 @@ execute, and is the main public entry point of the library.
 
 from __future__ import annotations
 
+import errno
 import grp
 import logging
 import os
@@ -71,7 +72,8 @@ def plan(tree: Tree, *, dest: str | Path | None = None, template_dirs: Sequence[
             content = node.content or ""
             if node.href:
                 source = _resolve_href(node.href, tree.template_dir, template_dirs)
-                content = substitute(read_source(source), tree.context, name=source)
+                raw = read_source(source)
+                content = raw if not node.substitute else substitute(raw, tree.context, name=source)
             actions.append(Action("write", path, content=content, mode=node.perms, username=node.username, group=node.group))
         else:  # Link
             link_dir = Path(node.dirname) if node.dirname else directory
@@ -119,6 +121,7 @@ def execute(
     dry_run: bool = False,
     warn: bool = False,
     on_confirm: Callable[[Action], bool] | None = None,
+    skip_existing_files: bool = False,
 ) -> list[Action]:
     """Apply ``actions`` in order and return the ones performed.
 
@@ -126,6 +129,10 @@ def execute(
     an already-existing directory into a :class:`BuildError` instead of a
     silent skip. ``on_confirm`` (used for interactive mode) is called per
     mkdir; returning False skips that directory and everything inside it.
+    ``skip_existing_files`` (default False, preserving today's behavior)
+    turns an already-existing ``write`` or ``symlink`` target into a
+    logged skip instead of a :class:`BuildError`, so re-running a
+    template over an existing tree is a clean no-op.
     """
     if dry_run:
         return list(actions)
@@ -156,15 +163,53 @@ def execute(
             _apply_ownership(action.path, action)
         elif action.op == "write":
             if action.path.exists():
+                if skip_existing_files:
+                    logger.info("skipping existing file: %s", action.path)
+                    continue
                 raise BuildError(f"refusing to overwrite existing path: {action.path}")
             action.path.write_text(action.content or "", encoding="utf-8")
             _apply_ownership(action.path, action)
         elif action.op == "symlink":
             if action.path.exists() or action.path.is_symlink():
+                if skip_existing_files:
+                    logger.info("skipping existing symlink: %s", action.path)
+                    continue
                 raise BuildError(f"refusing to overwrite existing path: {action.path}")
             if action.target is None:
                 raise BuildError(f"symlink {action.path} has no target")
             action.path.symlink_to(action.target)
+        elif action.op == "move":
+            if not action.path.exists() and not action.path.is_symlink():
+                logger.warning("move source does not exist, skipping: %s", action.path)
+                continue
+            if action.target is None:
+                raise BuildError(f"move {action.path} has no target")
+            destination = Path(action.target)
+            if destination.exists() or destination.is_symlink():
+                raise BuildError(f"refusing to overwrite existing path: {destination}")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                action.path.rename(destination)
+            except OSError as exc:
+                if getattr(exc, "errno", None) == errno.EXDEV:
+                    raise BuildError(
+                        f"cannot move {action.path} to {destination}: "
+                        "source and destination are on different filesystems "
+                        "(dirtt does not copy across filesystems)"
+                    ) from exc
+                raise
+        elif action.op == "rmdir":
+            if not action.path.exists():
+                logger.debug("rmdir target does not exist, skipping: %s", action.path)
+                continue
+            try:
+                os.rmdir(action.path)
+            except OSError as exc:
+                if exc.errno == errno.ENOTEMPTY:
+                    logger.warning("directory not empty, skipping rmdir: %s", action.path)
+                else:
+                    logger.warning("could not rmdir %s: %s", action.path, exc)
+                continue
         logger.debug("%s", action.describe())
         performed.append(action)
     return performed
@@ -179,8 +224,9 @@ def build(
     warn: bool = False,
     on_confirm: Callable[[Action], bool] | None = None,
     template_dirs: Sequence[Path] = (),
+    skip_existing_files: bool = False,
 ) -> list[Action]:
     """Parse a template, plan it, and execute the plan. Returns the actions."""
     tree = load_template(source, context)
     actions = plan(tree, dest=dest, template_dirs=template_dirs)
-    return execute(actions, dry_run=dry_run, warn=warn, on_confirm=on_confirm)
+    return execute(actions, dry_run=dry_run, warn=warn, on_confirm=on_confirm, skip_existing_files=skip_existing_files)
